@@ -49,7 +49,7 @@ export default {
   components: { Spinner },
   data () {
     return {
-      fullName: 'que',
+      fullName: 'John Doe',
       transition: 'slide-left'
     }
   },
@@ -64,27 +64,12 @@ export default {
   },
   //Methods here
   methods: {
-  	smth: function() {
-  		this.msg = Math.random();
-  	},
     fetchGoals: function() {
       fetchGoals(this.$store);
     }
   }
 }
 </script>
-
-<style lang="stylus">
-
-.slide-left-enter
-  opacity 0
-  transform translate(30px, 0)
-
-.slide-left-leave-active
-  opacity 0
-  transform translate(-30px, 0)
-
-</style>
 
 <style lang="stylus" scoped>
 

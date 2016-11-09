@@ -1,6 +1,6 @@
 <template>
 
-	<transition name="slide-left">
+	<transition appear name="slide-left">
 		<div class="main-block">
 
 		</div>
@@ -20,14 +20,10 @@ export default {
 
   data () {
     return {
-      fullName: 'John Doe'
     }
   },
   //Methods here
   methods: {
-  	smth: function() {
-  		this.msg = Math.random();
-  	}
   }
 }
 </script>

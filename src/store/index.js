@@ -20,8 +20,6 @@ const store = new Vuex.Store({
 	},
 
 	actions: {
-		// FIRST ACTION
-		// Testing out
 		// STUFF TO FETCH:
 		//   * Courses ( + tests )
 		//   * Goals
@@ -61,6 +59,24 @@ const store = new Vuex.Store({
 			console.log(user.data.id);
 			Vue.set(state.users, 'currentUser', user.data)
 		}
+	},
+
+	getters: {
+		// ids of courses that should be displayed
+
+		activeIds ( state ) {
+			if ( 0 ) {
+				// logic
+			} else {
+				return []
+			}
+		},
+
+		// items (course name/descriptions/status etc.)
+		activeItems ( state, getters ) {
+			return getters.activeIds.map(id => state.items[id].filter(_ => _))
+		}
+
 	}
 
 

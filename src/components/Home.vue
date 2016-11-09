@@ -39,15 +39,24 @@ export default {
   },
   //Methods here
   methods: {
-  	smth: function() {
-  		this.msg = Math.random();
-  	},
   	changePath: function() {
   		this.$store.changePath('/', { router: this.$router });
   	}
   }
 }
 </script>
+
+<style lang="stylus">
+
+.slide-left-enter
+  opacity 0
+  transform translate(30px, 0)
+
+.slide-left-leave-active
+  opacity 0
+  transform translate(-30px, 0)
+
+</style>
 
 <style lang="stylus" scoped>
 
@@ -64,6 +73,7 @@ export default {
 	background #ccc
 	min-height 600px
 	top 50px
+	transition all .5s cubic-bezier(.55,0,.1,1)
 
 h1
 	text-align center
