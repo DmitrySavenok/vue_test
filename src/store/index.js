@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { fetchGoals, fetchUser } from './api';
+import { fetchGoals, fetchUser, fetchCourses } from './api';
 
 Vue.use(Vuex);
 
@@ -8,8 +8,15 @@ const store = new Vuex.Store({
 
 	state: {
 		loggedIn: false,
-		users: {/*  */},
-		goals: {/*  */},
+		renderStage: 0,
+		users:   {/*  */},
+		goals:   {/*  */},
+		courses: {
+
+			first_row: [ "Astronomy", "sales", "Dark Arts" ],
+			second_row: [ "game", "text", "somethingelse" ]
+
+		},
 		lists: {
 			currentUserGoals:   [],
 			// Will split currentUserCourses[] in 2 (Mandatory / Optional)
@@ -26,7 +33,32 @@ const store = new Vuex.Store({
 		//   * User data
 		//   *
 
-		FETCH_GOALS: ({ commit, state }, { user }) => {
+		// ids - course unique IDS
+		FETCH_COURSES: ({ commit, state }, { userPosition }) => {
+
+			let userCourses = state.courses[userPosition];
+			// let ids = state.coruses.filter(id => !state.courses[id])
+			if ( userCourses.length ) {
+				return fetchCourses(userCourses).then(courses => {
+
+					let wat = {
+						"something": "here",
+						"somethingElse": "here2"
+					}
+					courses.forEach(course => {
+						console.log(course);
+						userCourses.includes(course.courseName) ? courses[course.courseId] = Array(course) : '';
+					});
+					console.log(courses);
+					commit('SET_COURSES'), { wat }
+				})
+			}
+			// else {
+				// return Promise.resolve()
+			// }
+		},
+		// ids - GOAL UNIQUE IDS
+		FETCH_GOALS: ({ commit, state }, { ids }) => {
 			ids = ids.filter(id => !state.goals[id])
 			if ( ids.length ) {
 				return fetchGoals(ids).then(goals => commit('SET_GOALS'), { goals })
@@ -35,17 +67,27 @@ const store = new Vuex.Store({
 			}
 		},
 
+		// The can't be a user in our state alredy
+		// TODO: remake with that in mind (state.users[id] check is irrelevant)
 		FETCH_USER: ({ commit, state }, { id }) => {
 			console.log('FETCH_USER dispatched, id: ' + id);
-			console.log(state.users[id]);
+			// console.log(state.users[id]);
 			return state.users[id]
 				? Promise.resolve(state.users[id])
-				: fetchUser(id).then(user => commit('SET_USER', { user }))
+				: fetchUser(id).then(user => { console.log(user); commit('SET_USER', { user })})
 		}
 
 	},
 
 	mutations: {
+		SET_COURSES: (state, { wat } ) => {
+			console.log(wat);
+			courses.data.forEach( course => {
+				if ( course ) {
+					Vue.set(state.lists.currentUserCourses, course.id, course)
+				}
+			})
+		},
 		SET_GOALS: (state, { goals }) => {
 			goals.forEach( goal => {
 				if ( goal ) {
@@ -54,10 +96,10 @@ const store = new Vuex.Store({
 			})
 		},
 		SET_USER: (state, { user }) => {
-			console.log('SET_USER mutation called');
 			console.log(user);
-			console.log(user.data.id);
-			Vue.set(state.users, 'currentUser', user.data)
+			console.log('SET_USER mutation called');
+			Vue.set(state.users, 'currentUser', user)
+			state.renderStage = 1;
 		}
 	},
 
@@ -83,8 +125,13 @@ const store = new Vuex.Store({
 });
 
 
+
+
+
+
 /**
  * Path handling
+ * ? Should change in the future
  */
 
 store.changePath = (path, { router }) => {

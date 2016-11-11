@@ -16,7 +16,7 @@ export function fetch ( child ) {
 
 	return new Promise((resolve, reject) => {
 		axios.get(`http://localhost:3000/${child}`).then( (res) => {
-			resolve(res);
+			resolve(res.data);
 		})
 		.catch( (err) => {
 			reject(err);
@@ -25,6 +25,11 @@ export function fetch ( child ) {
 
 }
 
+
+
+export function fetchCourses( userId ) {
+	return fetch(`courses`)
+}
 
 /*
  * Get goals for specific user
@@ -40,7 +45,7 @@ export function fetchGoals( userId ) {
 
 // Will change ID to pin (?)
 export function fetchUser (id) {
-	console.log('fetchUser function called');
+	console.log('fetchUser function called, id: ' + id);
 	return fetch('user')
 	// return fetch(`user/${id}`)
 }

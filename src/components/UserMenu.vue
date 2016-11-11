@@ -5,16 +5,16 @@
       <!-- <spinner :show="!user"></spinner> -->
       <template v-if="user">
 
-
           <div class="user-description">
             <h4 v-on:click="fetchGoals">{{ user.name }} {{ user.surname }}</h4>
+            <h4> {{ user.department }}</h4>
           </div>
 
-          <div class="menu">
+          <div class="student-menu" v-if="user.role === 'student'">
             <ul>
-              <li><a href="#">Menu item 1</a></li>
-              <li><a href="#">Menu item 2</a></li>
-              <li><a href="#">Menu item 3</a></li>
+              <li><a v-on:click="setContent">User Menu item 1</a></li>
+              <li><a v-on:click="fetchCourses">User Menu item 2</a></li>
+              <li><a v-on:click="setContent">User Menu item 3</a></li>
             </ul>
 
           </div>
@@ -42,6 +42,15 @@ function fetchGoals ( store ) {
   })
 }
 
+function fetchCourses ( store ) {
+  return store.dispatch('FETCH_COURSES', {
+    userPosition: store.state.users['currentUser'].position
+  });
+}
+function myFunc() {
+  console.log('ayy');
+}
+
 
 export default {
 
@@ -66,8 +75,15 @@ export default {
   methods: {
     fetchGoals: function() {
       fetchGoals(this.$store);
+    },
+    setContent: function() {
+      console.log('changing content here');
+    },
+    fetchCourses: function() {
+      fetchCourses(this.$store);
     }
-  }
+  },
+  mounted: myFunc
 }
 </script>
 
@@ -80,5 +96,23 @@ export default {
   background #ccc
   left 0%
   margin-left 15px
-
+  
+  .student-menu
+    ul
+      margin 0px
+      padding 0px
+    li
+      padding 10px 0px
+      list-style none
+      a
+        text-decoration none
+        color #FFF
+        background #aaa
+        display block
+        padding 10px 0px
+        text-align center
+        
+        &:hover
+          background #999
+        
 </style>

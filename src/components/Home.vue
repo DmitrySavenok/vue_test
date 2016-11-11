@@ -5,8 +5,8 @@
 			<h1>{{ msg }}</h1>
 			
 			<UserMenu></UserMenu>
-			<AdditionalBlock></AdditionalBlock>
-			<MainBlock></MainBlock>
+			<AdditionalBlock v-if="renderStage > 0"></AdditionalBlock>
+			<MainBlock v-if="renderStage > 1"></MainBlock>
 			<button v-on:click="changePath">Login</button>
 		</div>
 	</transition>
@@ -38,6 +38,11 @@ export default {
   	MainBlock
   },
   //Methods here
+  computed: {
+  	renderStage() {
+  		return this.$store.state.renderStage
+  	}
+  },
   methods: {
   	changePath: function() {
   		this.$store.changePath('/', { router: this.$router });
