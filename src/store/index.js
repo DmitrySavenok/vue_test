@@ -1,3 +1,5 @@
+'use strict';
+
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { fetchGoals, fetchUser, fetchCourses } from './api';
@@ -11,17 +13,21 @@ const store = new Vuex.Store({
 		renderStage: 0,
 		users:   {/*  */},
 		goals:   {/*  */},
-		courses: {
+		additionalBlockState: 'ayy',
 
-			first_row: [ "Astronomy", "sales", "Dark Arts" ],
-			second_row: [ "game", "text", "somethingelse" ]
+		// Position matrix (?)
+		// Instead of providing list on positions for every course we can specify which courses will be shown to each position
+		positionCourses: {
+
+			first_row: [ { "id": 1, courseName: "Astronomy" }, { "id": 99, "courseName": "sales" }, { "id": 3, "courseName": "Dark Arts" } ],
+			second_row: [ { "id": 100, "courseName": "game" }, { "id": 2, "courseName": "Defence Against the Dark Arts" }, { "id": 101, "courseName": "somethingelse" } ]
 
 		},
 		lists: {
 			currentUserGoals:   [],
 			// Will split currentUserCourses[] in 2 (Mandatory / Optional)
 			// Or merge with currentUserTests[] and split in 3
-			currentUserCourses: [],
+			currentUserCourses: {},
 			currentUserTests:   []
 		}
 	},
@@ -33,31 +39,48 @@ const store = new Vuex.Store({
 		//   * User data
 		//   *
 
+
+		// handle conditional rendering
+		HANDLE_RENDERING: ({ commit, state }, { renderStage, additionalBlockState = '' }) => {
+
+			// detect what we're chainging (render stage - whole page update? additional block )
+
+		},
+
 		// ids - course unique IDS
 		FETCH_COURSES: ({ commit, state }, { userPosition }) => {
 
-			let userCourses = state.courses[userPosition];
-			// let ids = state.coruses.filter(id => !state.courses[id])
-			if ( userCourses.length ) {
-				return fetchCourses(userCourses).then(courses => {
+			let positionCourses = state.positionCourses[userPosition];
 
-					let wat = {
-						"something": "here",
-						"somethingElse": "here2"
+			positionCourses = positionCourses.filter( course => !state.lists.currentUserCourses[course.id]);
+
+			// Maybe will be possible to fetch only those courses we need (not all and then sort out here)
+
+			if ( positionCourses.length ) {
+				return fetchCourses(positionCourses).then(courses => { 
+						
+					let posCoursesNames = [],
+						showCourses = [];
+
+					positionCourses.forEach(posCourse => posCoursesNames.push(posCourse.courseName));
+
+
+					// Filter out courses that we alredy have in our list
+					// courses = courses.filter( course => !state.lists.currentUserCourses[course.courseId] );
+					if ( courses.length ) {
+
+						courses.forEach(course => {
+							posCoursesNames.includes(course.courseName) ? showCourses.push(course) : '';
+						});
+
+						commit('SET_COURSES', { courses: showCourses }) 
+
 					}
-					courses.forEach(course => {
-						console.log(course);
-						userCourses.includes(course.courseName) ? courses[course.courseId] = Array(course) : '';
-					});
-					console.log(courses);
-					commit('SET_COURSES'), { wat }
 				})
+
 			}
-			// else {
-				// return Promise.resolve()
-			// }
 		},
-		// ids - GOAL UNIQUE IDS
+		// ids - goal unique IDS
 		FETCH_GOALS: ({ commit, state }, { ids }) => {
 			ids = ids.filter(id => !state.goals[id])
 			if ( ids.length ) {
@@ -80,13 +103,13 @@ const store = new Vuex.Store({
 	},
 
 	mutations: {
-		SET_COURSES: (state, { wat } ) => {
-			console.log(wat);
-			courses.data.forEach( course => {
+		SET_COURSES: (state, { courses } ) => {
+			courses.forEach( course => {
 				if ( course ) {
-					Vue.set(state.lists.currentUserCourses, course.id, course)
+					Vue.set(state.lists.currentUserCourses, course.courseId, course)
 				}
-			})
+			});
+			state.renderStage = 2;
 		},
 		SET_GOALS: (state, { goals }) => {
 			goals.forEach( goal => {

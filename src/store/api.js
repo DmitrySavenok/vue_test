@@ -1,5 +1,5 @@
 // API functions
-// such as fetching data etc.
+// fetching data etc.
 
 
 import axios from 'axios';
@@ -28,7 +28,7 @@ export function fetch ( child ) {
 
 
 export function fetchCourses( userId ) {
-	return fetch(`courses`)
+	return fetch('courses')
 }
 
 /*

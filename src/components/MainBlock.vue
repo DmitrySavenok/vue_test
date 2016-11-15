@@ -3,6 +3,15 @@
 	<transition appear name="slide-left">
 		<div class="main-block">
 
+			<ul class="course-list">
+				
+				<li v-for="course in courses">
+					{{ course.courseName }}
+				</li>
+
+			</ul>
+
+
 		</div>
 	</transition>
 
@@ -21,6 +30,14 @@ export default {
   data () {
     return {
     }
+  },
+  computed: {
+  	user () {
+  		return this.$store.state.users['currentUser']
+  	},
+  	courses() {
+  		return this.$store.state.lists.currentUserCourses;
+  	}
   },
   //Methods here
   methods: {

@@ -1,18 +1,23 @@
 <template>
 
 	<transition appear name="slide-left">
+
 		<div class="additional-block">
+
+			{{addBlockContent.additionalBlockState}}
 			
-			<div class="data">
-				
-				some stuff here
+			<div class="home-additional-data" v-if="addBlockContent.additionalBlockState == 'home'">
+				<div class="data">
+					
+					some stuff here
 
-			</div>
+				</div>
 
-			<div class="data-2" v-on:click="setContent">
-				
-				some stuff here
+				<div class="data-2" v-on:click="setContent">
+					
+					some stuff here
 
+				</div>
 			</div>
 
 		</div>
@@ -33,6 +38,11 @@ export default {
   data () {
     return {
     }
+  },
+  computed: {
+  	addBlockContent () {
+  		return this.$store.state;
+  	}
   },
   //Methods here
   methods: {

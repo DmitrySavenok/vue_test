@@ -12,7 +12,7 @@
 
           <div class="student-menu" v-if="user.role === 'student'">
             <ul>
-              <li><a v-on:click="setContent">User Menu item 1</a></li>
+              <li><a v-on:click="setAddContent">User Menu item 1</a></li>
               <li><a v-on:click="fetchCourses">User Menu item 2</a></li>
               <li><a v-on:click="setContent">User Menu item 3</a></li>
             </ul>
@@ -47,8 +47,9 @@ function fetchCourses ( store ) {
     userPosition: store.state.users['currentUser'].position
   });
 }
+
 function myFunc() {
-  console.log('ayy');
+  console.log('ayy mounted component');
 }
 
 
@@ -76,7 +77,19 @@ export default {
     fetchGoals: function() {
       fetchGoals(this.$store);
     },
+
+    // Temp (don't change state outside actions/mutations)
+    setAddContent: function() {
+      this.$store.state.additionalBlockState = 'home';
+      this.$store.state.renderStage = 1;
+      console.log(this.$store.state.additionalBlockState);
+    },
+
+    // Temp (don't change state outside actions/mutations)
     setContent: function() {
+      this.$store.state.additionalBlockState = 'notHome';
+      this.$store.state.renderStage = 1;
+      console.log(this.$store.state.additionalBlockState);
       console.log('changing content here');
     },
     fetchCourses: function() {
