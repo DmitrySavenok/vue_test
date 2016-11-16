@@ -19,6 +19,16 @@
 
           </div>
 
+          <div class="manager-menu" v-if="user.role === 'manager'">
+            
+            <ul>
+              <li><a v-on:click="setManagerContent">Manager Menu 1</a></li>
+              <li><a v-on:click="setManagerContent">Manager Menu 2</a></li>
+              <li><a v-on:click="setManagerContent">Manager Menu 3</a></li>
+            </ul>
+
+          </div>
+
       </template>
 
     </div>
@@ -94,6 +104,11 @@ export default {
     },
     fetchCourses: function() {
       fetchCourses(this.$store);
+    },
+
+    setManagerContent: function() {
+      console.log('hey');
+      console.log('beatmaker');
     }
   },
   mounted: myFunc

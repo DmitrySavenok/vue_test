@@ -1,7 +1,7 @@
 'use strict';
 
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex from 'vuex';	
 import { fetchGoals, fetchUser, fetchCourses } from './api';
 
 Vue.use(Vuex);

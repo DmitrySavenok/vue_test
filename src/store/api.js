@@ -46,6 +46,6 @@ export function fetchGoals( userId ) {
 // Will change ID to pin (?)
 export function fetchUser (id) {
 	console.log('fetchUser function called, id: ' + id);
-	return fetch('user')
+	return fetch('manager')
 	// return fetch(`user/${id}`)
 }
