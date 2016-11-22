@@ -3,13 +3,21 @@
 	<transition appear name="slide-left">
 		<div class="main-block">
 
-			<ul class="course-list">
+			<template v-if="mainBlockTemplate == 'goalsView'">
 				
-				<li v-for="course in courses">
-					{{ course.courseName }}
-				</li>
+				<h2>squad G | O | A | L | S</h2>
 
-			</ul>
+			</template>
+			
+			<template v-else>
+				<ul class="course-list">
+					
+					<li v-for="course in courses">
+						{{ course.courseName }}
+					</li>
+
+				</ul>
+			</template>
 
 
 		</div>
@@ -37,6 +45,9 @@ export default {
   	},
   	courses() {
   		return this.$store.state.lists.currentUserCourses;
+  	},
+  	mainBlockTemplate() {
+  		return this.$store.state.mainBlockTemplate;
   	}
   },
   //Methods here

@@ -4,21 +4,38 @@
 
 		<div class="additional-block">
 
-			{{addBlockContent.additionalBlockState}}
-			
-			<div class="home-additional-data" v-if="addBlockContent.additionalBlockState == 'home'">
-				<div class="data">
-					
-					some stuff here
+			<template v-if="_.isEmpty(goals)">
 
+				{{addBlockContent.additionalBlockState}}
+				
+				<div class="home-additional-data" v-if="addBlockContent.additionalBlockState == 'home'">
+					<div class="data" v-on:click="setUpGoals">
+						
+						some stuff here
+
+					</div>
+
+					<div class="data-2" v-on:click="setContent">
+						
+						some stuff here
+
+					</div>
 				</div>
 
-				<div class="data-2" v-on:click="setContent">
-					
-					some stuff here
+			</template>
+			<template v-else>
+				<div class="goals_list">
 
+					<ul>
+						<li v-for="goal in goals">
+							{{goal.goal_id}} / {{goal.goal_name}}
+						</li>
+
+					</ul>
+					
+					{{goals}}
 				</div>
-			</div>
+			</template>
 
 		</div>
 	</transition>
@@ -29,6 +46,14 @@
 <script>
 
 import store from '../store';
+import _ from 'lodash';
+
+
+function fetchGoals ( store ) {
+	return store.dispatch('FETCH_GOALS', {
+		id: store.state.userId
+	})
+}
 
 
 export default {
@@ -42,6 +67,9 @@ export default {
   computed: {
   	addBlockContent () {
   		return this.$store.state;
+  	},
+  	goals() {
+  		return this.$store.state.goals;
   	}
   },
   //Methods here
@@ -50,6 +78,11 @@ export default {
   		// Temp (don't change state outside actions/mutations)
   		console.log('additional block set content');
   		this.$store.state.renderStage = 2;
+  	},
+  	setUpGoals: function() {
+  		console.log('goal view');
+  		this.$store.state.renderStage = 2;
+  		fetchGoals(this.$store);
   	}
   }
 }

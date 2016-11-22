@@ -7,7 +7,7 @@
 			<h1>{{ msg }}</h1>
 			
 			<form v-on:submit.prevent="onSubmit">
-				<div class="login-field"><label>Login: <input type="text" name="name" value="Name"></label></div>
+				<div class="login-field"><label>Login: <input v-model="login" type="text" name="name" placeholder="pin here"></label></div>
 				<div class="login-field"><label>Password: <input type="password" name="password" value="Password"></label></div>
 				<input type="submit" name="submit" value="Submit">
 			</form>
@@ -27,12 +27,15 @@ export default {
   // I.e. {{ msg }} must have data () { msg: 'something' } initial value
   data () {
     return {
-      msg: 'Test msg'
+      msg: 'Test msg',
+      login: ''
     }
   },
   methods: {
   	onSubmit: function() {
   		// Auth here. if ( true ) =>
+  		console.log(this);
+  		this.$store.state.userId = +this.$data.login;
   		this.$store.changePath('/home', { router: this.$router });
   	}
   }

@@ -39,13 +39,13 @@ export function fetchCourses( userId ) {
  * @return {Promise}
  */
 export function fetchGoals( userId ) {
-	return fetch(`goals`)
+	return fetch(`goals?user_id=${userId}`)
 }
 
 
 // Will change ID to pin (?)
 export function fetchUser (id) {
 	console.log('fetchUser function called, id: ' + id);
-	return fetch('manager')
-	// return fetch(`user/${id}`)
+	// return fetch('manager')
+	return fetch(`users/${id}`)
 }

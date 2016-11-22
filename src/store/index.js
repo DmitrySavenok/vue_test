@@ -14,9 +14,11 @@ const store = new Vuex.Store({
 		users:   {/*  */},
 		goals:   {/*  */},
 		additionalBlockState: 'ayy',
+		mainBlockTemplate: 'none',
 
 		// Position matrix (?)
 		// Instead of providing list on positions for every course we can specify which courses will be shown to each position
+		// FIRST VERSION - OFFICE (no positions, only departments)
 		positionCourses: {
 
 			first_row: [ { "id": 1, courseName: "Astronomy" }, { "id": 99, "courseName": "sales" }, { "id": 3, "courseName": "Dark Arts" } ],
@@ -34,16 +36,16 @@ const store = new Vuex.Store({
 
 	actions: {
 		// STUFF TO FETCH:
-		//   * Courses ( + tests )
-		//   * Goals
-		//   * User data
-		//   *
+		// 	 * Courses ( + tests )
+		// 	 * Goals
+		// 	 * User data
+		// 	 * Fetch news
 
 
 		// handle conditional rendering
 		HANDLE_RENDERING: ({ commit, state }, { renderStage, additionalBlockState = '' }) => {
 
-			// detect what we're chainging (render stage - whole page update? additional block )
+			// detect what we're chainging (render stage - whole page update? - additional block? )
 
 		},
 
@@ -81,28 +83,54 @@ const store = new Vuex.Store({
 			}
 		},
 		// ids - goal unique IDS
-		FETCH_GOALS: ({ commit, state }, { ids }) => {
-			ids = ids.filter(id => !state.goals[id])
-			if ( ids.length ) {
-				return fetchGoals(ids).then(goals => commit('SET_GOALS'), { goals })
+		FETCH_GOALS: ({ commit, state }, { id }) => {
+
+			console.log(id);
+
+			// ids = ids.filter(id => !state.goals[id])
+			if ( id ) {
+				return fetchGoals(id).then(goals => { console.log(goals); commit('SET_GOALS', { goals: goals[0].user_goals }); } )
 			} else {
 				return Promise.resolve()
 			}
 		},
+		// Will need to add FETCH_NEWS aswell (?)
 
 		// The can't be a user in our state alredy
 		// TODO: remake with that in mind (state.users[id] check is irrelevant)
 		FETCH_USER: ({ commit, state }, { id }) => {
+
+
+			// TEMP
+			// Clear courses/goals
+			commit('CLEAR_SOME_DATA');
+
+
 			console.log('FETCH_USER dispatched, id: ' + id);
 			// console.log(state.users[id]);
 			return state.users[id]
 				? Promise.resolve(state.users[id])
 				: fetchUser(id).then(user => { console.log(user); commit('SET_USER', { user })})
+				.catch( (err) => {
+					console.log('fetch failed, changing path to / ');
+					// commit('CHANGE_PATH', { path: '/' });
+				});
 		}
 
 	},
 
 	mutations: {
+
+		//TEMP
+		CLEAR_SOME_DATA: (state) => {
+			store.state.goals = {};
+			store.state.lists.currentUserCourses = {};
+		},
+
+
+		CHANGE_PATH: (state, { path } ) => {
+			store.state.route = path;
+		},
 		SET_COURSES: (state, { courses } ) => {
 			courses.forEach( course => {
 				if ( course ) {
@@ -112,13 +140,15 @@ const store = new Vuex.Store({
 			state.renderStage = 2;
 		},
 		SET_GOALS: (state, { goals }) => {
+			state.mainBlockTemplate = 'goalsView';
 			goals.forEach( goal => {
 				if ( goal ) {
-					Vue.set(state.goals, goal.id, goal)
+					Vue.set(state.goals, goal.goal_id, goal)
 				}
 			})
 		},
 		SET_USER: (state, { user }) => {
+			state.mainBlockTemplate = 'none';
 			console.log(user);
 			console.log('SET_USER mutation called');
 			Vue.set(state.users, 'currentUser', user)

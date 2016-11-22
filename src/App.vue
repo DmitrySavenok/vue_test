@@ -2,7 +2,7 @@
   <div id="wrapper">
     <!-- header -->
     <div id="header">
-      <h2>Custom header (Visible on all pages)</h2>
+      <h2>{{ $t("message.header") }}</h2>
     </div>
     <!-- main view -->
     <!-- <transition name="slide-fade"> -->

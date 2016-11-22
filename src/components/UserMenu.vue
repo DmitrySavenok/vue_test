@@ -6,7 +6,7 @@
       <template v-if="user">
 
           <div class="user-description">
-            <h4 v-on:click="fetchGoals">{{ user.name }} {{ user.surname }}</h4>
+            <h4>{{ user.name }} {{ user.surname }}</h4>
             <h4> {{ user.department }}</h4>
           </div>
 
@@ -42,15 +42,10 @@ import Spinner from '../components/Spinner.vue';
 
 function fetchUser ( store ) {
   return store.dispatch('FETCH_USER', {
-    id: 123
+    id: store.state.userId
   })
 }
 
-function fetchGoals ( store ) {
-  return store.dispatch('FETCH_GOALS', {
-    user: 'vasily'
-  })
-}
 
 function fetchCourses ( store ) {
   return store.dispatch('FETCH_COURSES', {
@@ -84,9 +79,6 @@ export default {
   },
   //Methods here
   methods: {
-    fetchGoals: function() {
-      fetchGoals(this.$store);
-    },
 
     // Temp (don't change state outside actions/mutations)
     setAddContent: function() {
