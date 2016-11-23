@@ -12,9 +12,10 @@
 
           <div class="student-menu" v-if="user.role === 'student'">
             <ul>
-              <li><a v-on:click="setAddContent">User Menu item 1</a></li>
-              <li><a v-on:click="fetchCourses">User Menu item 2</a></li>
-              <li><a v-on:click="setContent">User Menu item 3</a></li>
+              <li><router-link :to="'/home'" v-on:click="setPageHome">(HOME)</router-link></li>
+              <li><router-link :to="'/goals'" v-on:click="setPageGoals">(DEV GOALS)</router-link></li>
+              <li><router-link :to="'/courses'" v-on:click="setPageCourses">(RIMI E-LEARN)</router-link></li>
+              <li><router-link :to="'/resources'" v-on:click="setPageResources">(LEARNING RESOURCES)</router-link></li>
             </ul>
 
           </div>
@@ -28,8 +29,9 @@
             </ul>
 
           </div>
-
       </template>
+
+      <button v-on:click="changePath">Logout</button>
 
     </div>
   </transition>
@@ -53,8 +55,19 @@ function fetchCourses ( store ) {
   });
 }
 
-function myFunc() {
-  console.log('ayy mounted component');
+
+function leave( store, renderStage ) {
+  return store.dispatch('HANDLE_RENDERING', {
+    renderStage
+  });
+}
+
+
+function setAdditionalField( store, page ) {
+  return store.dispatch('HANDLE_ADDITIONAL_FIELD', { page });
+}
+function setMainField( store, page ) {
+  return store.dispatch('HANDLE_MAIN_FIELD', { page })
 }
 
 
@@ -80,30 +93,44 @@ export default {
   //Methods here
   methods: {
 
-    // Temp (don't change state outside actions/mutations)
-    setAddContent: function() {
-      this.$store.state.additionalBlockState = 'home';
-      this.$store.state.renderStage = 1;
-      console.log(this.$store.state.additionalBlockState);
+    setPageHome: function() {
+
+      setAdditionalField(this.$store, 'home');
+      setMainField(this.$store, 'home');
+
     },
 
+    setPageGoals: function(){ console.log('goals') },
+    setPageCourses: function(){ console.log('courses') },
+    setPageResources: function(){ console.log('resources') },
+
     // Temp (don't change state outside actions/mutations)
-    setContent: function() {
-      this.$store.state.additionalBlockState = 'notHome';
-      this.$store.state.renderStage = 1;
-      console.log(this.$store.state.additionalBlockState);
-      console.log('changing content here');
-    },
-    fetchCourses: function() {
-      fetchCourses(this.$store);
-    },
+    // setAddContent: function() {
+    //   this.$store.state.additionalBlockState = 'home';
+    //   this.$store.state.renderStage = 1;
+    //   console.log(this.$store.state.additionalBlockState);
+    // },
+
+    // Temp (don't change state outside actions/mutations)
+    // setContent: function() {
+    //   this.$store.state.additionalBlockState = 'notHome';
+    //   this.$store.state.renderStage = 1;
+    //   console.log(this.$store.state.additionalBlockState);
+    //   console.log('changing content here');
+    // },
+    // fetchCourses: function() {
+    //   fetchCourses(this.$store);
+    // },
 
     setManagerContent: function() {
       console.log('hey');
       console.log('beatmaker');
+    },
+
+    changePath: function() {
+      leave(this.$store, '/');
     }
-  },
-  mounted: myFunc
+  }
 }
 </script>
 

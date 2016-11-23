@@ -2,7 +2,7 @@
 
 import Vue from 'vue';
 import Vuex from 'vuex';	
-import { fetchGoals, fetchUser, fetchCourses } from './api';
+import { fetchGoals, fetchUser, fetchCourses, fetchNotifications, fetchNews, fetchResources } from './api';
 
 Vue.use(Vuex);
 
@@ -13,8 +13,8 @@ const store = new Vuex.Store({
 		renderStage: 0,
 		users:   {/*  */},
 		goals:   {/*  */},
-		additionalBlockState: 'ayy',
-		mainBlockTemplate: 'none',
+
+		mainBlockState: 'home',
 
 		// Position matrix (?)
 		// Instead of providing list on positions for every course we can specify which courses will be shown to each position
@@ -26,6 +26,9 @@ const store = new Vuex.Store({
 
 		},
 		lists: {
+			news: {},
+			notifications: {},
+			resources: {},
 			currentUserGoals:   [],
 			// Will split currentUserCourses[] in 2 (Mandatory / Optional)
 			// Or merge with currentUserTests[] and split in 3
@@ -39,13 +42,88 @@ const store = new Vuex.Store({
 		// 	 * Courses ( + tests )
 		// 	 * Goals
 		// 	 * User data
-		// 	 * Fetch news
+		// 	 * Fetch news/notifications
+
+
+		FETCH_MAIN_BLOCKS_DATA: ({ commit, state }, { type }) => {
+			console.log('FETCH_MAIN_BLOCKS_DATA');
+			console.log(type);
+
+			commit('SET_MAIN_BLOCK_STATE', { type });
+
+			// Additinal Field
+			switch(type) {
+				case 'home':
+					fetchNotifications().then(notifications => {
+						// some filtering logic here
+
+						notifications = notifications.filter( notification => !state.lists.notifications[notification.id] );
+						if ( notifications.length ) {
+							console.log('setting notifications');
+							commit('SET_NOTIFICATIONS', { notifications });
+							console.log(notifications);
+						}
+					});
+					fetchNews().then(news => {
+						news = news.filter( article => !state.lists.news[article.id] )
+						if ( news.length ) {
+							console.log('setting news');
+							commit('SET_NEWS', { news });
+						}
+					});
+					break;
+				case 'goals':
+					console.log('fetch goals data');
+					break;
+				case 'courses':
+					console.log('fetch courses data');
+					break;
+				case 'resources':
+					console.log('fetch resources data');
+
+					fetchResources().then(resources => {
+						console.log(resources);
+
+						resources = resources.filter( resoucre => !state.lists.resources[resoucre.id] );
+
+						if ( resources.length ) {
+							commit('SET_RESOURCES', { resources });
+						}
+					});
+					break;
+				default:
+					console.log('fetch main block data default');
+			}
+		},
+
+		HANDLE_ADDITIONAL_FIELD: ({ commit, state }, { page }) => {
+
+				switch(page) {
+					case 'home':
+							fetchNotifications().then(notifications => {
+								// some filtering logic here
+								// filter out just the latest notifications (can you disable them at all?)
+								commit('SET_NOTIFICATIONS', { notifications });
+								console.log(notifications);
+							});
+							fetchNews().then(news => {
+								console.log(news);
+								commit('SET_NEWS', { news });
+							});
+				}
+
+		},
+		HANDLE_MAIN_FIELD: ({ commit, state }, { page }) => {
+				// do nothing
+		},
 
 
 		// handle conditional rendering
 		HANDLE_RENDERING: ({ commit, state }, { renderStage, additionalBlockState = '' }) => {
 
-			// detect what we're chainging (render stage - whole page update? - additional block? )
+			commit('CHANGE_PATH', { path: renderStage })
+
+			// detect what we're changing (render stage - whole page update? - additional block? )
 
 		},
 
@@ -100,21 +178,25 @@ const store = new Vuex.Store({
 		// TODO: remake with that in mind (state.users[id] check is irrelevant)
 		FETCH_USER: ({ commit, state }, { id }) => {
 
+			if ( id ) {
 
-			// TEMP
-			// Clear courses/goals
-			commit('CLEAR_SOME_DATA');
+				// TEMP
+				// Clear courses/goals
+				commit('CLEAR_SOME_DATA');
 
 
-			console.log('FETCH_USER dispatched, id: ' + id);
-			// console.log(state.users[id]);
-			return state.users[id]
-				? Promise.resolve(state.users[id])
-				: fetchUser(id).then(user => { console.log(user); commit('SET_USER', { user })})
-				.catch( (err) => {
-					console.log('fetch failed, changing path to / ');
-					// commit('CHANGE_PATH', { path: '/' });
-				});
+				console.log('FETCH_USER dispatched, id: ' + id);
+				// console.log(state.users[id]);
+				// debugger;
+				return ( state.users['currentUser'] && state.users['currentUser'].id === id )
+					? Promise.resolve(state.users['currentUser'])
+					: fetchUser(id).then(user => { console.log(user); commit('SET_USER', { user })})
+					.catch( (err) => {
+						fetchUser(123).then(user => { console.log(user); commit('SET_USER', { user })})
+						console.log('fetch failed, changing path to / ');
+						// commit('CHANGE_PATH', { path: '/' });
+					});
+			}
 		}
 
 	},
@@ -131,6 +213,19 @@ const store = new Vuex.Store({
 		CHANGE_PATH: (state, { path } ) => {
 			store.state.route = path;
 		},
+		SET_MAIN_BLOCK_STATE: (state, { type }) => {
+			store.state.mainBlockState = type;
+		},
+		SET_NOTIFICATIONS: (state, { notifications }) => {
+			notifications.forEach( notification => {
+				Vue.set(state.lists.notifications, notification.id, notification)
+			});
+		},
+		SET_NEWS: (state, { news }) => {
+			news.forEach( article => {
+				Vue.set(state.lists.news, article.id, article)
+			});
+		},
 		SET_COURSES: (state, { courses } ) => {
 			courses.forEach( course => {
 				if ( course ) {
@@ -140,15 +235,18 @@ const store = new Vuex.Store({
 			state.renderStage = 2;
 		},
 		SET_GOALS: (state, { goals }) => {
-			state.mainBlockTemplate = 'goalsView';
 			goals.forEach( goal => {
 				if ( goal ) {
 					Vue.set(state.goals, goal.goal_id, goal)
 				}
 			})
 		},
+		SET_RESOURCES: (state, { resources }) => {
+			resources.forEach( resource => {
+				Vue.set(state.lists.resources, resource.id, resource);
+			})
+		},
 		SET_USER: (state, { user }) => {
-			state.mainBlockTemplate = 'none';
 			console.log(user);
 			console.log('SET_USER mutation called');
 			Vue.set(state.users, 'currentUser', user)

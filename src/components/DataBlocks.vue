@@ -1,40 +1,32 @@
 <template>
 
-	<transition name="slide-left">
-		<div class="home-page">
-			<h1>{{ msg }} {{type}}</h1>
-			
-			<UserMenu></UserMenu>
+	<div class="main-data-blocks">
+		<div class="orange"></div>
+		
+		<AdditionalBlock></AdditionalBlock>
+		<MainBlock></MainBlock>
 
-      <DataBlocks></DataBlocks>
-
-		</div>
-	</transition>
-
-
-
+	</div>
 
 </template>
 
 <script>
 
-import UserMenu from './UserMenu.vue';
-import DataBlocks from './DataBlocks.vue';
+import AdditionalBlock from './AdditionalBlock.vue';
+import MainBlock from './MainBlock.vue';
 
 
 export default {
 
-  name: 'HomeView',
+  name: 'MainDataBlocksView',
 
   data () {
     return {
-      msg: 'Ayy we'
     }
   },
-  props: ['type'],
   components: {
-  	UserMenu,
-    DataBlocks
+  	AdditionalBlock,
+  	MainBlock
   },
   //Methods here
   computed: {
@@ -52,18 +44,15 @@ export default {
 
 <style lang="stylus">
 
-.slide-left-enter
-  opacity 0
-  transform translate(30px, 0)
-
-.slide-left-leave-active
-  opacity 0
-  transform translate(-30px, 0)
 
 </style>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 
+.orange
+	height 50px
+	width 50px
+	background orange
 
 .home-page
 	min-height 600px

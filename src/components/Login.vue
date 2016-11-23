@@ -34,6 +34,7 @@ export default {
   methods: {
   	onSubmit: function() {
   		// Auth here. if ( true ) =>
+  		// Set user pin here (and login in UserMenu.vue component?)
   		console.log(this);
   		this.$store.state.userId = +this.$data.login;
   		this.$store.changePath('/home', { router: this.$router });

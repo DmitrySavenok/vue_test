@@ -49,3 +49,20 @@ export function fetchUser (id) {
 	// return fetch('manager')
 	return fetch(`users/${id}`)
 }
+
+// Should add limit (?)
+// Called from HANDLE_ADDITIONAL_FIELD
+export function fetchNotifications() {
+	console.log('fetching notifications');
+	return fetch('notifications');
+}
+
+export function fetchNews() {
+	console.log('fetching news');
+	return fetch('news');
+}
+
+export function fetchResources() {
+	console.log('fetching resources');
+	return fetch('resources');
+}

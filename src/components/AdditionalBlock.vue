@@ -4,11 +4,28 @@
 
 		<div class="additional-block">
 
-			<template v-if="_.isEmpty(goals)">
+			<h1>{{additionalBlockState}}</h1>
 
-				{{addBlockContent.additionalBlockState}}
+			<template v-if="additionalBlockState === 'home'">
 				
-				<div class="home-additional-data" v-if="addBlockContent.additionalBlockState == 'home'">
+				<div class="notifications">
+
+					<ul>
+						
+						<li v-for="notification in notifications">
+							{{notification.name}}
+							{{notification.description}}
+						</li>
+
+					</ul>
+
+				</div>
+
+			</template>
+
+			<template v-if="additionalBlockState === 'goals'">
+				
+				<div class="home-additional-data">
 					<div class="data" v-on:click="setUpGoals">
 						
 						some stuff here
@@ -23,7 +40,8 @@
 				</div>
 
 			</template>
-			<template v-else>
+
+			<template v-if="additionalBlockState === 'courses'">
 				<div class="goals_list">
 
 					<ul>
@@ -37,6 +55,34 @@
 				</div>
 			</template>
 
+			<template v-if="additionalBlockState === 'resources'">
+				<div class="sections">
+
+					<ul>
+						<template v-for="(section, index) in sections">
+							<li v-on:click="showSectionInfo" class="section-handle">
+								Section {{index}}
+								<div class="section-info hidden" v-bind:class="'section-' + index + '-info'" v-on:click.stop>
+									<h3>{{section.section_name}}</h3>
+									<p>{{section.section_description}}</p>
+									<div class="section-expert">
+										Section expert
+										<div class="section-expert-photo"></div>
+										<h3 class="section-expert-name">{{section.section_expert_name}}</h3>
+										<p>
+											<span class="section-expert-phone">{{section.section_expert_phone}}</span>
+											<span class="section-expert-mail">{{section.section_expert_mail}}</span>
+										</p>
+									</div>
+								</div>
+							</li>
+						</template>
+
+					</ul>
+					
+				</div>
+			</template>
+
 		</div>
 	</transition>
 
@@ -45,7 +91,6 @@
 
 <script>
 
-import store from '../store';
 import _ from 'lodash';
 
 
@@ -64,12 +109,19 @@ export default {
     return {
     }
   },
+  props: ['type'],
   computed: {
-  	addBlockContent () {
-  		return this.$store.state;
-  	},
   	goals() {
   		return this.$store.state.goals;
+  	},
+  	notifications() {
+  		return this.$store.state.lists.notifications;
+  	},
+  	sections() {
+  		return this.$store.state.lists.resources;
+  	},
+  	additionalBlockState() {
+  		return this.$store.state.mainBlockState;
   	}
   },
   //Methods here
@@ -83,6 +135,13 @@ export default {
   		console.log('goal view');
   		this.$store.state.renderStage = 2;
   		fetchGoals(this.$store);
+  	},
+  	showSectionInfo: function(event) {
+  		let descriptions = document.querySelectorAll('.section-info');
+
+  		event.target.querySelector('.section-info').classList.contains('hidden')
+  		? ( [].forEach.call(descriptions, description => description.classList.add('hidden')), event.target.querySelector('.section-info').classList.toggle('hidden') )
+  		: [].forEach.call(descriptions, description => description.classList.add('hidden'));
   	}
   }
 }
@@ -105,5 +164,19 @@ export default {
 		
 	.data-2
 		top 150px
+	
+	.section-info
+		// display block
+		visibility visible
+		height auto
+		transition 0.3s height ease-out
+		&.hidden
+			visibility hidden
+			height 0px
+			// display none
+	
+	.section-handle
+		cursor pointer
+		transition 0.3s all ease-out
 
 </style>
