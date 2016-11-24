@@ -6,7 +6,7 @@
 			
 			<UserMenu></UserMenu>
 
-      <DataBlocks></DataBlocks>
+	  <DataBlocks></DataBlocks>
 
 		</div>
 	</transition>
@@ -27,25 +27,25 @@ export default {
   name: 'HomeView',
 
   data () {
-    return {
-      msg: 'Ayy we'
-    }
+	return {
+	  msg: 'Ayy we'
+	}
   },
   props: ['type'],
   components: {
-  	UserMenu,
-    DataBlocks
+	UserMenu,
+	DataBlocks
   },
   //Methods here
   computed: {
-  	renderStage() {
-  		return this.$store.state.renderStage
-  	}
+	renderStage() {
+		return this.$store.state.renderStage
+	}
   },
   methods: {
-  	changePath: function() {
-  		this.$store.changePath('/', { router: this.$router });
-  	}
+	changePath: function() {
+		this.$store.changePath('/', { router: this.$router });
+	}
   }
 }
 </script>
@@ -53,12 +53,37 @@ export default {
 <style lang="stylus">
 
 .slide-left-enter
-  opacity 0
-  transform translate(30px, 0)
+	opacity 0
+	transform translate(30px, 0)
 
 .slide-left-leave-active
-  opacity 0
-  transform translate(-30px, 0)
+	opacity 0
+	transform translate(-30px, 0)
+
+.fade-enter-active, .fade-leave-active
+	transition all .5s
+
+.fade-enter, .fade-leave-active
+	opacity 0
+
+
+.section-fade-enter
+	transition height .5s
+	
+.section-fade-enter-active
+	transition all .5s
+	height 0px
+	opacity 0
+
+.section-fade-leave-enter
+	opacity 0
+	height auto
+	
+.section-fade-leave-active
+	height auto
+	opacity 0
+
+
 
 </style>
 
@@ -69,11 +94,12 @@ export default {
 	min-height 600px
 	position relative
 	
-
 .userMenu
 .additional-block
 .main-block
-	position absolute
+	position relative
+	display inline-block
+	vertical-align top
 	background #ccc
 	min-height 600px
 	top 50px

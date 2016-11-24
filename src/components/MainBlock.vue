@@ -86,7 +86,7 @@ export default {
 <style lang="stylus" scoped>
 
 .main-block
-	width 70%
-	left 28%
+	width 80%
+	left 2%
 
 </style>

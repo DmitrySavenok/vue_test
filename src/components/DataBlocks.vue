@@ -1,7 +1,6 @@
 <template>
 
 	<div class="main-data-blocks">
-		<div class="orange"></div>
 		
 		<AdditionalBlock></AdditionalBlock>
 		<MainBlock></MainBlock>
@@ -49,25 +48,24 @@ export default {
 
 <style lang="stylus" scoped>
 
-.orange
-	height 50px
-	width 50px
-	background orange
-
-.home-page
-	min-height 600px
-	position relative
+// .home-page
+// 	min-height 600px
+// 	position relative
 	
 
-.userMenu
-.additional-block
-.main-block
-	position absolute
-	background #ccc
-	min-height 600px
-	top 50px
-	transition all .5s cubic-bezier(.55,0,.1,1)
+// .userMenu
+// .additional-block
+// .main-block
+// 	position absolute
+// 	background #ccc
+// 	min-height 600px
+// 	top 50px
+// 	transition all .5s cubic-bezier(.55,0,.1,1)
 
+.main-data-blocks
+	display inline-block
+	width 80%
+	
 h1
 	text-align center
 

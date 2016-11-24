@@ -57,29 +57,11 @@
 
 			<template v-if="additionalBlockState === 'resources'">
 				<div class="sections">
-
 					<ul>
 						<template v-for="(section, index) in sections">
-							<li v-on:click="showSectionInfo" class="section-handle">
-								Section {{index}}
-								<div class="section-info hidden" v-bind:class="'section-' + index + '-info'" v-on:click.stop>
-									<h3>{{section.section_name}}</h3>
-									<p>{{section.section_description}}</p>
-									<div class="section-expert">
-										Section expert
-										<div class="section-expert-photo"></div>
-										<h3 class="section-expert-name">{{section.section_expert_name}}</h3>
-										<p>
-											<span class="section-expert-phone">{{section.section_expert_phone}}</span>
-											<span class="section-expert-mail">{{section.section_expert_mail}}</span>
-										</p>
-									</div>
-								</div>
-							</li>
+							<ResourceSection v-bind:section="section" v-bind:show="show"></ResourceSection>
 						</template>
-
 					</ul>
-					
 				</div>
 			</template>
 
@@ -91,6 +73,7 @@
 
 <script>
 
+import ResourceSection from './ResourceSection.vue';
 import _ from 'lodash';
 
 
@@ -107,7 +90,11 @@ export default {
 
   data () {
     return {
+    	show: false
     }
+  },
+  components: {
+  	ResourceSection
   },
   props: ['type'],
   computed: {
@@ -137,11 +124,7 @@ export default {
   		fetchGoals(this.$store);
   	},
   	showSectionInfo: function(event) {
-  		let descriptions = document.querySelectorAll('.section-info');
-
-  		event.target.querySelector('.section-info').classList.contains('hidden')
-  		? ( [].forEach.call(descriptions, description => description.classList.add('hidden')), event.target.querySelector('.section-info').classList.toggle('hidden') )
-  		: [].forEach.call(descriptions, description => description.classList.add('hidden'));
+  		this.show = !this.show;
   	}
   }
 }
@@ -150,7 +133,7 @@ export default {
 <style lang="stylus" scoped>
 
 .additional-block
-	left 15%
+	left 1%
 	width 12%
 	min-width 180px
 	
@@ -165,18 +148,18 @@ export default {
 	.data-2
 		top 150px
 	
-	.section-info
-		// display block
-		visibility visible
-		height auto
-		transition 0.3s height ease-out
-		&.hidden
-			visibility hidden
-			height 0px
-			// display none
-	
-	.section-handle
-		cursor pointer
-		transition 0.3s all ease-out
+	.sections
+		position absolute
+		height 100%
+		width 100%
+		ul
+			height 100%
+			width 100%
+			margin 0
+			padding 0
+			list-style none
+			
+			li
+				transition all 0.3s ease-out
 
 </style>

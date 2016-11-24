@@ -16,6 +16,8 @@ const store = new Vuex.Store({
 
 		mainBlockState: 'home',
 
+		showSection: '',
+
 		// Position matrix (?)
 		// Instead of providing list on positions for every course we can specify which courses will be shown to each position
 		// FIRST VERSION - OFFICE (no positions, only departments)
