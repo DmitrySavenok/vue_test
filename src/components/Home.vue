@@ -68,19 +68,20 @@ export default {
 
 
 .section-fade-enter
-	transition height .5s
+	transition all .5s
+	opacity 0
 	
 .section-fade-enter-active
 	transition all .5s
-	height 0px
+	// height 0px
 	opacity 0
 
 .section-fade-leave-enter
+	display none
+	transition none
 	opacity 0
-	height auto
 	
 .section-fade-leave-active
-	height auto
 	opacity 0
 
 

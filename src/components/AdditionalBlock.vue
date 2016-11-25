@@ -59,7 +59,7 @@
 				<div class="sections">
 					<ul>
 						<template v-for="(section, index) in sections">
-							<ResourceSection v-bind:section="section" v-bind:show="show"></ResourceSection>
+							<ResourceSection v-bind:section="section"></ResourceSection>
 						</template>
 					</ul>
 				</div>
@@ -90,7 +90,6 @@ export default {
 
   data () {
     return {
-    	show: false
     }
   },
   components: {
@@ -135,7 +134,7 @@ export default {
 .additional-block
 	left 1%
 	width 12%
-	min-width 180px
+	min-width 140px
 	
 	.data
 	.data-2
@@ -150,11 +149,17 @@ export default {
 	
 	.sections
 		position absolute
-		height 100%
+		height 78%
 		width 100%
 		ul
+			display flex
+			flex-direction column
+			justify-content flex-end
+			align-items stretch
+			
+
 			height 100%
-			width 100%
+			text-align center
 			margin 0
 			padding 0
 			list-style none

@@ -1,7 +1,7 @@
 <template>
 	<li v-on:click="showSectionInfo" class="section-handle">
 		Menu item {{section.id}}
-		<transition appear name="section-fade">
+		<!-- <transition appear name="section-fade"> -->
 			<div v-if="showSection" class="section-info" v-on:click.stop>
 				<h3>{{section.section_name}}</h3>
 				<p>{{section.section_description}}</p>
@@ -15,7 +15,7 @@
 					</p>
 				</div>
 			</div>
-		</transition>
+		<!-- </transition> -->
 	</li>
 </template>
 
@@ -24,13 +24,14 @@
 
 
 // Rewrite that damn animation for opening lists
+// Transition left for later..
 
 export default {
 
 	name: 'ResourceSection',
 	data () {
 		return {
-			showEl: 'none'
+			showEl: 0
 		}
 	},
 	props: ['type', 'section'],
@@ -45,9 +46,9 @@ export default {
 	},
 	methods: {
 		showSectionInfo: function(event) {
-			this.showSection ? this.showEl = '' : this.showEl = event.target;
+			this.showSection ? this.showEl = '' : this.showEl = this.section.id;
 			// Not a good idea to change state w/o outside actions/mutations
-			this.$store.state.showSection = event.target;
+			this.$store.state.showSection = this.section.id;
 		}
 	},
 	updated: function() {
@@ -60,6 +61,7 @@ export default {
 
 .section-info
 	transition all .5s cubic-bezier(.55,0,.1,1)
+	min-height 360px
 	// height auto
 	// height 0px
 	

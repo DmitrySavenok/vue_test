@@ -42,8 +42,22 @@
 
 			</template>
 			
-			<template v-if="mainBlockState === 'resoruces'">
+			<template v-if="mainBlockState === 'resources'">
 				<h2>resources here</h2>
+
+				<div class="resource-list">
+					
+					<template v-if="resources && resources[sectionNum]">
+						
+						<div v-for="resource in resources[sectionNum].section_resources">
+							<!-- {{resource.resource_title}} -->
+							<ResourceListItem v-bind:resource="resource"></ResourceListItem>
+						</div>
+
+					</template>
+
+				</div>
+
 			</template>
 
 
@@ -55,13 +69,19 @@
 
 <script>
 
+import ResourceListItem from './ResourceListItem.vue';
+
 export default {
 
   name: 'MainBlock',
 
   data () {
     return {
+    	sectionNum: 0
     }
+  },
+  components: {
+  	ResourceListItem
   },
   computed: {
   	user () {
@@ -72,6 +92,12 @@ export default {
   	},
   	news() {
   		return this.$store.state.lists.news;
+  	},
+  	sectionNum() {
+  		return this.$store.state.showSection;
+  	},
+  	resources() {
+  		return this.$store.state.lists.resources;
   	},
   	mainBlockState() {
   		return this.$store.state.mainBlockState;

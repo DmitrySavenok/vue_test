@@ -16,7 +16,7 @@ const store = new Vuex.Store({
 
 		mainBlockState: 'home',
 
-		showSection: '',
+		showSection: 1,
 
 		// Position matrix (?)
 		// Instead of providing list on positions for every course we can specify which courses will be shown to each position
