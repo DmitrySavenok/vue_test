@@ -2,7 +2,11 @@
 
 import Vue from 'vue';
 import Vuex from 'vuex';	
-import { fetchGoals, fetchUser, fetchCourses, fetchNotifications, fetchNews, fetchResources } from './api';
+import { 
+	fetchGoals, fetchUser, fetchCourses, 
+	fetchNotifications, fetchNews, fetchResources, 
+	fetchCourseSectionDescription 
+} from './api';
 
 Vue.use(Vuex);
 
@@ -30,11 +34,16 @@ const store = new Vuex.Store({
 		lists: {
 			news: {},
 			notifications: {},
+			courseSections: {},
 			resources: {},
+			courseDescriptions: {},
 			currentUserGoals:   [],
 			// Will split currentUserCourses[] in 2 (Mandatory / Optional)
 			// Or merge with currentUserTests[] and split in 3
-			currentUserCourses: {},
+			currentUserCourses: {
+				mandatory: { 'que': 1 },
+				optional: { 'que': 2 }
+			},
 			currentUserTests:   []
 		}
 	},
@@ -45,6 +54,9 @@ const store = new Vuex.Store({
 		// 	 * Goals
 		// 	 * User data
 		// 	 * Fetch news/notifications
+
+		// Next: goals/polish up news|resources|next week - start styling up?
+		// back
 
 
 		FETCH_MAIN_BLOCKS_DATA: ({ commit, state }, { type }) => {
@@ -79,6 +91,42 @@ const store = new Vuex.Store({
 					break;
 				case 'courses':
 					console.log('fetch courses data');
+
+					fetchCourseSectionDescription( 'mandatory' ).then( mandatoryCourses => {
+						commit('SET_COURSE_SECTION_DESC', { courseDesc: mandatoryCourses });
+						fetchCourseSectionDescription( 'optional' ).then( optionalCourses => {
+							commit('SET_COURSE_SECTION_DESC', { courseDesc: optionalCourses });
+						});
+					}
+					);
+
+					let userPosition = 'first_row';
+
+					if ( state.users.currentUser ) {
+						userPosition = state.users.currentUser.position;
+					}
+
+					let positionCourses = state.positionCourses[userPosition];
+
+					positionCourses = positionCourses.filter( course => !state.lists.currentUserCourses[course.id]);
+					// Maybe will be possible to fetch only those courses we need (not all and then sort out here)
+					if ( positionCourses.length ) {
+						return fetchCourses(positionCourses).then(courses => { 
+
+
+							let posCoursesNames = [],
+								showCourses = [];
+							positionCourses.forEach(posCourse => posCoursesNames.push(posCourse.courseName));
+							// Filter out courses that we alredy have in our list
+							// courses = courses.filter( course => !state.lists.currentUserCourses[course.courseId] );
+							if ( courses.length ) {
+								courses.forEach(course => {
+									posCoursesNames.includes(course.course_name) ? showCourses.push(course) : '';
+								});
+								commit('SET_COURSES', { courses: showCourses }) 
+							}
+						})
+					}
 					break;
 				case 'resources':
 					console.log('fetch resources data');
@@ -116,7 +164,7 @@ const store = new Vuex.Store({
 
 		},
 		HANDLE_MAIN_FIELD: ({ commit, state }, { page }) => {
-				// do nothing
+			// do nothing
 		},
 
 
@@ -132,35 +180,37 @@ const store = new Vuex.Store({
 		// ids - course unique IDS
 		FETCH_COURSES: ({ commit, state }, { userPosition }) => {
 
-			let positionCourses = state.positionCourses[userPosition];
+			// MOVING THIS TO FETCH_MAIN_BLOCK_DATA
 
-			positionCourses = positionCourses.filter( course => !state.lists.currentUserCourses[course.id]);
+			// let positionCourses = state.positionCourses[userPosition];
 
-			// Maybe will be possible to fetch only those courses we need (not all and then sort out here)
+			// positionCourses = positionCourses.filter( course => !state.lists.currentUserCourses[course.id]);
 
-			if ( positionCourses.length ) {
-				return fetchCourses(positionCourses).then(courses => { 
+			// // Maybe will be possible to fetch only those courses we need (not all and then sort out here)
+
+			// if ( positionCourses.length ) {
+			// 	return fetchCourses(positionCourses).then(courses => { 
 						
-					let posCoursesNames = [],
-						showCourses = [];
+			// 		let posCoursesNames = [],
+			// 			showCourses = [];
 
-					positionCourses.forEach(posCourse => posCoursesNames.push(posCourse.courseName));
+			// 		positionCourses.forEach(posCourse => posCoursesNames.push(posCourse.courseName));
 
 
-					// Filter out courses that we alredy have in our list
-					// courses = courses.filter( course => !state.lists.currentUserCourses[course.courseId] );
-					if ( courses.length ) {
+			// 		// Filter out courses that we alredy have in our list
+			// 		// courses = courses.filter( course => !state.lists.currentUserCourses[course.courseId] );
+			// 		if ( courses.length ) {
 
-						courses.forEach(course => {
-							posCoursesNames.includes(course.courseName) ? showCourses.push(course) : '';
-						});
+			// 			courses.forEach(course => {
+			// 				posCoursesNames.includes(course.courseName) ? showCourses.push(course) : '';
+			// 			});
 
-						commit('SET_COURSES', { courses: showCourses }) 
+			// 			commit('SET_COURSES', { courses: showCourses }) 
 
-					}
-				})
+			// 		}
+			// 	})
 
-			}
+			// }
 		},
 		// ids - goal unique IDS
 		FETCH_GOALS: ({ commit, state }, { id }) => {
@@ -208,7 +258,7 @@ const store = new Vuex.Store({
 		//TEMP
 		CLEAR_SOME_DATA: (state) => {
 			store.state.goals = {};
-			store.state.lists.currentUserCourses = {};
+			// store.state.lists.currentUserCourses = {};
 		},
 
 
@@ -229,12 +279,27 @@ const store = new Vuex.Store({
 			});
 		},
 		SET_COURSES: (state, { courses } ) => {
+			console.log('Setting courses');
+			console.log(courses);
 			courses.forEach( course => {
+				console.log(course);
+				console.log(course.course_mandatory);
+				console.log(state.lists.currentUserCourses.mandatory);
 				if ( course ) {
-					Vue.set(state.lists.currentUserCourses, course.courseId, course)
+					Vue.set(state.lists.currentUserCourses, course.id, course)
 				}
+				// if ( course && course.course_mandatory ) {
+				// 	Vue.set(state.lists.currentUserCourses.mandatory, course.id, course)
+				// } else if ( course && !course.course_mandatory ) {
+				// 	Vue.set(state.lists.currentUserCourses.optional, course.id, course)
+				// }
 			});
 			state.renderStage = 2;
+		},
+		SET_COURSE_SECTION_DESC: (state, { courseDesc }) => {
+
+			Vue.set(state.lists.courseSections, courseDesc.category_handle, courseDesc)
+
 		},
 		SET_GOALS: (state, { goals }) => {
 			goals.forEach( goal => {

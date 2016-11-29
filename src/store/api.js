@@ -28,7 +28,12 @@ export function fetch ( child ) {
 
 
 export function fetchCourses( userId ) {
-	return fetch('courses')
+	console.log('fetch courses + ')
+	console.log(userId);
+	// Separation for mandatory/optional courses
+
+	// Mandatory:
+	return fetch('courses/?course_mandatory=true')
 }
 
 /*
@@ -65,4 +70,8 @@ export function fetchNews() {
 export function fetchResources() {
 	console.log('fetching resources');
 	return fetch('resources');
+}
+
+export function fetchCourseSectionDescription( type ) {
+	return fetch(`${type}_courses`);
 }

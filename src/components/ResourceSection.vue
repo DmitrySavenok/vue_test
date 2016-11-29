@@ -39,10 +39,7 @@ export default {
 	computed: {
 		showSection() {
 			return this.$store.state.showSection === this.showEl;
-		},
-	  	sections() {
-	  		return this.$store.state.lists.resources;
-	  	}
+		}
 	},
 	methods: {
 		showSectionInfo: function(event) {
@@ -50,9 +47,6 @@ export default {
 			// Not a good idea to change state w/o outside actions/mutations
 			this.$store.state.showSection = this.section.id;
 		}
-	},
-	updated: function() {
-		console.log('updated');
 	}
 }
 </script>

@@ -24,24 +24,7 @@
 			</template>
 
 			<template v-if="additionalBlockState === 'goals'">
-				
-				<div class="home-additional-data">
-					<div class="data" v-on:click="setUpGoals">
-						
-						some stuff here
 
-					</div>
-
-					<div class="data-2" v-on:click="setContent">
-						
-						some stuff here
-
-					</div>
-				</div>
-
-			</template>
-
-			<template v-if="additionalBlockState === 'courses'">
 				<div class="goals_list">
 
 					<ul>
@@ -53,10 +36,39 @@
 					
 					{{goals}}
 				</div>
+
+<!-- 				<div class="home-additional-data">
+					<div class="data" v-on:click="setUpGoals">
+						
+						some stuff here
+
+					</div>
+
+					<div class="data-2" v-on:click="setContent">
+						
+						some stuff here
+
+					</div>
+				</div> -->
+
+			</template>
+
+			<template v-if="additionalBlockState === 'courses'">
+
+				<div class="course-sections">
+					
+					<ul>
+						<CourseSection v-bind:section="mandatoryCourse"></CourseSection>
+						<CourseSection v-bind:section="optionalCourse"></CourseSection>
+					</ul>
+
+				</div>
+
 			</template>
 
 			<template v-if="additionalBlockState === 'resources'">
 				<div class="sections">
+				<!-- <dir>{{mandatoryCourse}}</dir> -->
 					<ul>
 						<template v-for="(section, index) in sections">
 							<ResourceSection v-bind:section="section"></ResourceSection>
@@ -74,6 +86,7 @@
 <script>
 
 import ResourceSection from './ResourceSection.vue';
+import CourseSection from './CourseSection.vue';
 import _ from 'lodash';
 
 
@@ -93,7 +106,8 @@ export default {
     }
   },
   components: {
-  	ResourceSection
+  	ResourceSection,
+  	CourseSection
   },
   props: ['type'],
   computed: {
@@ -102,6 +116,15 @@ export default {
   	},
   	notifications() {
   		return this.$store.state.lists.notifications;
+  	},
+  	mandatoryCourse() {
+  		return this.$store.state.lists.courseSections.mandatory;
+  	},
+  	optionalCourse() {
+  		return this.$store.state.lists.courseSections.optional;
+  	},
+  	courseSections() {
+  		return this.$store.state.lists.courseSections;
   	},
   	sections() {
   		return this.$store.state.lists.resources;
@@ -146,7 +169,8 @@ export default {
 		
 	.data-2
 		top 150px
-	
+		
+	.course-sections
 	.sections
 		position absolute
 		height 78%

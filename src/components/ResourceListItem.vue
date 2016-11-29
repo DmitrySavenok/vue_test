@@ -1,6 +1,5 @@
 <template>
 
-
 	<div class="resource-item">
 		
 		<h4 class="resource-title" @click="showInfo">{{resource.resource_title}}</h4>

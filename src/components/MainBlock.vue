@@ -34,9 +34,15 @@
 
 				<ul class="course-list">
 					
-					<li v-for="course in courses">
-						{{ course.courseName }}
-					</li>
+					<template v-if="courses">
+						
+						<div v-for="course in courses">
+							{{sectionNum}}
+							<!-- {{resource.resource_title}} -->
+							<CourseListItem v-bind:course="course"></CourseListItem>
+						</div>
+
+					</template>
 
 				</ul>
 
@@ -70,6 +76,7 @@
 <script>
 
 import ResourceListItem from './ResourceListItem.vue';
+import CourseListItem from './CourseListItem.vue';
 
 export default {
 
@@ -81,7 +88,8 @@ export default {
     }
   },
   components: {
-  	ResourceListItem
+  	ResourceListItem,
+  	CourseListItem
   },
   computed: {
   	user () {
