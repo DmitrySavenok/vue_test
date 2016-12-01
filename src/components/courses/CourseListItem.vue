@@ -1,8 +1,9 @@
 <template>
 	
 	<div class="course-item">
+		<!-- {{course}} -->
 		
-		<h4 class="course-title" @click="showInfo">{{course.course_title}}</h4>
+		<h4 class="course-title" @click="showInfo">{{course.course_name}}</h4>
 
 		<transition-group 
 			name="fade-course" 
@@ -93,6 +94,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+
+.course-title
+	cursor pointer
 
 
 .fade-course-enter-active, .fade-course-leave-active

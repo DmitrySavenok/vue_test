@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 
 import { createMainView } from '../views/CreateMainView';
 import Login from '../components/Login.vue';
-import Home from '../components/Home.vue';
+import Home from '../views/HomeView.vue';
 
 
 Vue.use(VueRouter);

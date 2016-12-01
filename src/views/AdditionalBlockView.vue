@@ -4,8 +4,6 @@
 
 		<div class="additional-block">
 
-			<h1>{{additionalBlockState}}</h1>
-
 			<template v-if="additionalBlockState === 'home'">
 				
 				<div class="notifications">
@@ -25,31 +23,13 @@
 
 			<template v-if="additionalBlockState === 'goals'">
 
-				<div class="goals_list">
+				<div class="goals-list">
 
-					<ul>
-						<li v-for="goal in goals">
-							{{goal.goal_id}} / {{goal.goal_name}}
-						</li>
+					<div class="goal-section" v-for="index in [1,2,3]">
+						<GoalComponent v-bind:goalIndex="index" v-bind:goal="goals['Goal' + index]"></GoalComponent>
+					</div>
 
-					</ul>
-					
-					{{goals}}
 				</div>
-
-<!-- 				<div class="home-additional-data">
-					<div class="data" v-on:click="setUpGoals">
-						
-						some stuff here
-
-					</div>
-
-					<div class="data-2" v-on:click="setContent">
-						
-						some stuff here
-
-					</div>
-				</div> -->
 
 			</template>
 
@@ -85,8 +65,9 @@
 
 <script>
 
-import ResourceSection from './ResourceSection.vue';
-import CourseSection from './CourseSection.vue';
+import ResourceSection from '../components/resources/ResourceSection.vue';
+import CourseSection from '../components/courses/CourseSection.vue';
+import GoalComponent from '../components/goals/GoalComponent.vue';
 import _ from 'lodash';
 
 
@@ -107,12 +88,13 @@ export default {
   },
   components: {
   	ResourceSection,
-  	CourseSection
+  	CourseSection,
+  	GoalComponent
   },
   props: ['type'],
   computed: {
   	goals() {
-  		return this.$store.state.goals;
+  		return this.$store.state.lists.currentUserGoals;
   	},
   	notifications() {
   		return this.$store.state.lists.notifications;
@@ -154,10 +136,15 @@ export default {
 
 <style lang="stylus" scoped>
 
+ul
+	margin 0
+	padding 0
+	list-style none
+
 .additional-block
 	left 1%
 	width 12%
-	min-width 140px
+	min-width 250px
 	
 	.data
 	.data-2
@@ -166,10 +153,10 @@ export default {
 		background green
 		position relative
 		top 50px
-		
+
 	.data-2
 		top 150px
-		
+
 	.course-sections
 	.sections
 		position absolute
@@ -180,15 +167,19 @@ export default {
 			flex-direction column
 			justify-content flex-end
 			align-items stretch
-			
-
 			height 100%
 			text-align center
-			margin 0
-			padding 0
-			list-style none
-			
 			li
 				transition all 0.3s ease-out
+
+	.goals-list
+		position absolute
+		height 100%
+		width 100%
+		
+		.goal-section
+			height 33.3%
+			display flex
+			justify-content flex-start
 
 </style>

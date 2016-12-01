@@ -6,7 +6,7 @@
 			
 			<UserMenu></UserMenu>
 
-	  <DataBlocks></DataBlocks>
+	  		<DataBlocks></DataBlocks>
 
 		</div>
 	</transition>
@@ -18,8 +18,8 @@
 
 <script>
 
-import UserMenu from './UserMenu.vue';
-import DataBlocks from './DataBlocks.vue';
+import UserMenu from '../components/UserMenu.vue';
+import DataBlocks from './DataBlocksView.vue';
 
 
 export default {
@@ -92,7 +92,7 @@ export default {
 
 
 .home-page
-	min-height 600px
+	min-height 1000px
 	position relative
 	
 .userMenu
@@ -102,8 +102,7 @@ export default {
 	display inline-block
 	vertical-align top
 	background #ccc
-	min-height 600px
-	top 50px
+	min-height 1000px
 	transition all .5s cubic-bezier(.55,0,.1,1)
 
 h1

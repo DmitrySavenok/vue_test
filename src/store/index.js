@@ -37,7 +37,10 @@ const store = new Vuex.Store({
 			courseSections: {},
 			resources: {},
 			courseDescriptions: {},
-			currentUserGoals:   [],
+			currentUserGoals:   {
+				Goal1: 'Kappa',
+				Goal3: 'Keepo'
+			},
 			// Will split currentUserCourses[] in 2 (Mandatory / Optional)
 			// Or merge with currentUserTests[] and split in 3
 			currentUserCourses: {

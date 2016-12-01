@@ -37,7 +37,7 @@
 					<template v-if="courses">
 						
 						<div v-for="course in courses">
-							{{sectionNum}}
+							<!-- {{course}} -->
 							<!-- {{resource.resource_title}} -->
 							<CourseListItem v-bind:course="course"></CourseListItem>
 						</div>
@@ -75,8 +75,8 @@
 
 <script>
 
-import ResourceListItem from './ResourceListItem.vue';
-import CourseListItem from './CourseListItem.vue';
+import ResourceListItem from '../components/resources/ResourceListItem.vue';
+import CourseListItem from '../components/courses/CourseListItem.vue';
 
 export default {
 

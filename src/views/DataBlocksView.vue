@@ -11,8 +11,8 @@
 
 <script>
 
-import AdditionalBlock from './AdditionalBlock.vue';
-import MainBlock from './MainBlock.vue';
+import AdditionalBlock from './AdditionalBlockView.vue';
+import MainBlock from './MainBlockView.vue';
 
 
 export default {
