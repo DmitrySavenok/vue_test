@@ -10,12 +10,12 @@
 
 		<div class="goal-graph-wrapper">
 
-			<div class="percentage"> 42% </div>
+			<div class="percentage"> 0% </div>
 
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-1"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-2"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-3"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-4"></div>	
+			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-1 empty-goal"></div>
+			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-2 empty-goal"></div>
+			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-3 empty-goal"></div>
+			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-4 empty-goal"></div>	
 
 		</div>
 
@@ -27,6 +27,7 @@
 		<!-- Existing goal here -->
 		<h4>Goal {{goalIndex}}</h4>
 		<span>285 B.C - 476 A.D</span>
+		<p>{{goal.goal_name}}</p>
 
 		<div class="goal-graph-wrapper">
 
@@ -63,6 +64,8 @@ export default {
 	methods: {
 		showGoal() {
 			console.log(this.goal);
+
+			this.$store.state.goalToShow = 'Goal' + this.goal.goal_id;
 		},
 		mouseOver(e) {
 			e.target.classList.add('bigger')
@@ -87,6 +90,9 @@ export default {
 .goal-item
 	height 100%
 	cursor pointer
+	
+	p
+		margin 0px
 
 	.goal-graph-wrapper
 		height 250px
@@ -174,6 +180,10 @@ export default {
 				background rgb(204, 153, 0)
 			&.goal-bg-3
 				background rgb(204, 102, 0)
+				
+		.empty-goal
+			height 30px
+			width 30px
 				
 		.bigger
 			height 100px

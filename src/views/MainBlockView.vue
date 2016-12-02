@@ -28,6 +28,12 @@
 				
 				<h2>squad G | O | A | L | S</h2>
 
+				<div v-if="goalToShow">
+
+					<GoalListItem v-bind:goalToShow="goals[goalToShow]"></GoalListItem>
+				
+				</div>
+
 			</template>
 
 			<template v-if="mainBlockState === 'courses'">
@@ -77,6 +83,7 @@
 
 import ResourceListItem from '../components/resources/ResourceListItem.vue';
 import CourseListItem from '../components/courses/CourseListItem.vue';
+import GoalListItem from '../components/goals/GoalListItem.vue';
 
 export default {
 
@@ -89,11 +96,18 @@ export default {
   },
   components: {
   	ResourceListItem,
-  	CourseListItem
+  	CourseListItem,
+  	GoalListItem
   },
   computed: {
   	user () {
   		return this.$store.state.users['currentUser']
+  	},
+  	goalToShow() {
+  		return this.$store.state.goalToShow;
+  	},
+  	goals() {
+  		return this.$store.state.goals;
   	},
   	courses() {
   		return this.$store.state.lists.currentUserCourses;

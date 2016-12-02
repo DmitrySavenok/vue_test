@@ -94,7 +94,7 @@ export default {
   props: ['type'],
   computed: {
   	goals() {
-  		return this.$store.state.lists.currentUserGoals;
+  		return this.$store.state.goals;
   	},
   	notifications() {
   		return this.$store.state.lists.notifications;

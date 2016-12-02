@@ -21,6 +21,7 @@ const store = new Vuex.Store({
 		mainBlockState: 'home',
 
 		showSection: 1,
+		goalToShow: '',
 
 		// Position matrix (?)
 		// Instead of providing list on positions for every course we can specify which courses will be shown to each position
@@ -76,24 +77,38 @@ const store = new Vuex.Store({
 
 						notifications = notifications.filter( notification => !state.lists.notifications[notification.id] );
 						if ( notifications.length ) {
-							console.log('setting notifications');
+							// console.log('setting notifications');
 							commit('SET_NOTIFICATIONS', { notifications });
-							console.log(notifications);
+							// console.log(notifications);
 						}
 					});
 					fetchNews().then(news => {
 						news = news.filter( article => !state.lists.news[article.id] )
 						if ( news.length ) {
-							console.log('setting news');
+							// console.log('setting news');
 							commit('SET_NEWS', { news });
 						}
 					});
 					break;
 				case 'goals':
 					console.log('fetch goals data');
+
+					let userId = 123
+
+					if ( state.users.currentUser ) {
+						let userId = state.users.currentUser.id 
+					}
+					
+					if ( userId ) {
+						fetchGoals(userId).then(goals => { console.log(goals); commit('SET_GOALS', { goals: goals[0].user_goals }); } )
+					} else {
+						console.log('no user id specified');
+					}
+					
+
 					break;
 				case 'courses':
-					console.log('fetch courses data');
+					// console.log('fetch courses data');
 
 					fetchCourseSectionDescription( 'mandatory' ).then( mandatoryCourses => {
 						commit('SET_COURSE_SECTION_DESC', { courseDesc: mandatoryCourses });
@@ -132,10 +147,10 @@ const store = new Vuex.Store({
 					}
 					break;
 				case 'resources':
-					console.log('fetch resources data');
+					// console.log('fetch resources data');
 
 					fetchResources().then(resources => {
-						console.log(resources);
+						// console.log(resources);
 
 						resources = resources.filter( resoucre => !state.lists.resources[resoucre.id] );
 
@@ -157,10 +172,10 @@ const store = new Vuex.Store({
 								// some filtering logic here
 								// filter out just the latest notifications (can you disable them at all?)
 								commit('SET_NOTIFICATIONS', { notifications });
-								console.log(notifications);
+								// console.log(notifications);
 							});
 							fetchNews().then(news => {
-								console.log(news);
+								// console.log(news);
 								commit('SET_NEWS', { news });
 							});
 				}
@@ -218,14 +233,16 @@ const store = new Vuex.Store({
 		// ids - goal unique IDS
 		FETCH_GOALS: ({ commit, state }, { id }) => {
 
-			console.log(id);
+			// console.log(id);
 
 			// ids = ids.filter(id => !state.goals[id])
-			if ( id ) {
-				return fetchGoals(id).then(goals => { console.log(goals); commit('SET_GOALS', { goals: goals[0].user_goals }); } )
-			} else {
-				return Promise.resolve()
-			}
+
+
+			// if ( id ) {
+			// 	return fetchGoals(id).then(goals => { console.log(goals); commit('SET_GOALS', { goals: goals[0].user_goals }); } )
+			// } else {
+			// 	return Promise.resolve()
+			// }
 		},
 		// Will need to add FETCH_NEWS aswell (?)
 
@@ -240,7 +257,7 @@ const store = new Vuex.Store({
 				commit('CLEAR_SOME_DATA');
 
 
-				console.log('FETCH_USER dispatched, id: ' + id);
+				// console.log('FETCH_USER dispatched, id: ' + id);
 				// console.log(state.users[id]);
 				// debugger;
 				return ( state.users['currentUser'] && state.users['currentUser'].id === id )
@@ -282,12 +299,12 @@ const store = new Vuex.Store({
 			});
 		},
 		SET_COURSES: (state, { courses } ) => {
-			console.log('Setting courses');
-			console.log(courses);
+			// console.log('Setting courses');
+			// console.log(courses);
 			courses.forEach( course => {
-				console.log(course);
-				console.log(course.course_mandatory);
-				console.log(state.lists.currentUserCourses.mandatory);
+				// console.log(course);
+				// console.log(course.course_mandatory);
+				// console.log(state.lists.currentUserCourses.mandatory);
 				if ( course ) {
 					Vue.set(state.lists.currentUserCourses, course.id, course)
 				}
@@ -307,7 +324,7 @@ const store = new Vuex.Store({
 		SET_GOALS: (state, { goals }) => {
 			goals.forEach( goal => {
 				if ( goal ) {
-					Vue.set(state.goals, goal.goal_id, goal)
+					Vue.set(state.goals, 'Goal' + goal.goal_id, goal)
 				}
 			})
 		},
@@ -317,8 +334,8 @@ const store = new Vuex.Store({
 			})
 		},
 		SET_USER: (state, { user }) => {
-			console.log(user);
-			console.log('SET_USER mutation called');
+			// console.log(user);
+			// console.log('SET_USER mutation called');
 			Vue.set(state.users, 'currentUser', user)
 			state.renderStage = 1;
 		}
