@@ -3,9 +3,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';	
 import { 
-	fetchGoals, fetchUser, fetchCourses, 
-	fetchNotifications, fetchNews, fetchResources, 
-	fetchCourseSectionDescription 
+	fetchGoals, fetchGoalTasks, 
+	fetchUser, 
+	fetchCourses, fetchCourseSectionDescription, 
+	fetchNotifications, fetchNews, 
+	fetchResources
+} from './api';
+
+import {
+	patchTaskPercentage
 } from './api';
 
 Vue.use(Vuex);
@@ -21,7 +27,8 @@ const store = new Vuex.Store({
 		mainBlockState: 'home',
 
 		showSection: 1,
-		goalToShow: '',
+		goalToShow: {},
+		goalTasks: {},
 
 		// Position matrix (?)
 		// Instead of providing list on positions for every course we can specify which courses will be shown to each position
@@ -269,6 +276,27 @@ const store = new Vuex.Store({
 						// commit('CHANGE_PATH', { path: '/' });
 					});
 			}
+		},
+
+
+		SET_GOAL_TO_DISPLAY: ({ commit, state }, { goalId }) => {
+			if ( goalId ) {
+
+				// Could check if tasks are alredy in the state obj. and return resolved promise
+
+				return fetchGoalTasks(goalId).then( tasks => {
+					tasks = tasks.filter( task => task.task_goal_id === goalId );
+					commit('SET_GOAL_TO_DISPLAY', { goalId, goalTasks: tasks });
+				});
+			}
+		},
+
+		UPDATE_TASK_COMPLETION_STATUS: ({ commit, state }, { taskId, percentage }) => {
+
+			if ( taskId && percentage ) {
+				return patchTaskPercentage(taskId, percentage)
+			}
+
 		}
 
 	},
@@ -279,6 +307,16 @@ const store = new Vuex.Store({
 		CLEAR_SOME_DATA: (state) => {
 			store.state.goals = {};
 			// store.state.lists.currentUserCourses = {};
+		},
+
+		SET_GOAL_TO_DISPLAY: (state, { goalId, goalTasks }) => {
+			// console.log('Goal id: ' + goalId);
+			// console.log('Tasks: ');
+			// console.log(goalTasks);
+			Vue.set(state.goalToShow, 0, 'Goal' + goalId);
+			goalTasks.forEach( goalTask => {
+				Vue.set(state.goalTasks, goalTask.id, goalTask );
+			});
 		},
 
 

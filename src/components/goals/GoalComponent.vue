@@ -47,6 +47,10 @@
 
 <script>
 
+function setGoalToDisplay( store, goalId ) {
+	return store.dispatch('SET_GOAL_TO_DISPLAY', { goalId });
+}
+
 
 export default {
 
@@ -63,9 +67,11 @@ export default {
 
 	methods: {
 		showGoal() {
+			console.log('here');
 			console.log(this.goal);
 
-			this.$store.state.goalToShow = 'Goal' + this.goal.goal_id;
+			setGoalToDisplay(this.$store, this.goal.goal_id);
+			// this.$store.state.goalToShow = 'Goal' + this.goal.goal_id;
 		},
 		mouseOver(e) {
 			e.target.classList.add('bigger')

@@ -104,7 +104,7 @@ export default {
   		return this.$store.state.users['currentUser']
   	},
   	goalToShow() {
-  		return this.$store.state.goalToShow;
+  		return this.$store.state.goalToShow[0];
   	},
   	goals() {
   		return this.$store.state.goals;

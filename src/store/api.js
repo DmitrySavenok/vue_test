@@ -25,6 +25,26 @@ export function fetch ( child ) {
 
 }
 
+export function patchData ( child, data ) {
+
+	// tbf we need only to fetch user data
+	// or fetch course list too?
+
+	console.log(child);
+	console.log(data);
+
+	console.log('patch function called');
+
+	return new Promise((resolve, reject) => {
+		axios.patch(`http://localhost:3000/${child}`, data).then( (res) => {
+			resolve(res.data);
+		})
+		.catch( (err) => {
+			reject(err);
+		});
+	})
+
+}
 
 
 export function fetchCourses( userId ) {
@@ -44,7 +64,11 @@ export function fetchCourses( userId ) {
  * @return {Promise}
  */
 export function fetchGoals( userId ) {
-	return fetch(`goals?user_id=${userId}`)
+	return fetch(`goals?userId=${userId}`)
+}
+
+export function fetchGoalTasks( goalId ) {
+	return fetch(`goal_tasks?goal_task_id=${goalId}`)
 }
 
 
@@ -74,4 +98,12 @@ export function fetchResources() {
 
 export function fetchCourseSectionDescription( type ) {
 	return fetch(`${type}_courses`);
+}
+
+
+// PATCH functions
+
+export function patchTaskPercentage( taskId, percentage ) {
+	console.log('patchTaskPercentage');
+	return patchData(`goal_tasks/${taskId}`, { "task_complete": percentage } )
 }
