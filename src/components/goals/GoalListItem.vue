@@ -6,27 +6,26 @@
 
 		<h2 class="goal-heading">Goal {{goalToShow.goal_id}}</h2>
 		<p class="goal-date">Date here</p>
-		<pre>{{goalTasks}}</pre>
+		<!-- <pre>{{goalTasks}}</pre> -->
 
 		<template>
 
 			<div class="task-wrapper" v-for="(task, index) in goalTasks">
-				<h4 class="task-heading">{{task.task_name}}</h4>
-				<p class="task-description">{{task.task_description}}</p>
-				<div class="task-slider">
-					<span>{{index}}</span>
+				<template v-if="task.task_goal_id === goalToShow.goal_id">
+					<h4 class="task-heading">{{task.task_name}}</h4>
+					<p class="task-description">{{task.task_description}}</p>
+					<div class="task-slider">
+						<span>{{index}}</span>
 
-					<!-- Can bind straight to the TASK_COMPLETE field we've got from DB -->
-					<!-- Need to save on some button click though -->
+						<input type="range" v-model="goalTasks[index].task_complete" min="0" max="100">
+						<input type="submit" name="submit" @click="saveGoalProgress(task.id)">
+					</div>
+					<span>%: {{goalTasks[index].task_complete}}</span>
+	<!-- 				<div>{{rangeNum}}</div>
+					<div>{{rangeNum[index]}}</div> -->
 
-					<input type="range" v-model="goalTasks[index].task_complete" min="0" max="100">
-					<input type="submit" name="submit" @click="saveGoalProgress(task.id)">
-				</div>
-				<span>%: {{goalTasks[index].task_complete}}</span>
-				<div>{{rangeNum}}</div>
-				<div>{{rangeNum[index]}}</div>
-
-				<!-- {{task}} -->
+					<!-- {{task}} -->
+				</template>
 			</div>			
 
 		</template>

@@ -26,7 +26,7 @@
 
 			<template v-if="mainBlockState === 'goals'">
 				
-				<h2>squad G | O | A | L | S</h2>
+				<!-- <h2>squad G | O | A | L | S</h2> -->
 
 				<div v-if="goalToShow">
 

@@ -22,7 +22,7 @@
 	</div>	
 
 
-	<div v-else @click="showGoal" class="goal-item">
+	<div v-else @click="showGoal" class="goal-item" :class="'goal-item-' + goalIndex">
 
 		<!-- Existing goal here -->
 		<h4>Goal {{goalIndex}}</h4>
@@ -31,12 +31,15 @@
 
 		<div class="goal-graph-wrapper">
 
-			<div class="percentage"> 42% </div>
+			<div class="percentage">{{overallPercentage(goalIndex)}}%</div>
 
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-1"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-2"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-3"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-4"></div>	
+			<template v-for="(task, index) in goalTasks">
+				<GoalTaskPart v-if="task.task_goal_id === goalIndex"
+					:index="index"
+					:goalIndex="goalIndex"
+					:task="task">
+				</GoalTaskPart>
+			</template>
 			
 		</div>
 
@@ -47,31 +50,78 @@
 
 <script>
 
+// import _ from 'lodash';
+import GoalTaskPart from './GoalTaskPart.vue';
+
 function setGoalToDisplay( store, goalId ) {
 	return store.dispatch('SET_GOAL_TO_DISPLAY', { goalId });
 }
+
+// TODO:
+// Find a way to split these 3 goals
+// each needs separate 4 tasks (%-age)
 
 
 export default {
 
 	name: 'GoalComponent',
-	data () {
+	data: function() {
 		return {
+			counter: 0
 		}
 	},
 	props: ['goal', 'goalIndex'],
+	components: {
+		GoalTaskPart
+	},
 
 	computed: {
 
+		goalTasks() {
+			return this.$store.state.goalTasks;
+		}
+		
 	},
 
 	methods: {
+
+		overallPercentage( goalId ) {
+
+			let allTasks = this.$store.state.goalTasks
+			let totalScore = 0;
+
+			for ( let task in allTasks ) {
+				if ( allTasks.hasOwnProperty(task)) {
+					if ( allTasks[task].task_goal_id === goalId ) {
+						totalScore+= Math.floor(+allTasks[task].task_complete);
+					}
+				}
+			}
+
+			// 4 tasks (parts) => One goal (100%) 
+			totalScore = totalScore / 400 * 100;
+
+			return Math.floor(totalScore);
+
+		},
+
+		// showTaskPercentage() {
+
+		// 	[].forEach.call(goalTasks, (goalTask) => {
+		// 		let completionPercentage = goalTask.getAttribute('data-completion');
+		// 		if ( completionPercentage !== 'empty' ) {
+		// 			let convertedPercentage = 30 + ( 45 * ( +completionPercentage / 100 ) );
+		// 			// this.$data['goal' + goalIndex]['part' + index].height = convertedPercentage;
+		// 			// this.$data['goal' + goalIndex]['part' + index].width = convertedPercentage;
+		// 			index++;
+		// 		}
+		// 	});
+
+		// },
 		showGoal() {
-			console.log('here');
-			console.log(this.goal);
 
 			setGoalToDisplay(this.$store, this.goal.goal_id);
-			// this.$store.state.goalToShow = 'Goal' + this.goal.goal_id;
+
 		},
 		mouseOver(e) {
 			e.target.classList.add('bigger')
@@ -79,12 +129,16 @@ export default {
 		mouseLeave(e) {
 			e.target.classList.remove('bigger')
 		}
+	},
+	updated: function() {
+
+		// this.showTaskPercentage();
 	}
 }
 
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 // borders(n, a, b, c, d)
 // 	border-top n solid a
@@ -131,6 +185,8 @@ export default {
 
 
 		.graph-part-1
+		.graph-part-5
+		.graph-part-9
 			height 30px
 			width 30px
 			
@@ -146,6 +202,8 @@ export default {
 				background rgb(255, 102, 0)
 				
 		.graph-part-2
+		.graph-part-6
+		.graph-part-10
 			border-radius 0px 0px 100px 0px
 			left 125px
 			top 125px
@@ -161,6 +219,8 @@ export default {
 				background rgb(255, 153, 51)
 				
 		.graph-part-3
+		.graph-part-7
+		.graph-part-11
 			border-radius 0px 0px 0px 100px
 			right 125px
 			top 125px
@@ -176,6 +236,8 @@ export default {
 				background rgb(255, 102, 0)
 				
 		.graph-part-4
+		.graph-part-8
+		.graph-part-12
 			border-radius 100px 0px 0px 0px
 			right 125px
 			bottom 125px
@@ -186,7 +248,7 @@ export default {
 				background rgb(204, 153, 0)
 			&.goal-bg-3
 				background rgb(204, 102, 0)
-				
+					
 		.empty-goal
 			height 30px
 			width 30px

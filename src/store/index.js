@@ -285,7 +285,7 @@ const store = new Vuex.Store({
 				// Could check if tasks are alredy in the state obj. and return resolved promise
 
 				return fetchGoalTasks(goalId).then( tasks => {
-					tasks = tasks.filter( task => task.task_goal_id === goalId );
+					// tasks = tasks.filter( task => task.task_goal_id === goalId );
 					commit('SET_GOAL_TO_DISPLAY', { goalId, goalTasks: tasks });
 				});
 			}
@@ -294,7 +294,10 @@ const store = new Vuex.Store({
 		UPDATE_TASK_COMPLETION_STATUS: ({ commit, state }, { taskId, percentage }) => {
 
 			if ( taskId && percentage ) {
-				return patchTaskPercentage(taskId, percentage)
+				return patchTaskPercentage(taskId, percentage).then( updatedTask => {
+					// console.log(answer);
+					commit('UPDATE_TASK_COMPLETION_STATUS', { updatedTask });
+				});
 			}
 
 		}
@@ -314,11 +317,16 @@ const store = new Vuex.Store({
 			// console.log('Tasks: ');
 			// console.log(goalTasks);
 			Vue.set(state.goalToShow, 0, 'Goal' + goalId);
+			state.goalTasks = {};
 			goalTasks.forEach( goalTask => {
 				Vue.set(state.goalTasks, goalTask.id, goalTask );
 			});
 		},
+		UPDATE_TASK_COMPLETION_STATUS: (state, { updatedTask }) => {
 
+			Vue.set(state.goalTasks, updatedTask.id, updatedTask);
+
+		},
 
 		CHANGE_PATH: (state, { path } ) => {
 			store.state.route = path;
@@ -337,12 +345,7 @@ const store = new Vuex.Store({
 			});
 		},
 		SET_COURSES: (state, { courses } ) => {
-			// console.log('Setting courses');
-			// console.log(courses);
 			courses.forEach( course => {
-				// console.log(course);
-				// console.log(course.course_mandatory);
-				// console.log(state.lists.currentUserCourses.mandatory);
 				if ( course ) {
 					Vue.set(state.lists.currentUserCourses, course.id, course)
 				}
