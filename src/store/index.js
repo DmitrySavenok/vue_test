@@ -27,7 +27,9 @@ const store = new Vuex.Store({
 		mainBlockState: 'home',
 
 		showSection: 1,
-		goalToShow: {},
+		goalToShow: {
+			0: 'Goal1'
+		},
 		goalTasks: {},
 
 		// Position matrix (?)
@@ -323,6 +325,7 @@ const store = new Vuex.Store({
 			});
 		},
 		UPDATE_TASK_COMPLETION_STATUS: (state, { updatedTask }) => {
+			//Updating task completion percentage right away ( bind it to task compeiton graph )
 
 			Vue.set(state.goalTasks, updatedTask.id, updatedTask);
 

@@ -8,14 +8,25 @@
 				
 				<div class="notifications">
 
+					<div class="notifications-header">
+						<h4>Notifications</h4>
+					</div>
+
 					<ul>
 						
-						<li v-for="notification in notifications">
-							{{notification.name}}
-							{{notification.description}}
+						<li class="notification" v-for="notification in notifications">
+							<p>
+								<span>{{notification.name}}</span>
+								{{notification.description}}
+							</p>
+							<div class="tick"></div>
 						</li>
 
 					</ul>
+
+					<div class="notifications-footer">
+						<h4>All notifications</h4>
+					</div>
 
 				</div>
 
@@ -68,7 +79,11 @@
 import ResourceSection from '../components/resources/ResourceSection.vue';
 import CourseSection from '../components/courses/CourseSection.vue';
 import GoalComponent from '../components/goals/GoalComponent.vue';
-import _ from 'lodash';
+
+// Not needed for now
+// Used _.debounce on update to filter out function calls
+
+// import _ from 'lodash';
 
 
 function fetchGoals ( store ) {
@@ -92,6 +107,7 @@ export default {
   	GoalComponent
   },
   props: ['type'],
+
   computed: {
   	goals() {
   		return this.$store.state.goals;
@@ -123,6 +139,7 @@ export default {
   		this.$store.state.renderStage = 2;
   	},
   	setUpGoals: function() {
+  		// TO REMOVE (NOT USED)
   		console.log('goal view');
   		this.$store.state.renderStage = 2;
   		fetchGoals(this.$store);
@@ -136,6 +153,8 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import '../styles/variables.styl';
+
 ul
 	margin 0
 	padding 0
@@ -143,8 +162,88 @@ ul
 
 .additional-block
 	left 1%
-	width 12%
-	min-width 250px
+	width 300px
+	
+
+	.notifications
+		.notifications-header
+			height 95px
+			width 300px
+			background transparent url('../styles/img/notifications-header.png') 0 0 no-repeat
+			background-size 100% 100%
+			h4
+				font-size 21px
+				padding 15px 35px
+				color #FFF
+				margin 0px
+				
+		.notification
+			min-height 120px
+			padding 10px 25px 0px 25px
+			margin 0px 15px 20px 28px
+			background rimiLightGrey
+			background-size 100% 100%
+			position relative
+			cursor pointer
+			
+			.tick
+				position absolute
+				background transparent url('../styles/img/tick-grey.png') 0 0 no-repeat
+				height 36px
+				width 36px
+				right -5px
+				bottom -5px
+				z-index 1
+			
+			&:before
+				content ''
+				display block
+				position absolute
+				height 70.5%
+				width 40px
+				left -34px
+				top 32px
+				background #f0f0f0
+				transform rotateZ(-45deg) skew(-45deg)
+				transform-origin center
+					
+			&:after
+				content ''
+				display block
+				position absolute
+				border-right 15px solid #FFF
+				border-bottom 15px solid #FFF
+				border-top 15px solid transparent
+				border-left 15px solid transparent
+				right 0px
+				bottom 0px
+				
+			p
+				margin 0px
+				color rimiGrey
+				
+			span
+				display block
+				font-size 21px
+				font-weight 600
+				line-height 21px
+				padding-bottom 10px
+		
+		.notifications-footer
+			background transparent url('../styles/img/notifications-all.png') 0 0 no-repeat
+			position absolute
+			bottom 0px
+			width 100%
+			color #FFF
+			height 37px
+			font-size 21px
+			line-height 34px
+			cursor pointer
+			
+			h4
+				margin 0px
+				padding-left 50px
+		
 	
 	.data
 	.data-2

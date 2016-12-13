@@ -2,7 +2,7 @@
 
 	<transition name="slide-left">
 		<div class="home-page">
-			<h1>{{ msg }} {{type}}</h1>
+			<!-- <h1>{{ msg }} {{type}}</h1> -->
 			
 			<UserMenu></UserMenu>
 
@@ -101,7 +101,7 @@ export default {
 	position relative
 	display inline-block
 	vertical-align top
-	background #ccc
+	background #FFF
 	min-height 1000px
 	transition all .5s cubic-bezier(.55,0,.1,1)
 

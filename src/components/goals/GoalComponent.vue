@@ -57,10 +57,6 @@ function setGoalToDisplay( store, goalId ) {
 	return store.dispatch('SET_GOAL_TO_DISPLAY', { goalId });
 }
 
-// TODO:
-// Find a way to split these 3 goals
-// each needs separate 4 tasks (%-age)
-
 
 export default {
 
@@ -73,6 +69,12 @@ export default {
 	props: ['goal', 'goalIndex'],
 	components: {
 		GoalTaskPart
+	},
+
+	mounted () {
+		console.log('here');
+		console.log(this.$options.propsData);
+		setGoalToDisplay(this.$store, 1);
 	},
 
 	computed: {

@@ -5,33 +5,37 @@
 	  <!-- <spinner :show="!user"></spinner> -->
 	  <template v-if="user">
 
-		  <div class="user-description">
-			<h4>{{ user.name }} {{ user.surname }}</h4>
-			<h4> {{ user.department }}</h4>
-		  </div>
+		<div class="user-description">
+			<div class="user-row">
+				<h4 class="name-surname">{{ user.name }}<br>{{ user.surname }}</h4>
+				<div class="profile-pic"></div>
+			</div>
+			<h4 class="department"> {{ user.department }}</h4>
 
-		  <div class="student-menu" v-if="user.role === 'student'">
+			<router-link class="logout" :to="'/'">Logout</router-link>
+		</div>
+
+
+		<div class="student-menu" v-if="user.role === 'student'">
 			<ul>
-			  <li><router-link :to="'/home'" v-on:click="setPageHome">(HOME)</router-link></li>
-			  <li><router-link :to="'/goals'" v-on:click="setPageGoals">(DEV GOALS)</router-link></li>
-			  <li><router-link :to="'/courses'" v-on:click="setPageCourses">(RIMI E-LEARN)</router-link></li>
-			  <li><router-link :to="'/resources'" v-on:click="setPageResources">(LEARNING RESOURCES)</router-link></li>
+				<li><router-link class="link-home" :to="'/home'" v-on:click="setPageHome">(HOME)</router-link></li>
+				<li><router-link class="link-goals" :to="'/goals'" v-on:click="setPageGoals">(DEV GOALS)</router-link></li>
+				<li><router-link class="link-courses" :to="'/courses'" v-on:click="setPageCourses">(RIMI E-LEARN)</router-link></li>
+				<li><router-link class="link-resources" :to="'/resources'" v-on:click="setPageResources">(LEARNING RESOURCES)</router-link></li>
 			</ul>
 
-		  </div>
+		</div>
 
-		  <div class="manager-menu" v-if="user.role === 'manager'">
+		<div class="manager-menu" v-if="user.role === 'manager'">
 			
 			<ul>
-			  <li><a v-on:click="setManagerContent">Manager Menu 1</a></li>
-			  <li><a v-on:click="setManagerContent">Manager Menu 2</a></li>
-			  <li><a v-on:click="setManagerContent">Manager Menu 3</a></li>
+				<li><a v-on:click="setManagerContent">Manager Menu 1</a></li>
+				<li><a v-on:click="setManagerContent">Manager Menu 2</a></li>
+				<li><a v-on:click="setManagerContent">Manager Menu 3</a></li>
 			</ul>
-
-		  </div>
+		
+		</div>
 	  </template>
-
-	  <button v-on:click="changePath">Logout</button>
 
 	</div>
   </transition>
@@ -134,29 +138,97 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
+
+@import '../styles/variables.styl';
 
 .userMenu
-	width 12%
-	min-width 180px
+	width 270px
 	height 100%
 	left 0%
 	
-	.student-menu
-	ul
-		margin 0px
-		padding 0px
-	li
-		padding 10px 0px
-		list-style none
-	a
-		text-decoration none
-		color #FFF
-		background #aaa
-		display block
-		padding 10px 0px
-		text-align center
-		&:hover
-			background #999
+	.user-description
+		padding 15px
 		
+		h4
+			margin 5px 0px
+		
+	.user-row
+		display flex
+		align-items center
+		
+	.name-surname
+		flex 1 1 auto
+		font-size 18px
+		font-weight 300
+		color rimiRed
+	
+	.profile-pic
+		background transparent url('../styles/img/profile-ph.png') 0 0 no-repeat
+		height 45px
+		width 45px
+		
+	.logout
+		text-decoration none
+		color rimiGrey
+		
+	.student-menu			
+		ul
+			margin 0px
+			padding 0px
+		li
+			list-style none
+		a
+			position relative
+			text-decoration none
+			color rimiGrey
+			display block
+			padding 5px 0px 5px 15px
+			
+			&:hover
+				background #999
+		
+		.link-home
+			margin-bottom 20px
+			
+		.link-goals
+		.link-courses
+		.link-resources
+			&:hover
+				color #FFF
+			&:before
+				content ''
+				display block
+				position absolute
+				height 100%
+				width 4px
+				margin-left -15px
+				top 0px
+				
+		.link-goals
+			&:hover
+				background rimiRed
+			&:before
+				background rimiPink
+		.link-courses
+			&:hover
+				background rimiOrange
+			&:before
+				background rimiOrange
+		.link-resources
+			&:hover
+				background rimiLightGreen
+			&:before
+				background rimiLightGreen
+				
+		.router-link-active
+			color #FFF
+			&.link-home
+				background rimiRed
+			&.link-goals
+				background rimiPink
+			&.link-courses
+				background rimiOrange
+			&.link-resources
+				background rimiLightGreen
 </style>

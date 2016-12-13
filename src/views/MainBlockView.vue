@@ -6,20 +6,50 @@
 
 			<template v-if="mainBlockState === 'home'">
 				
-				<h2>news here</h2>
+				<!-- <h2>news here</h2> -->
 
 				<ul class="news">
 						
-					<li v-for="article in news">
+					<li class="article" v-for="article in news">
 						
-						{{article.headline}}
-						{{article.name}}
-						{{article.description}}
-						{{article.article_notification}}
+						<div class="article-first-row">
+							<div class="article-headline">{{article.headline}}</div>
+							<p class="article-description">
+								<span class="article-name">{{article.name}}</span>
+								{{article.description}}
+							</p>
+						</div>
+						<p class="article-notification">{{article.article_notification}}</p>
 
 					</li>
 
 				</ul>
+
+				<div class="videos">
+					
+					<!-- Probably will be remade to v-for type template -->
+					<!-- With proper descriptions etc. -->
+
+					<div class="main-video-block"></div>
+
+					<div class="video-selection-panel">
+						
+						<div class="video-selector">
+							<p class="video-description"><span>Video 1</span>short description here.</p>
+						</div>
+						<div class="video-selector">
+							<p class="video-description"><span>Video 2</span>short description here.</p>
+						</div>
+						<div class="video-selector">
+							<p class="video-description"><span>Video 3</span>short description here.</p>
+						</div>
+						<div class="video-selector">
+							<p class="video-description"><span>Video 4</span>short description here.</p>
+						</div>
+
+					</div>
+
+				</div>
 
 			</template>
 
@@ -28,7 +58,7 @@
 				
 				<!-- <h2>squad G | O | A | L | S</h2> -->
 
-				<div v-if="goalToShow">
+				<div v-if="goalToShow && goals[goalToShow]">
 
 					<GoalListItem v-bind:goalToShow="goals[goalToShow]"></GoalListItem>
 				
@@ -133,8 +163,127 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import '../styles/variables.styl';
+
 .main-block
-	width 80%
+	width 870px
 	left 2%
+	
+	.news
+		margin 0px
+		padding 0px
+		list-style none
+		
+		li
+			margin 10px 0px 20px 0px
+
+		.article
+			
+			.article-notification
+				padding-left 90px
+				margin 30px 0px 0px 0px
+			
+			.article-first-row
+				display flex
+				
+				.article-headline
+					display flex
+					width 210px
+					height 65px
+					color #FFF
+					font-size 32px
+					font-weight 600
+					padding 10px 0px 0px 60px
+					line-height 26px
+					margin-left 24px
+					position relative
+					
+					&:before
+						content ''
+						display block
+						position absolute
+						height 70.5%
+						width 35px
+						left -29px
+						top 23px
+						transform rotateZ(-45deg) skew(-45deg)
+						transform-origin center
+					
+				.article-name
+					color rimiGrey
+					font-size 21px
+					font-weight 600
+					display block
+					
+				.article-description
+					color rimiGrey
+					background rimiLightGrey
+					height 65px
+					flex 1 0 auto
+					margin 0px
+					padding 10px 0px 0px 70px
+
+			&:nth-child(1)
+				.article-headline
+					background rimiPink
+					&:before
+						background #ea5f97
+					// background transparent url('../styles/img/news-part-1.png') 0 0 no-repeat
+			&:nth-child(2)
+				.article-headline
+					background rimiOrange
+					&:before
+						background #fb9d48
+					// background transparent url('../styles/img/news-part-2.png') 0 0 no-repeat
+			&:nth-child(3)
+				.article-headline
+					background rimiLightGreen
+					&:before
+						background #9ac561
+					// background transparent url('../styles/img/news-part-3.png') 0 0 no-repeat
+						
+	.videos
+		width 100%
+		
+		.main-video-block
+			width 100%
+			height 330px
+			background transparent url('../styles/img/video-ph.png') 0 0 no-repeat
+			background-size 100% 110%
+		
+		.video-selection-panel
+			width 100%
+			height 130px
+			display flex
+			justify-content space-around
+			align-items center
+			
+			.video-selector
+				cursor pointer
+				background transparent url('../styles/img/video-ph-small.png') 0 0 no-repeat
+				width 25%
+				height 97%
+				background-size 100% 100%
+				position relative
+				
+				p
+					position absolute
+					height 100%
+					width 100%
+					left 0px
+					top 0px
+					background rgba(50, 50, 50, 0.8)
+					visibility hidden
+					margin 0px
+					color #FFF
+					
+					span
+						font-size 21px
+						display block
+				
+				&:hover
+					p
+						visibility visible
+				
 
 </style>

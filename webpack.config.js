@@ -22,6 +22,22 @@ module.exports = {
         // for normal use cases only node_modules is needed.
         exclude: /node_modules|vue\/dist|vue-router\/|vue-loader\/|vue-hot-reload-api\//,
         loader: 'babel'
+      },
+      {
+        test: /\.css$/,
+        loaders: [
+          'style-loader',
+          'css-loader?importLoaders=1',
+          'postcss-loader'
+        ]
+      },
+      {
+        test: /\.(png|jpg|woff|woff2|eot|ttf|svg)$/, 
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: '[name].[ext]?[hash]'
+        }      
       }
     ]
   },

@@ -1,9 +1,9 @@
 <template>
   <div id="wrapper">
     <!-- header -->
-    <div id="header">
+<!--     <div id="header">
       <h2>{{ $t("message.header") }}</h2>
-    </div>
+    </div> -->
     <!-- main view -->
     <!-- <transition name="slide-fade"> -->
     	<router-view class="view"></router-view>
@@ -11,13 +11,26 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<script>
+	
+import './styles/fonts.css'; 
 
+</script>
 
+<style lang="stylus">
+
+@import './styles/variables.styl';
+	
 html, body
 	height 100%
 	width 100%
 	margin 0px
+	font-family 'Neris', Arial, sans-serif
+	background rimiLightGrey
+
+</style>
+
+<style lang="stylus" scoped>
 
 #wrapper
 	height 100%
@@ -41,6 +54,7 @@ html, body
 	text-align center
 	color #2c3e50
 	margin-top 60px
+	
 #header
 	text-align center
 h1, h2
