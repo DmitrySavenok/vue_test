@@ -1,6 +1,6 @@
 <template>
 
-	<div class="resource-item">
+	<div class="resource-item" :class="isHidden ? 'hidden-item' : 'visible-resource-item'">
 		
 		<h4 class="resource-title" @click="showInfo">{{resource.resource_title}}</h4>
 
@@ -14,11 +14,12 @@
 					@beforeLeave="beforeLeave" 
 					@afterLeave="afterLeave" 
 					>
+					<div class="completion-icon"></div>
 					<div class="resource-description">{{resource.resource_description}}</div>
 					
 					<template v-for="link in resource.links">
-						<a v-if="link.indexOf('.pdf') > 0" v-bind:href="link">PDF</a>
-						<a v-else :href="link">Else</a>
+						<a class="resource-pdf" v-if="link.indexOf('.pdf') > 0" v-bind:href="link">PDF</a>
+						<a class="resource-web" v-else :href="link">WWW</a>
 					</template>
 				</div>
 		</transition-group>
@@ -105,22 +106,92 @@ export default {
 
 <style lang="stylus" scoped>
 
+@import '../../styles/variables.styl';
 
-.resource-item
-	transition height 0.3s ease-out
+
+.resource-list
+
+	.resource-item
+		transition height 0.3s ease-out
+		border-bottom 1px solid rimiLightGrey
+		position relative
+		padding 10px 60px 4px 25px
+		margin-left 10px
+		border-top 1px solid transparent
+		
+		&.visible-resource-item
+			background #EAEAEA
+			padding 10px 60px 4px 65px
+			.resource-title
+				font-size 24px
+				font-weight 600
+				padding 5px 40px
+				color rimiGrey
+				text-transform capitalize
+			
+			.resource-description
+				padding-left 15px
+				
+			&:after
+				content ''
+				display block
+				position absolute
+				left 64px
+				background #C2C2C2
+				height 100%
+				width 1px
+				top 0px
+								
+			&:before
+				content ''
+				display block
+				position absolute
+				background rimiLightGreen
+				height 70.5%
+				width 15px
+				left -12px
+				top 18%
+				transform rotateZ(-45deg) skew(-45deg)
+				transform-origin center
+			
+		
+	.resource-title
+		margin 0px
+		cursor pointer
+		font-weight 300
 	
-.resource-title
-	margin 0px
-	cursor pointer
+	.resource-description
+		margin-bottom 20px
+
+	.resource-pdf
+	.resource-web
+		background #C2C2C2	
+		color #FFF
+		padding 5px 20px
+		font-size 18px
+		text-decoration none
 	
-.resource-info
+	.resource-web
+		background rimiLightBlue
+		margin-left -4px
+	
+	.resource-info
+		.completion-icon
+			background transparent url('../../styles/img/tick-green.png') 0 0 no-repeat
+			width 34px
+			height 32px
+			left 16px
+			top 0px
+			bottom 0px
+			margin auto
+			position absolute
 			
 
-.fade-resource-enter-active, .fade-resource-leave-active
-	transition opacity .5s
+// .fade-resource-enter-active, .fade-resource-leave-active
+// 	transition opacity .5s
 
-.fade-resource-enter, .fade-resource-leave-active
-	opacity 0
+// .fade-resource-enter, .fade-resource-leave-active
+// 	opacity 0
 	
 
 

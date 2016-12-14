@@ -3,10 +3,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';	
 import { 
-	fetchGoals, fetchGoalTasks, 
 	fetchUser, 
-	fetchCourses, fetchCourseSectionDescription, 
 	fetchNotifications, fetchNews, 
+	fetchGoals, fetchGoalTasks, 
+	fetchCourses, fetchCourseSectionDescription, 
 	fetchResources
 } from './api';
 
@@ -54,8 +54,6 @@ const store = new Vuex.Store({
 			// Will split currentUserCourses[] in 2 (Mandatory / Optional)
 			// Or merge with currentUserTests[] and split in 3
 			currentUserCourses: {
-				mandatory: { 'que': 1 },
-				optional: { 'que': 2 }
 			},
 			currentUserTests:   []
 		}
@@ -77,6 +75,8 @@ const store = new Vuex.Store({
 			console.log(type);
 
 			commit('SET_MAIN_BLOCK_STATE', { type });
+			commit('SET_DEFAULT_SECTION', { type });
+
 
 			// Additinal Field
 			switch(type) {
@@ -336,6 +336,19 @@ const store = new Vuex.Store({
 		},
 		SET_MAIN_BLOCK_STATE: (state, { type }) => {
 			store.state.mainBlockState = type;
+		},
+		SET_DEFAULT_SECTION: (state, { type }) => {
+			switch(type) {
+				case 'courses':
+					store.state.showSection = 'mandatory';
+					break;
+				case 'resources':
+					store.state.showSection = 1;
+					break;
+				default:
+					store.state.showSection = 1;
+					console.log('default SET_DEFAULT_SECTION action');
+			}
 		},
 		SET_NOTIFICATIONS: (state, { notifications }) => {
 			notifications.forEach( notification => {

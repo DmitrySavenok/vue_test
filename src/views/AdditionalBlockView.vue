@@ -13,18 +13,25 @@
 					</div>
 
 					<ul>
-						
-						<li class="notification" v-for="notification in notifications">
-							<p>
-								<span>{{notification.name}}</span>
-								{{notification.description}}
-							</p>
-							<div class="tick"></div>
-						</li>
+						<transition-group 
+							name="fade-notification" 
+							tag="li" 
+								class="notification" 
+								@beforeEnter="beforeEnter" 
+								@afterEnter="afterEnter" 
+								@beforeLeave="beforeLeave" 
+								@afterLeave="afterLeave" 
+								v-for="notification in notifications">
+								<p @click="hideNotification" :key="notification.id">
+									<span>{{notification.name}}</span>
+									{{notification.description}}
+								</p>
+								<div class="tick"></div>
+						</transition-group>
 
 					</ul>
 
-					<div class="notifications-footer">
+					<div class="notifications-footer" @click="showAllNotifications">
 						<h4>All notifications</h4>
 					</div>
 
@@ -146,6 +153,31 @@ export default {
   	},
   	showSectionInfo: function(event) {
   		this.show = !this.show;
+  	},
+  	beforeEnter: function(el) {
+  		console.log('1');
+  	},
+  	afterEnter: function(el) {
+  		console.log('2');
+  	},
+  	beforeLeave: function(el) {
+  		console.log('3');
+  	},
+  	afterLeave: function(el) {
+  		console.log('4');
+  	},
+  	hideNotification: function(event) {
+  		console.log('ayy');
+  		console.log(this.$store.state.lists.notifications);
+  		// this.$store.state.lists.notifications
+  		// console.log(event.currentTarget);
+  		// event.currentTarget.style.display = 'none';
+  	},
+  	showAllNotifications: function() {
+  		// let notifications = document.querySelectorAll('.notification');
+  		// [].forEach.call(notifications, (notification) => {
+  		// 	notification.style.display = 'block';
+  		// })
   	}
   }
 }

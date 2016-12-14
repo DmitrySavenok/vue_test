@@ -1,7 +1,7 @@
 <template>
 
 	<transition appear name="slide-left">
-		<div class="main-block">
+		<div class="main-block" :class="mainBlockState">
 
 
 			<template v-if="mainBlockState === 'home'">
@@ -68,6 +68,8 @@
 
 			<template v-if="mainBlockState === 'courses'">
 
+				<h2 class="course-header">{{sectionNum}} courses</h2>
+
 				<ul class="course-list">
 					
 					<template v-if="courses">
@@ -85,7 +87,8 @@
 			</template>
 			
 			<template v-if="mainBlockState === 'resources'">
-				<h2>resources here</h2>
+
+				<h2 class="resource-header">Section {{sectionNum}}</h2>
 
 				<div class="resource-list">
 					
@@ -284,6 +287,39 @@ export default {
 				&:hover
 					p
 						visibility visible
+	
+	.course-list
+		padding 0px
+		margin 0px
+		
+	.resource-header
+	.course-header
+		background #EAEAEA
+		padding 25px 100px
+		margin 0px
+		margin-left 10px
+		position relative
+		bottom 10px
+		color rimiGrey
+		font-size 32px
+		text-transform capitalize
+		
+		&:before
+			content ''
+			display block
+			position absolute
+			background rimiLightGreen
+			height 70.5%
+			width 15px
+			left -12px
+			top 17px
+			transform rotateZ(-45deg) skew(-45deg)
+			transform-origin center
+	
+	&.resources
+		margin-top 120px
+	&.courses
+		margin-top 120px
 				
 
 </style>

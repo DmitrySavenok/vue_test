@@ -92,7 +92,7 @@ export default {
 
 
 .home-page
-	min-height 1000px
+	min-height 800px
 	position relative
 	
 .userMenu
@@ -102,7 +102,7 @@ export default {
 	display inline-block
 	vertical-align top
 	background #FFF
-	min-height 1000px
+	min-height 800px
 	transition all .5s cubic-bezier(.55,0,.1,1)
 
 h1
