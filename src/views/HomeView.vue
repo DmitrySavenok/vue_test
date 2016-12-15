@@ -94,6 +94,7 @@ export default {
 .home-page
 	min-height 800px
 	position relative
+	height 100%
 	
 .userMenu
 .additional-block
@@ -103,6 +104,7 @@ export default {
 	vertical-align top
 	background #FFF
 	min-height 800px
+	height 100%
 	transition all .5s cubic-bezier(.55,0,.1,1)
 
 h1

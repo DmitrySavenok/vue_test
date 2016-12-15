@@ -171,6 +171,7 @@ export default {
 .main-block
 	width 870px
 	left 2%
+	height 100%
 	
 	.news
 		margin 0px

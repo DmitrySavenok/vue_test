@@ -19,8 +19,7 @@
 
 		</div>
 
-	</div>	
-
+	</div>
 
 	<div v-else @click="showGoal" class="goal-item" :class="'goal-item-' + goalIndex">
 
@@ -56,7 +55,6 @@ import GoalTaskPart from './GoalTaskPart.vue';
 function setGoalToDisplay( store, goalId ) {
 	return store.dispatch('SET_GOAL_TO_DISPLAY', { goalId });
 }
-
 
 export default {
 

@@ -65,6 +65,7 @@ export default {
 .main-data-blocks
 	display inline-block
 	width 80%
+	height 100%
 	
 h1
 	text-align center

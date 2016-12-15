@@ -194,6 +194,12 @@ const store = new Vuex.Store({
 			// do nothing
 		},
 
+		HIDE_NOTIFICATION: ({ commit, state }, { notificationId }) => {
+
+			commit('HIDE_NOTIFICATION', { notificationId })
+
+		},
+
 
 		// handle conditional rendering
 		HANDLE_RENDERING: ({ commit, state }, { renderStage, additionalBlockState = '' }) => {
@@ -354,6 +360,9 @@ const store = new Vuex.Store({
 			notifications.forEach( notification => {
 				Vue.set(state.lists.notifications, notification.id, notification)
 			});
+		},
+		HIDE_NOTIFICATION: (state, { notificationId }) => {
+			Vue.set(state.lists.notifications, notificationId, "seen");
 		},
 		SET_NEWS: (state, { news }) => {
 			news.forEach( article => {

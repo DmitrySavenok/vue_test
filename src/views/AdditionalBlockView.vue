@@ -13,22 +13,23 @@
 					</div>
 
 					<ul>
-						<transition-group 
-							name="fade-notification" 
-							tag="li" 
+						<li v-for="notification in notifications">
+							<transition-group 
+								name="fade-notification" 
+								tag="div" 
 								class="notification" 
 								@beforeEnter="beforeEnter" 
 								@afterEnter="afterEnter" 
 								@beforeLeave="beforeLeave" 
 								@afterLeave="afterLeave" 
-								v-for="notification in notifications">
-								<p @click="hideNotification" :key="notification.id">
-									<span>{{notification.name}}</span>
-									{{notification.description}}
-								</p>
-								<div class="tick"></div>
-						</transition-group>
-
+								v-show="notification.status == 'not_seen'">
+									<p @click="hideNotification(notification.id)" :key="notification.id">
+										<span>{{notification.name}}</span>
+										{{notification.description}}
+									</p>
+									<div class="tick"></div>
+							</transition-group>
+						</li>
 					</ul>
 
 					<div class="notifications-footer" @click="showAllNotifications">
@@ -44,6 +45,7 @@
 				<div class="goals-list">
 
 					<div class="goal-section" v-for="index in [1,2,3]">
+						<!-- <pre>{{goals['Goal' + index]}}</pre> -->
 						<GoalComponent v-bind:goalIndex="index" v-bind:goal="goals['Goal' + index]"></GoalComponent>
 					</div>
 
@@ -97,6 +99,10 @@ function fetchGoals ( store ) {
 	return store.dispatch('FETCH_GOALS', {
 		id: store.state.userId
 	})
+}
+
+function hideNotification ( store, notificationId ) {
+	return store.dispatch('HIDE_NOTIFICATION', { notificationId })
 }
 
 
@@ -156,22 +162,22 @@ export default {
   	},
   	beforeEnter: function(el) {
   		console.log('1');
+  		console.log(el.innerHTML);
   	},
   	afterEnter: function(el) {
   		console.log('2');
+  		console.log(el.innerHTML);
   	},
   	beforeLeave: function(el) {
   		console.log('3');
+  		console.log(el.innerHTML);
   	},
   	afterLeave: function(el) {
   		console.log('4');
+  		console.log(el.innerHTML);
   	},
-  	hideNotification: function(event) {
-  		console.log('ayy');
-  		console.log(this.$store.state.lists.notifications);
-  		// this.$store.state.lists.notifications
-  		// console.log(event.currentTarget);
-  		// event.currentTarget.style.display = 'none';
+  	hideNotification: function(notificationId) {
+  		hideNotification(this.$store, notificationId);
   	},
   	showAllNotifications: function() {
   		// let notifications = document.querySelectorAll('.notification');
