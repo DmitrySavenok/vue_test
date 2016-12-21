@@ -1,7 +1,29 @@
 <template>
-		
 
-	<div v-if="!goal" class="goal-item">
+	<div v-if="goal" @click="showGoal" class="goal-item" :class="'goal-item-' + goalIndex">
+
+		<!-- Existing goal here -->
+		<h4>Goal {{goalIndex}}</h4>
+		<span>285 B.C - 476 A.D</span>
+
+		<div class="goal-graph-wrapper">
+
+			<div class="percentage">{{overallPercentage(goalIndex)}}%</div>
+
+			<template v-for="(task, index) in goalTasks">
+				<GoalTaskPart v-if="task.task_goal_id === goalIndex"
+					:index="index"
+					:goalIndex="goalIndex"
+					:task="task">
+				</GoalTaskPart>
+			</template>
+			
+		</div>
+
+	</div>
+
+
+	<div v-else class="goal-item">
 		
 		<!-- Empty goal here -->
 
@@ -21,35 +43,11 @@
 
 	</div>
 
-	<div v-else @click="showGoal" class="goal-item" :class="'goal-item-' + goalIndex">
-
-		<!-- Existing goal here -->
-		<h4>Goal {{goalIndex}}</h4>
-		<span>285 B.C - 476 A.D</span>
-		<p>{{goal.goal_name}}</p>
-
-		<div class="goal-graph-wrapper">
-
-			<div class="percentage">{{overallPercentage(goalIndex)}}%</div>
-
-			<template v-for="(task, index) in goalTasks">
-				<GoalTaskPart v-if="task.task_goal_id === goalIndex"
-					:index="index"
-					:goalIndex="goalIndex"
-					:task="task">
-				</GoalTaskPart>
-			</template>
-			
-		</div>
-
-	</div>
-
 
 </template>
 
 <script>
 
-// import _ from 'lodash';
 import GoalTaskPart from './GoalTaskPart.vue';
 
 function setGoalToDisplay( store, goalId ) {
@@ -140,6 +138,8 @@ export default {
 
 <style lang="stylus">
 
+@import '../../styles/variables.styl';
+
 // borders(n, a, b, c, d)
 // 	border-top n solid a
 // 	border-right n solid b
@@ -149,19 +149,36 @@ export default {
 
 .goal-item
 	height 100%
+	width 100%
 	cursor pointer
 	
 	p
 		margin 0px
+	
+	h4
+		font-family 'Neris'
+		font-size 21px
+		font-weight 400
+		margin 10px 0px 0px 0px
+		padding-left 60px
+		color rimiGrey
+	
+	span
+		padding-left 60px
+		color rimiGrey
 
 	.goal-graph-wrapper
+		position relative
 		height 250px
 		width 250px
-		position relative
+		left 0px
+		right 0px
+		margin auto
+		transform rotate(-45deg)
 		
 		.percentage
-			height 50px
-			width 50px
+			height 60px
+			width 60px
 			position absolute
 			left 0px
 			top 0px
@@ -172,9 +189,10 @@ export default {
 			background #FFF
 			border-radius 50%
 			text-align center
-			font-size 19px
-			font-family OpenSans, Arial, sans-serif
-			line-height 50px
+			font-size 21px
+			font-family 'Neris', OpenSans, Arial, sans-serif
+			line-height 58px
+			transform rotate(45deg)
 
 		.graph-part
 			height 75px
@@ -187,8 +205,8 @@ export default {
 		.graph-part-1
 		.graph-part-5
 		.graph-part-9
-			height 30px
-			width 30px
+			height 40px
+			width 40px
 			
 			border-radius 0px 100px 0px 0px
 			left 125px
@@ -250,8 +268,8 @@ export default {
 				background rgb(204, 102, 0)
 					
 		.empty-goal
-			height 30px
-			width 30px
+			height 40px
+			width 40px
 				
 		.bigger
 			height 100px

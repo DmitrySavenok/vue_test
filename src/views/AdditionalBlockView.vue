@@ -148,12 +148,12 @@ export default {
   methods: {
   	setContent: function() {
   		// Temp (don't change state outside actions/mutations)
-  		console.log('additional block set content');
+  		// console.log('additional block set content');
   		this.$store.state.renderStage = 2;
   	},
   	setUpGoals: function() {
   		// TO REMOVE (NOT USED)
-  		console.log('goal view');
+  		// console.log('goal view');
   		this.$store.state.renderStage = 2;
   		fetchGoals(this.$store);
   	},
@@ -161,20 +161,20 @@ export default {
   		this.show = !this.show;
   	},
   	beforeEnter: function(el) {
-  		console.log('1');
-  		console.log(el.innerHTML);
+  		// console.log('1');
+  		// console.log(el.innerHTML);
   	},
   	afterEnter: function(el) {
-  		console.log('2');
-  		console.log(el.innerHTML);
+  		// console.log('2');
+  		// console.log(el.innerHTML);
   	},
   	beforeLeave: function(el) {
-  		console.log('3');
-  		console.log(el.innerHTML);
+  		// console.log('3');
+  		// console.log(el.innerHTML);
   	},
   	afterLeave: function(el) {
-  		console.log('4');
-  		console.log(el.innerHTML);
+  		// console.log('4');
+  		// console.log(el.innerHTML);
   	},
   	hideNotification: function(notificationId) {
   		hideNotification(this.$store, notificationId);

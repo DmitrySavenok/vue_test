@@ -33,7 +33,7 @@ export default {
 	},
 	methods: {
 		convertedPrc(prc) {
-			return ( 30 + ( 45 * (+prc / 100) ) );
+			return ( 40 + ( 55 * (+prc / 100) ) );
 		}
 	}
 }

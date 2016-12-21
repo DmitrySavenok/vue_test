@@ -11,7 +11,9 @@ import {
 } from './api';
 
 import {
-	patchTaskPercentage
+	patchTaskPercentage,
+	patchTaskDescription,
+	createEmptyGoal
 } from './api';
 
 Vue.use(Vuex);
@@ -25,6 +27,9 @@ const store = new Vuex.Store({
 		goals:   {/*  */},
 
 		mainBlockState: 'home',
+		goalTutorialPhase: {
+			0: 'que'
+		},
 
 		showSection: 1,
 		goalToShow: {
@@ -109,7 +114,7 @@ const store = new Vuex.Store({
 					}
 					
 					if ( userId ) {
-						fetchGoals(userId).then(goals => { console.log(goals); commit('SET_GOALS', { goals: goals[0].user_goals }); } )
+						fetchGoals(userId).then(goals => { goals[0] != undefined ? commit('SET_GOALS', { goals: goals[0].user_goals }) : console.log('no goals ;('); } )
 					} else {
 						console.log('no user id specified');
 					}
@@ -298,6 +303,14 @@ const store = new Vuex.Store({
 				});
 			}
 		},
+		SET_GOAL_PHASE: ({ commit, state }, { phaseNum }) => {
+			commit('SET_GOAL_PHASE', { phaseNum });
+		},
+		CREATE_EMPTY_GOAL: ({ commit, state }, { userId }) => {
+			return createEmptyGoal(userId).then( answer => {
+				console.log(answer);
+			})
+		},
 
 		UPDATE_TASK_COMPLETION_STATUS: ({ commit, state }, { taskId, percentage }) => {
 
@@ -305,6 +318,17 @@ const store = new Vuex.Store({
 				return patchTaskPercentage(taskId, percentage).then( updatedTask => {
 					// console.log(answer);
 					commit('UPDATE_TASK_COMPLETION_STATUS', { updatedTask });
+				});
+			}
+
+		},
+
+		UPDATE_TASK_DESCRIPTION: ({ commit, state }, { taskId, taskDescription }) => {
+
+			if ( taskId && taskDescription ) {
+				return patchTaskDescription(taskId, taskDescription).then( updatedTask => {
+					// console.log(answer);
+					commit('UPDATE_TASK_DESCRIPTION', { updatedTask });
 				});
 			}
 
@@ -335,6 +359,9 @@ const store = new Vuex.Store({
 
 			Vue.set(state.goalTasks, updatedTask.id, updatedTask);
 
+		},
+		UPDATE_TASK_DESCRIPTION: (state, { updatedTask }) => {
+			Vue.set(state.goalTasks, updatedTask.id, updatedTask);
 		},
 
 		CHANGE_PATH: (state, { path } ) => {
@@ -393,6 +420,9 @@ const store = new Vuex.Store({
 					Vue.set(state.goals, 'Goal' + goal.goal_id, goal)
 				}
 			})
+		},
+		SET_GOAL_PHASE: (state, { phaseNum }) => {
+			Vue.set(state.goalTutorialPhase, 0, 'phase-' + phaseNum);
 		},
 		SET_RESOURCES: (state, { resources }) => {
 			resources.forEach( resource => {

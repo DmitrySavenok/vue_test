@@ -16,6 +16,7 @@ export function fetch ( child ) {
 
 	return new Promise((resolve, reject) => {
 		axios.get(`http://localhost:3000/${child}`).then( (res) => {
+		// axios.get(`http://lms-test-json-server.herokuapp.com/${child}`).then( (res) => {
 			resolve(res.data);
 		})
 		.catch( (err) => {
@@ -37,6 +38,21 @@ export function patchData ( child, data ) {
 
 	return new Promise((resolve, reject) => {
 		axios.patch(`http://localhost:3000/${child}`, data).then( (res) => {
+		// axios.patch(`http://lms-test-json-server.herokuapp.com/${child}`, data).then( (res) => {
+			resolve(res.data);
+		})
+		.catch( (err) => {
+			reject(err);
+		});
+	})
+
+}
+
+export function postData( child, data ) {
+
+	return new Promise((resolve, reject) => {
+		axios.post(`http://localhost:3000/${child}`, data).then( (res) => {
+		// axios.patch(`http://lms-test-json-server.herokuapp.com/${child}`, data).then( (res) => {
 			resolve(res.data);
 		})
 		.catch( (err) => {
@@ -106,4 +122,13 @@ export function fetchCourseSectionDescription( type ) {
 export function patchTaskPercentage( taskId, percentage ) {
 	console.log('patchTaskPercentage');
 	return patchData(`goal_tasks/${taskId}`, { "task_complete": percentage } )
+}
+export function patchTaskDescription( taskId, taskDescription ) {
+	console.log('patchTaskDescription');
+	return patchData(`goal_tasks/${taskId}`, { "task_description": taskDescription } )
+}
+
+export function createEmptyGoal( userId ) {
+	console.log('creating empty goal for user: ' + userId);
+	return postData(`goals`, { "userId": userId, "user_goals": [ { goal_name: "", goal_description: "", "goal_quarter": "" } ] })
 }

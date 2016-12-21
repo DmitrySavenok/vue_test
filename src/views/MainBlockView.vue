@@ -1,7 +1,7 @@
 <template>
 
 	<transition appear name="slide-left">
-		<div class="main-block" :class="mainBlockState">
+		<div class="main-block" :class="[goalTutorialPhase, mainBlockState]">
 
 
 			<template v-if="mainBlockState === 'home'">
@@ -64,6 +64,18 @@
 				
 				</div>
 
+				<div v-if="!goals[goalToShow]">
+
+					<GoalFirstTimeTutorial></GoalFirstTimeTutorial>
+
+				</div>
+
+				<div v-if="goalTutorialPhase == 'phase-2'">
+					<div @click="createEmptyGoal" class="tooltip tooltip-1"></div>
+					<div @click="createEmptyGoal" class="tooltip tooltip-2"></div>
+					<div @click="createEmptyGoal" class="tooltip tooltip-3"></div>
+				</div>
+
 			</template>
 
 			<template v-if="mainBlockState === 'courses'">
@@ -117,6 +129,12 @@
 import ResourceListItem from '../components/resources/ResourceListItem.vue';
 import CourseListItem from '../components/courses/CourseListItem.vue';
 import GoalListItem from '../components/goals/GoalListItem.vue';
+import GoalFirstTimeTutorial from '../components/goals/GoalFirstTimeTutorial.vue';
+
+
+function setEmptyGoal(store, userId) {
+	store.dispatch('CREATE_EMPTY_GOAL', { userId });
+}
 
 export default {
 
@@ -130,7 +148,8 @@ export default {
   components: {
   	ResourceListItem,
   	CourseListItem,
-  	GoalListItem
+  	GoalListItem,
+  	GoalFirstTimeTutorial
   },
   computed: {
   	user () {
@@ -141,6 +160,9 @@ export default {
   	},
   	goals() {
   		return this.$store.state.goals;
+  	},
+  	goalTutorialPhase() {
+  		return this.$store.state.goalTutorialPhase[0];
   	},
   	courses() {
   		return this.$store.state.lists.currentUserCourses;
@@ -160,11 +182,19 @@ export default {
   },
   //Methods here
   methods: {
+
+  	createEmptyGoal: function() {
+
+  		let userId = this.$store.state.users['currentUser'].id;
+
+  		setEmptyGoal( this.$store, userId );
+
+  	}
   }
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import '../styles/variables.styl';
 
@@ -295,6 +325,7 @@ export default {
 		
 	.resource-header
 	.course-header
+	.goal-header
 		background #EAEAEA
 		padding 25px 100px
 		margin 0px
@@ -313,7 +344,7 @@ export default {
 			height 70.5%
 			width 15px
 			left -12px
-			top 17px
+			top 19%
 			transform rotateZ(-45deg) skew(-45deg)
 			transform-origin center
 	
@@ -321,6 +352,34 @@ export default {
 		margin-top 120px
 	&.courses
 		margin-top 120px
+	&.goals
+		margin-top 120px
+		
+	&.phase-2
+		margin-top 0px
+		background rimiLightGrey
+		
+		.tooltip
+			position absolute
+			height 142px
+			width 142px
+			border-radius 50%
+			left -240px
+			cursor pointer
+			
+			&.tooltip-1
+				top 108px
+				border 2px solid rimiPink
+			&.tooltip-2
+				top 424px
+				border 2px solid rimiOrange
+			&.tooltip-3
+				top 741px
+				border 2px solid rimiOrange		
+
+		.goal-tutorial
+			display none
+		
 				
 
 </style>
