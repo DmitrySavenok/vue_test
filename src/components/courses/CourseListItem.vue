@@ -19,7 +19,7 @@
 					<div class="course-description">{{course.course_description}}</div>
 					
 					<template v-for="link in course.links">
-						<a class="course-link" v-bind:href="link.url">{{link.lang}}</a>
+						<a target="_blank" class="course-link" v-bind:href="link.url">{{link.lang}}</a>
 					</template>
 				</div>
 		</transition-group>
@@ -153,10 +153,18 @@ export default {
 .course-link
 	background #C2C2C2	
 	color #FFF
-	padding 5px 20px
+	padding 5px 40px
 	font-size 18px
 	text-decoration none
+	
+	&:nth-child(4)
+	&:nth-child(6)
+		background rimiLighterGrey
+	&:nth-child(5)
+		background rimiLightGrey
 
+	&:hover
+		background rimiLightBlue
 
 .course-info
 	.completion-icon

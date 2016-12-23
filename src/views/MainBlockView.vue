@@ -71,9 +71,18 @@
 				</div>
 
 				<div v-if="goalTutorialPhase == 'phase-2'">
-					<div @click="createEmptyGoal" class="tooltip tooltip-1"></div>
-					<div @click="createEmptyGoal" class="tooltip tooltip-2"></div>
-					<div @click="createEmptyGoal" class="tooltip tooltip-3"></div>
+					<div class="tooltip-wrapper">
+						<div @click="createEmptyGoal" class="tooltip tooltip-1"></div>
+						<div class="tooltip-text tooltip-text-1">Izvēlies kādu no trīs mērķiem un sāc plānot savu izaugsmi! Katrs mērķis satur četrus uzdevumus.</div>
+					</div>
+					<div class="tooltip-wrapper">
+						<div @click="createEmptyGoal" class="tooltip tooltip-2"></div>
+						<div class="tooltip-text tooltip-text-2"></div>
+					</div>
+					<div class="tooltip-wrapper">
+						<div @click="createEmptyGoal" class="tooltip tooltip-3"></div>
+						<div class="tooltip-text tooltip-text-3"></div>
+					</div>
 				</div>
 
 			</template>
@@ -354,31 +363,75 @@ export default {
 		margin-top 120px
 	&.goals
 		margin-top 120px
-		
-	&.phase-2
-		margin-top 0px
-		background rimiLightGrey
-		
-		.tooltip
-			position absolute
-			height 142px
-			width 142px
-			border-radius 50%
-			left -240px
-			cursor pointer
+		&.phase-2
+			margin-top 0px
+			background rimiLightGrey
 			
-			&.tooltip-1
-				top 108px
-				border 2px solid rimiPink
-			&.tooltip-2
-				top 424px
-				border 2px solid rimiOrange
-			&.tooltip-3
-				top 741px
-				border 2px solid rimiOrange		
+			.tooltip-text
+				position relative
+				height 45px
+				width 340px
+				top 128px
+				left 100px
+				background rimiPink
+				color #FFF
+				padding 10px 20px
+				
+				&:before
+					content ''
+					display block
+					position absolute
+					height 25px
+					width 25px
+					left -13px
+					top 19px
+					background rimiPink
+					transform rotate(45deg)
+					
+				&:after
+					content ''
+					display block
+					position absolute
+					width 179px
+					height 2px
+					background rimiPink
+					left -195px
+					top 31px
+			
+				&.tooltip-text-2
+					background transparent
+					top 373px
+					&:before
+						background rimiOrange
+					&:after
+						background rimiOrange
+				&.tooltip-text-3
+					background transparent
+					top 617px
+					&:before
+						background rimiOrange
+					&:after
+						background rimiOrange
+			.tooltip
+				position absolute
+				height 142px
+				width 142px
+				border-radius 50%
+				left -240px
+				cursor pointer
+				
+				&.tooltip-1
+					top 89px
+					border 2px solid rimiPink
+				&.tooltip-2
+					top 397px
+					border 2px solid rimiOrange
+				&.tooltip-3
+					top 706px
+					border 2px solid rimiOrange		
 
-		.goal-tutorial
-			display none
+			.goal-tutorial
+				display none
 		
 				
 

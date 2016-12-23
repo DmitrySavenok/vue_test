@@ -51,6 +51,8 @@
 
 				</div>
 
+				<pre @click="clearGoals">Clear goals</pre>
+
 			</template>
 
 			<template v-if="additionalBlockState === 'courses'">
@@ -105,6 +107,9 @@ function hideNotification ( store, notificationId ) {
 	return store.dispatch('HIDE_NOTIFICATION', { notificationId })
 }
 
+function clearGoals( store, userId ) {
+	return store.dispatch('CLEAR_GOALS', { userId });
+}
 
 export default {
 
@@ -146,6 +151,13 @@ export default {
   },
   //Methods here
   methods: {
+
+	clearGoals() {
+		console.log('clearing goals');
+		clearGoals(this.$store, this.$store.state.users['currentUser'].id);
+	},
+
+
   	setContent: function() {
   		// Temp (don't change state outside actions/mutations)
   		// console.log('additional block set content');
@@ -318,5 +330,13 @@ ul
 			height 33.3%
 			display flex
 			justify-content flex-start
+		
+
+	pre
+		position absolute
+		bottom 0px
+		left 20px
+		z-index 99
+		cursor pointer
 
 </style>

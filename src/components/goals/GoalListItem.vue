@@ -5,8 +5,17 @@
 		<!-- {{goalToShow}} -->
 		
 		<div class="goal-header">
-			<h2 class="goal-heading">Goal {{goalToShow.goal_id}}</h2>
-			<p class="goal-date">Date here</p>
+			<template>
+				<textarea 
+					class="editable-goal" 
+					@blur="stopEditingGoal(goalToShow.goal_id, goalToShow.goal_name)" 
+					@keyup.enter.prevent.stop="stopEditingGoal(goalToShow.goal_id, goalToShow.goal_name)"
+					v-model="goalToShow.goal_name"
+					v-if="editableGoalIndex == goalToShow.goal_id"></textarea>
+				<h2 v-else class="goal-heading" @click="editGoalName(goalToShow.goal_id)">{{goalToShow.goal_name}}</h2>
+			</template>
+			<p class="goal-date">{{phDate}}</p>
+			<button class="edit-button edit-task-description" @click="editGoalName(goalToShow.goal_id)"></button>
 		</div>
 		<!-- <pre>{{goalTasks}}</pre> -->
 
@@ -32,7 +41,8 @@
 							<div class="hover-popup info-popup"></div>
 						</div>
 						<div class="range-wrapper">
-							<input @mouseup="saveGoalProgress(task.id)" type="range" v-model="goalTasks[index].task_complete" min="0" max="100">
+							<input v-if="isIe" @mouseup="saveGoalProgress(task.id)" type="range" v-model.lazy="goalTasks[index].task_complete" min="0" max="100">
+							<input v-else type="range" v-model="goalTasks[index].task_complete" min="0" max="100">
 							<div class="percentage-labels">
 								<span>0%</span>
 								<span>25%</span>
@@ -41,7 +51,7 @@
 								<span>100%</span>
 							</div>
 						</div>
-						<button class="edit-task-description" @click="editTaskDescription(index)"></button>
+						<button class="edit-button edit-task-description" @click="editTaskDescription(index)"></button>
 						<!-- <input type="submit" name="submit" @click="saveGoalProgress(task.id)"> -->
 					</div>
 					<!-- <span>%: {{goalTasks[index].task_complete}}</span> -->
@@ -65,6 +75,9 @@ function updateTaskCompletionStatus( store, taskId, percentage ) {
 function updateTaskDescription( store, taskId, taskDescription ) {
 	return store.dispatch('UPDATE_TASK_DESCRIPTION', { taskId, taskDescription });
 }
+function updateGoalName( store, goalId, goalName ) {
+	return store.dispatch('UPDATE_GOAL_NAME', { goalId, goalName });
+}
 
 
 export default {
@@ -80,21 +93,22 @@ export default {
 			},
 			bindTask: '',
 			taskNames: [
-				'Macos no kolegiem',
-				'Macos darba vieta',
+				'Mācos no kolēģiem',
+				'Mācos darba vietā',
 				'Izzinu pats',
 				'4th option',
-				'Macos no kolegiem',
-				'Macos darba vieta',
+				'Mācos no kolēģiem',
+				'Mācos darba vietā',
 				'Izzinu pats',
 				'4th option',
-				'Macos no kolegiem',
-				'Macos darba vieta',
+				'Mācos no kolēģiem',
+				'Mācos darba vietā',
 				'Izzinu pats',
 				'4th option'
 			],
 			visibleTaskIndex: '',
 			editableTaskIndex: '',
+			editableGoalIndex: '',
 			taskDesk: ''
 		}
 	},
@@ -102,8 +116,16 @@ export default {
 
 	computed: {
 
+		isIe() {
+			return this.$store.state.isIe;
+		},
 		goalTasks() {
 			return this.$store.state.goalTasks;
+		},
+
+		phDate() {
+			let date = new Date();
+			return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' - ' + date.getDate() + '.' + date.getMonth(date.setMonth(date.getMonth() + 3 )) + '.' + date.getFullYear()
 		}
 
 	},
@@ -147,6 +169,16 @@ export default {
 		},
 		editTaskDescription: function( index ) {
 			this.editableTaskIndex = index;
+		},
+		editGoalName: function ( index ) {
+			this.editableGoalIndex = index;
+		},
+		stopEditingGoal: function ( goalId, goalName ) {
+			this.editableGoalIndex = '';
+
+			console.log(goalName);
+
+			updateGoalName( this.$store, goalId, goalName );
 		},
 		stopEditing: function( taskId ) {
 
@@ -279,16 +311,16 @@ makelongshadow(color, size)
 			border: 0
 			margin-top: 0
 
-		&::-ms-track
-			background: transparent
-			border: 0
-			border-color: transparent
-			border-radius: 0
-			border-width: 0
-			color: transparent
-			height: $slider-height
-			margin-top: 10px
-			width: $slider-width
+		// &::-ms-track
+		// 	background: transparent
+		// 	border: 0
+		// 	border-color: transparent
+		// 	border-radius: 0
+		// 	border-width: 0
+		// 	color: transparent
+		// 	height: $slider-height
+		// 	margin-top: 10px
+		// 	width: $slider-width
 		
 		// &::-ms-thumb
 		// 	width $thumb-width
@@ -299,12 +331,14 @@ makelongshadow(color, size)
 		// 	border: $thumb-border
 
 		&::-ms-fill-lower
-			background: $background-filled-slider
-			border-radius: 0
+			background rimiPink
+			color rimiPink
+			border-radius 15px
 
 		&::-ms-fill-upper
-			background: $background-slider
-			border-radius: 0
+			background rimiLightGrey
+			color rimiLightGrey
+			border-radius 15px
 
 		&::-ms-tooltip
 			display: none
@@ -312,6 +346,34 @@ makelongshadow(color, size)
 
 .goals
 	.goal-item
+		
+		.edit-button
+			position absolute
+			background transparent url('../../styles/img/icon-edit.png') 0 0 no-repeat
+			height 19px
+			width 19px
+			border none
+			cursor pointer
+			
+			&:focus
+			&:active
+				outline none
+				
+		.edit-task-description
+			right 50px
+			top 50px
+			
+		.editable-goal
+			width 250px
+			height 45px
+			resize none
+			margin 0px
+			border none
+			border-radius 1px
+			font-family 'Neris', Arial, sans-serif
+			font-size 16px
+			overflow hidden
+				
 		.task-wrapper
 			position relative
 			padding 20px 20px
@@ -327,6 +389,7 @@ makelongshadow(color, size)
 				justify-content space-between
 				bottom -30px
 				width 109%
+				left -5%
 				
 				span
 					flex 1 0 20%
@@ -343,19 +406,6 @@ makelongshadow(color, size)
 				font-family 'Neris', Arial, sans-serif
 				font-size 16px
 			
-			.edit-task-description
-				position absolute
-				background transparent url('../../styles/img/icon-edit.png') 0 0 no-repeat
-				height 19px
-				width 19px
-				border none
-				right 50px
-				top 50px
-				cursor pointer
-				
-				&:focus
-				&:active
-					outline none
 			
 			&.visible-slider
 				background: #eaeaea;
@@ -401,6 +451,47 @@ makelongshadow(color, size)
 						
 				input[type=range]
 					-webkit-appearance none
+						
+					&::-moz-range-track
+						background rimiLightGrey
+						height 15px
+						margin-top 5px
+						border-radius 15px
+					
+					&::-ms-track
+						background rimiLightGrey
+						color rimiLightGrey
+						height 15px
+						margin-top 5px
+						border-radius 15px
+					
+					&::-webkit-slider-runnable-track
+						-webkit-appearance none
+						background rimiLightGrey
+						height 15px
+						margin-top 5px
+						border-radius 15px
+					
+					&::-moz-range-thumb
+						// border 15px solid rimiPink
+						border-radius 50px
+						height 10px
+						width 10px
+						background #FFF
+						cursor pointer
+						box-shadow 0px 0px 0px 10px rimiPink
+						margin-top 2px
+					
+					&::-ms-thumb
+						// border 15px solid rimiPink
+						border-radius 50px
+						height 10px
+						width 10px
+						background #FFF
+						cursor pointer
+						box-shadow 0px 0px 0px 10px rimiPink
+						margin-top 2px
+					
 					&::-webkit-slider-thumb
 						-webkit-appearance none
 						// border 15px solid rimiPink
@@ -411,28 +502,33 @@ makelongshadow(color, size)
 						cursor pointer
 						box-shadow 0px 0px 0px 10px rimiPink
 						margin-top 2px
+							
+				// input[type=range]
+				// 	-webkit-appearance none
+				// 	&::-webkit-slider-thumb
+				// 		-webkit-appearance none
+				// 		// border 15px solid rimiPink
+				// 		border-radius 50px
+				// 		height 10px
+				// 		width 10px
+				// 		background #FFF
+				// 		cursor pointer
+				// 		box-shadow 0px 0px 0px 10px rimiPink
+				// 		margin-top 2px
 						
-					&::-webkit-slider-runnable-track
-						background rimiLightGrey
-						height 15px
-						margin-top 5px
-						border-radius 15px
-						
-					// &::-webkit-slider-thumb
-					// 	-webkit-appearance none
-					// 	border 1px solid #000000
-					// 	border-radius 50px
-					// 	height 25px
-					// 	width 25px
-					// 	background #ffffff
-					// 	cursor pointer
-					// 	box-shadow 1px 1px 1px #000000, 0px 0px 1px #0d0d0d
+				// 	&::-webkit-slider-runnable-track
+				// 		background rimiLightGrey
+				// 		height 15px
+				// 		margin-top 5px
+				// 		border-radius 15px
+
 				
 			.task-header
 				font-weight 600
 				cursor pointer
 			.task-description
 				color rimiGrey
+				min-height 10px
 
 
 </style>

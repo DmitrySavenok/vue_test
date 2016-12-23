@@ -22,6 +22,8 @@
     "babel-runtime": "^6.0.0",
     "cross-env": "^2.0.1",
     "css-loader": "^0.24.0",
+    "es6-promise": "^3.3.1",
+    "es6-promise-polyfill": "^1.2.0",
     "file-loader": "^0.9.0",
     "path": "^0.12.7",
     "postcss-input-range": "github:jonathantneal/postcss-input-range",
@@ -33,7 +35,7 @@
     "vue-hot-reload-api": "^1.2.0",
     "vue-html-loader": "^1.0.0",
     "vue-i18n": "^4.8.0",
-    "vue-loader": "^9.0.0",
+    "vue-loader": "^9.9.5",
     "vue-router": "^2.0.1",
     "vue-style-loader": "^1.0.0",
     "vuex": "^2.0.0",
@@ -43,7 +45,7 @@
   },
   "dependencies": {
     "es6-promise": "^3.0.2",
-    "vue": "^2.0.0",
+    "vue": "^2.1.6",
     "vue-router": "^2.0.0"
   }
 }

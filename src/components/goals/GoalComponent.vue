@@ -1,47 +1,48 @@
 <template>
 
-	<div v-if="goal" @click="showGoal" class="goal-item" :class="'goal-item-' + goalIndex">
+	<div class="wrapper">
+		<div v-if="goal" @click="showGoal" class="goal-item" :class="'goal-item-' + goalIndex">
 
-		<!-- Existing goal here -->
-		<h4>Goal {{goalIndex}}</h4>
-		<span>285 B.C - 476 A.D</span>
+			<!-- Existing goal here -->
+			<h4>{{goal.goal_name}}</h4>
+			<!-- <span>285 B.C - 476 A.D</span> -->
 
-		<div class="goal-graph-wrapper">
+			<div class="goal-graph-wrapper">
 
-			<div class="percentage">{{overallPercentage(goalIndex)}}%</div>
+				<div class="percentage">{{overallPercentage(goalIndex)}}%</div>
 
-			<template v-for="(task, index) in goalTasks">
-				<GoalTaskPart v-if="task.task_goal_id === goalIndex"
-					:index="index"
-					:goalIndex="goalIndex"
-					:task="task">
-				</GoalTaskPart>
-			</template>
+				<template v-for="(task, index) in goalTasks">
+					<GoalTaskPart v-if="task.task_goal_id === goalIndex"
+						:index="index"
+						:goalIndex="goalIndex"
+						:task="task">
+					</GoalTaskPart>
+				</template>
+				
+			</div>
+
+		</div>
+		<div v-else class="goal-item">
 			
-		</div>
+			<!-- Empty goal here -->
 
-	</div>
+			<h4>Goal {{goalIndex}}</h4>
+			<!-- <span>285 B.C - 476 A.D</span> -->
 
+			<div class="goal-graph-wrapper">
 
-	<div v-else class="goal-item">
-		
-		<!-- Empty goal here -->
+				<div class="percentage"> 0% </div>
 
-		<h4>Goal {{goalIndex}}</h4>
-		Empty
+				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-1 empty-goal"></div>
+				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-2 empty-goal"></div>
+				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-3 empty-goal"></div>
+				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-4 empty-goal"></div>	
 
-		<div class="goal-graph-wrapper">
-
-			<div class="percentage"> 0% </div>
-
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-1 empty-goal"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-2 empty-goal"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-3 empty-goal"></div>
-			<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-4 empty-goal"></div>	
+			</div>
 
 		</div>
-
 	</div>
+
 
 
 </template>
@@ -53,6 +54,7 @@ import GoalTaskPart from './GoalTaskPart.vue';
 function setGoalToDisplay( store, goalId ) {
 	return store.dispatch('SET_GOAL_TO_DISPLAY', { goalId });
 }
+
 
 export default {
 
@@ -147,6 +149,8 @@ export default {
 // 	border-left n solid d
 
 
+.wrapper
+	width 100%
 .goal-item
 	height 100%
 	width 100%

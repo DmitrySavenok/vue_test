@@ -18,10 +18,10 @@
 
 		<div class="student-menu" v-if="user.role === 'student'">
 			<ul>
-				<li><router-link class="link-home" :to="'/home'" v-on:click="setPageHome">(HOME)</router-link></li>
-				<li><router-link class="link-goals" :to="'/goals'" v-on:click="setPageGoals">(DEV GOALS)</router-link></li>
-				<li><router-link class="link-courses" :to="'/courses'" v-on:click="setPageCourses">(RIMI E-LEARN)</router-link></li>
-				<li><router-link class="link-resources" :to="'/resources'" v-on:click="setPageResources">(LEARNING RESOURCES)</router-link></li>
+				<li><router-link class="link-home" :to="'/home'" v-on:click="setPageHome">Home</router-link></li>
+				<li><router-link class="link-goals" :to="'/goals'" v-on:click="setPageGoals">Development Goals</router-link></li>
+				<li><router-link class="link-courses" :to="'/courses'" v-on:click="setPageCourses">Rimi e-learning</router-link></li>
+				<li><router-link class="link-resources" :to="'/resources'" v-on:click="setPageResources">Learning resources</router-link></li>
 			</ul>
 
 		</div>
@@ -191,6 +191,7 @@ export default {
 		.link-home
 			margin-bottom 20px
 			
+		.link-home
 		.link-goals
 		.link-courses
 		.link-resources
@@ -204,10 +205,16 @@ export default {
 				width 4px
 				margin-left -15px
 				top 0px
+		
+		.link-home
+			&:hover
+				background rimiRed
+			&:before
+				background rimiRed
 				
 		.link-goals
 			&:hover
-				background rimiRed
+				background rimiPink
 			&:before
 				background rimiPink
 		.link-courses

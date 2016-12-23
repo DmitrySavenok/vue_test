@@ -1,3 +1,7 @@
+import 'es6-promise';
+
+// var autoprefixer = require('autoprefixer');
+
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import App from './App.vue';
@@ -29,7 +33,8 @@ Object.keys(locales).forEach(function(lang) {
 });
 
 
-
+// var info = autoprefixer().info();
+// console.log(info);
 
 
 sync(store, router)

@@ -13,6 +13,8 @@
 					<hr>
 					<div class="section-completion">
 						Course passed
+						<div class="courses-passed courses-passed-ph"></div>
+						<span class="passed-number-ph">3/14</span>
 					</div>
 				</div>
 			<!-- </transition> -->
@@ -38,7 +40,7 @@ export default {
 		}
 	},
 	props: ['type', 'section'],
-	//Methods here
+
 	computed: {
 		showSection() {
 			return this.$store.state.showSection === this.showEl;
@@ -92,6 +94,19 @@ export default {
 
 .section-completion
 	text-align center
+	
+	.courses-passed-ph
+		background transparent url('../../styles/img/completed-courses-ph.png') 0 0 no-repeat
+		height 200px
+		width 200px
+		left 0px
+		right 0px
+		margin auto
+		top 30px
+		position relative
+	.passed-number-ph
+		position relative
+		top 40px
 	
 .list-handle
 	cursor pointer

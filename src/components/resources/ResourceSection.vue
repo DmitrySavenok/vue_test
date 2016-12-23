@@ -58,7 +58,7 @@ export default {
 
 .section-info
 	transition all .5s cubic-bezier(.55,0,.1,1)
-	min-height 602px
+	// min-height 602px
 	text-align left
 	
 	h3

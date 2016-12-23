@@ -28,9 +28,6 @@ export function fetch ( child ) {
 
 export function patchData ( child, data ) {
 
-	// tbf we need only to fetch user data
-	// or fetch course list too?
-
 	console.log(child);
 	console.log(data);
 
@@ -48,7 +45,7 @@ export function patchData ( child, data ) {
 
 }
 
-export function postData( child, data ) {
+export function postData ( child, data ) {
 
 	return new Promise((resolve, reject) => {
 		axios.post(`http://localhost:3000/${child}`, data).then( (res) => {
@@ -127,8 +124,66 @@ export function patchTaskDescription( taskId, taskDescription ) {
 	console.log('patchTaskDescription');
 	return patchData(`goal_tasks/${taskId}`, { "task_description": taskDescription } )
 }
+export function patchGoalName( goalId, goalName ) {
+	console.log('patchGoalName');
+	// TODO: NEED TO CHECK USER ID TOO
+	// return patchData(`goals/1`)
+}
+
 
 export function createEmptyGoal( userId ) {
-	console.log('creating empty goal for user: ' + userId);
-	return postData(`goals`, { "userId": userId, "user_goals": [ { goal_name: "", goal_description: "", "goal_quarter": "" } ] })
+	// console.log('creating empty goal for user: ' + userId);
+	// console.log(fetch(`goals?userId=${userId}`));
+
+	return new Promise( (resolve, reject) => {
+		fetch(`goals?userId=${userId}`).then( (res) => {
+			console.log('we here');
+			console.log(res);
+			let userGoalId = res[0].id;
+			resolve(patchData(`goals/${userGoalId}`, { "user_goals": [ { goal_id: 1, goal_name: "Goal 1", goal_description: "", "goal_quarter": 1 },
+																		{ goal_id: 2, goal_name: "Goal 2", goal_description: "", "goal_quarter": 1 },
+																		{ goal_id: 3, goal_name: "Goal 3", goal_description: "", "goal_quarter": 1 } ] })
+			)
+		}).catch( (err) => {
+			console.log('error here: (creating new user with empty goals?)');
+			console.log(err);
+			reject(err);
+		});
+	})
+
+
+	// return postData(`goals`, { "userId": userId, "user_goals": [ { goal_name: "", goal_description: "", "goal_quarter": "" } ] })
+	// return false;
+}
+export function clearGoals( userId ) {
+	// return patchData(`goals/${userId}`, { "user_goals": [] })
+
+	return new Promise( (resolve, reject) => {
+		fetch(`goals?userId=${userId}`).then( (res) => {
+			console.log('we here');
+			console.log(res);
+			let userGoalId = res[0].id;
+			for ( let i = 0; i < 12; i++ ) {
+				patchData(`goal_tasks/${i}`, { "task_name": "", "task_description": "", "task_complete": "0" });
+			}
+			// patchData(`goal_tasks/1`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/2`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/3`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/4`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/5`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/6`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/7`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/8`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/9`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/10`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/11`, { "task_name": "","task_description":"","task_complete":"0" });
+			// patchData(`goal_tasks/12`, { "task_name": "","task_description":"","task_complete":"0" });
+			resolve(patchData(`goals/${userGoalId}`, { "user_goals": [] })
+			)
+		}).catch( (err) => {
+			console.log('error here: ');
+			console.log(err);
+			reject(err);
+		});
+	})
 }

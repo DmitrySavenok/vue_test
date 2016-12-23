@@ -18,8 +18,8 @@
 					<div class="resource-description">{{resource.resource_description}}</div>
 					
 					<template v-for="link in resource.links">
-						<a class="resource-pdf" v-if="link.indexOf('.pdf') > 0" v-bind:href="link">PDF</a>
-						<a class="resource-web" v-else :href="link">WWW</a>
+						<a target="_blank" class="resource-pdf" v-if="link.indexOf('.pdf') > 0" v-bind:href="link">PDF</a>
+						<a target="_blank" class="resource-web" v-else :href="link">WWW</a>
 					</template>
 				</div>
 		</transition-group>

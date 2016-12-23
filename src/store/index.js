@@ -13,10 +13,63 @@ import {
 import {
 	patchTaskPercentage,
 	patchTaskDescription,
-	createEmptyGoal
+	createEmptyGoal,
+	clearGoals
 } from './api';
 
 Vue.use(Vuex);
+
+
+
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function(searchElement /*, fromIndex*/) {
+    'use strict';
+    if (this == null) {
+      throw new TypeError('Array.prototype.includes called on null or undefined');
+    }
+
+    var O = Object(this);
+    var len = parseInt(O.length, 10) || 0;
+    if (len === 0) {
+      return false;
+    }
+    var n = parseInt(arguments[1], 10) || 0;
+    var k;
+    if (n >= 0) {
+      k = n;
+    } else {
+      k = len + n;
+      if (k < 0) {k = 0;}
+    }
+    var currentElement;
+    while (k < len) {
+      currentElement = O[k];
+      if (searchElement === currentElement ||
+         (searchElement !== searchElement && currentElement !== currentElement)) { // NaN !== NaN
+        return true;
+      }
+      k++;
+    }
+    return false;
+  };
+}
+
+function msieversion() {
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
+    {
+        return true;
+    }
+    else  // If another browser, return 0
+    {
+    	return false;
+    }
+
+}
+
 
 const store = new Vuex.Store({
 
@@ -30,6 +83,7 @@ const store = new Vuex.Store({
 		goalTutorialPhase: {
 			0: 'que'
 		},
+		isIe: msieversion(),
 
 		showSection: 1,
 		goalToShow: {
@@ -42,7 +96,7 @@ const store = new Vuex.Store({
 		// FIRST VERSION - OFFICE (no positions, only departments)
 		positionCourses: {
 
-			first_row: [ { "id": 1, courseName: "Astronomy" }, { "id": 99, "courseName": "sales" }, { "id": 3, "courseName": "Dark Arts" } ],
+			first_row: [ { "id": 1, courseName: "Sales" }, { "id": 99, "courseName": "sales" }, { "id": 3, "courseName": "Sanitary Minimum" } ],
 			second_row: [ { "id": 100, "courseName": "game" }, { "id": 2, "courseName": "Defence Against the Dark Arts" }, { "id": 101, "courseName": "somethingelse" } ]
 
 		},
@@ -153,6 +207,7 @@ const store = new Vuex.Store({
 							// courses = courses.filter( course => !state.lists.currentUserCourses[course.courseId] );
 							if ( courses.length ) {
 								courses.forEach(course => {
+									console.log(posCoursesNames);
 									posCoursesNames.includes(course.course_name) ? showCourses.push(course) : '';
 								});
 								commit('SET_COURSES', { courses: showCourses }) 
@@ -307,9 +362,27 @@ const store = new Vuex.Store({
 			commit('SET_GOAL_PHASE', { phaseNum });
 		},
 		CREATE_EMPTY_GOAL: ({ commit, state }, { userId }) => {
-			return createEmptyGoal(userId).then( answer => {
+			// console.log(createEmptyGoal(userId));
+			createEmptyGoal(userId).then( answer => {
+				console.log('the answer: ');
 				console.log(answer);
-			})
+				
+				if ( userId ) {
+					fetchGoals(userId).then(goals => { goals[0] != undefined ? (commit('SET_GOALS', { goals: goals[0].user_goals }), commit('SET_GOAL_PHASE', { phaseNum: 3 })) : console.log('no goals ;('); } )
+				} else {
+					console.log('no user id specified');
+				}
+
+			}).catch( (e) => {
+				console.log('the error: ');
+				console.log(e);
+			});
+		},
+		CLEAR_GOALS: ({ commit, state }, { userId }) => {
+			clearGoals(userId).then( answer => {
+				commit('CLEAR_GOALS');
+				fetchGoals(123).then(goals => { goals[0] != undefined ? commit('SET_GOALS', { goals: goals[0].user_goals }) : console.log('no goals ;('); } )
+			});
 		},
 
 		UPDATE_TASK_COMPLETION_STATUS: ({ commit, state }, { taskId, percentage }) => {
@@ -331,6 +404,20 @@ const store = new Vuex.Store({
 					commit('UPDATE_TASK_DESCRIPTION', { updatedTask });
 				});
 			}
+
+		},
+
+		UPDATE_GOAL_NAME: ({ commit, state }, { goalId, goalName }) => {
+
+			//TODO: NOT READY
+
+			// if ( goalId && goalName ) {
+
+			// 	return patchGoalName(goalId, goalName).then( updatedGoal => {
+			// 		commit('UPDATE_GOAL_NAME', { updatedGoal });
+			// 	});
+
+			// }
 
 		}
 
@@ -423,6 +510,9 @@ const store = new Vuex.Store({
 		},
 		SET_GOAL_PHASE: (state, { phaseNum }) => {
 			Vue.set(state.goalTutorialPhase, 0, 'phase-' + phaseNum);
+		},
+		CLEAR_GOALS: (state) => {
+			state.goals = {};
 		},
 		SET_RESOURCES: (state, { resources }) => {
 			resources.forEach( resource => {
