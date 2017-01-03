@@ -3,13 +3,14 @@
 	<div class="login-form">
 
 		<div class="login-fields">
-			<h1>{{ msg }}</h1>
+      		<h1>{{ $t("message.header") }}</h1>
+			<!-- <h1>{{ msg }}</h1> -->
 
 			<div class="lang-select">
-				<button class="lang-button" name="lang-ee">EE</button>
-				<button class="lang-button" name="lang-lv">LV</button>
-				<button class="lang-button" name="lang-lt">LT</button>
-				<button class="lang-button" name="lang-eng">ENG</button>
+				<button @click="changeLang" data-lang="ee" class="lang-button" name="lang-ee">EE</button>
+				<button @click="changeLang" data-lang="lv" class="lang-button" name="lang-lv">LV</button>
+				<button @click="changeLang" data-lang="lt" class="lang-button" name="lang-lt">LT</button>
+				<button @click="changeLang" data-lang="eng" class="lang-button" name="lang-eng">ENG</button>
 			</div>
 			
 			<form v-on:submit.prevent="onSubmit">
@@ -24,6 +25,11 @@
 </template>
 
 <script>
+
+
+function setLang( store, lang ) {
+	return store.dispatch('SET_LANG', { lang });
+}
 
 
 export default {
@@ -44,6 +50,13 @@ export default {
   		console.log(this);
   		this.$store.state.userId = +this.$data.login;
   		this.$store.changePath('/home', { router: this.$router });
+  	},
+
+  	changeLang: function(e) {
+
+  		let newLang = e.target.getAttribute('data-lang');
+  		setLang(this.$store, newLang);
+  		
   	}
   }
 }

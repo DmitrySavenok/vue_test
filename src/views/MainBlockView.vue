@@ -70,7 +70,7 @@
 
 				</div>
 
-				<div v-if="goalTutorialPhase == 'phase-2'">
+<!-- 				<div v-if="goalTutorialPhase == 'phase-2'">
 					<div class="tooltip-wrapper">
 						<div @click="createEmptyGoal" class="tooltip tooltip-1"></div>
 						<div class="tooltip-text tooltip-text-1">Izvēlies kādu no trīs mērķiem un sāc plānot savu izaugsmi! Katrs mērķis satur četrus uzdevumus.</div>
@@ -83,7 +83,7 @@
 						<div @click="createEmptyGoal" class="tooltip tooltip-3"></div>
 						<div class="tooltip-text tooltip-text-3"></div>
 					</div>
-				</div>
+				</div> -->
 
 			</template>
 
@@ -141,9 +141,9 @@ import GoalListItem from '../components/goals/GoalListItem.vue';
 import GoalFirstTimeTutorial from '../components/goals/GoalFirstTimeTutorial.vue';
 
 
-function setEmptyGoal(store, userId) {
-	store.dispatch('CREATE_EMPTY_GOAL', { userId });
-}
+// function setEmptyGoal(store, userId) {
+// 	store.dispatch('CREATE_EMPTY_GOAL', { userId });
+// }
 
 export default {
 
@@ -174,6 +174,8 @@ export default {
   		return this.$store.state.goalTutorialPhase[0];
   	},
   	courses() {
+  		// TODO:
+  		// Filter courses so all the completed ones would be at the bottom ( after API update? )
   		return this.$store.state.lists.currentUserCourses;
   	},
   	news() {
@@ -192,13 +194,13 @@ export default {
   //Methods here
   methods: {
 
-  	createEmptyGoal: function() {
+  	// createEmptyGoal: function() {
 
-  		let userId = this.$store.state.users['currentUser'].id;
+  	// 	let userId = this.$store.state.users['currentUser'].id;
 
-  		setEmptyGoal( this.$store, userId );
+  	// 	setEmptyGoal( this.$store, userId );
 
-  	}
+  	// }
   }
 }
 </script>
@@ -364,75 +366,9 @@ export default {
 	&.goals
 		margin-top 120px
 		&.phase-2
-			margin-top 0px
-			background rimiLightGrey
-			
-			.tooltip-text
-				position relative
-				height 45px
-				width 340px
-				top 128px
-				left 100px
-				background rimiPink
-				color #FFF
-				padding 10px 20px
-				
-				&:before
-					content ''
-					display block
-					position absolute
-					height 25px
-					width 25px
-					left -13px
-					top 19px
-					background rimiPink
-					transform rotate(45deg)
-					
-				&:after
-					content ''
-					display block
-					position absolute
-					width 179px
-					height 2px
-					background rimiPink
-					left -195px
-					top 31px
-			
-				&.tooltip-text-2
-					background transparent
-					top 373px
-					&:before
-						background rimiOrange
-					&:after
-						background rimiOrange
-				&.tooltip-text-3
-					background transparent
-					top 617px
-					&:before
-						background rimiOrange
-					&:after
-						background rimiOrange
-			.tooltip
-				position absolute
-				height 142px
-				width 142px
-				border-radius 50%
-				left -240px
-				cursor pointer
-				
-				&.tooltip-1
-					top 89px
-					border 2px solid rimiPink
-				&.tooltip-2
-					top 397px
-					border 2px solid rimiOrange
-				&.tooltip-3
-					top 706px
-					border 2px solid rimiOrange		
-
-			.goal-tutorial
-				display none
-		
-				
+			display none
+			// margin-top 0px
+			// background rimiLightGrey
+						
 
 </style>

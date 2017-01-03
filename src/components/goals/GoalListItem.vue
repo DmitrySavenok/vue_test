@@ -37,8 +37,12 @@
 
 					<div class="task-slider" v-show="index == visibleTaskIndex">
 						<div class="left-side">
-							<div class="hover-popup qm-popup"></div>
-							<div class="hover-popup info-popup"></div>
+							<div @mouseleave="hidePopup" @mouseenter="showPopup" class="hover-popup qm-popup">
+								<div v-if="qmPopup" class="popup-wrapper">{{$t("popups.goalQm")}}</div>
+							</div>
+							<div @mouseleave="hidePopup" @mouseenter="showPopup" class="hover-popup info-popup">
+								<div v-if="infoPopup" class="popup-wrapper">{{$t("popups.goalInfo")}}</div>
+							</div>
 						</div>
 						<div class="range-wrapper">
 							<input v-if="isIe" @mouseup="saveGoalProgress(task.id)" type="range" v-model.lazy="goalTasks[index].task_complete" min="0" max="100">
@@ -109,7 +113,9 @@ export default {
 			visibleTaskIndex: '',
 			editableTaskIndex: '',
 			editableGoalIndex: '',
-			taskDesk: ''
+			taskDesk: '',
+			qmPopup: false,
+			infoPopup: false
 		}
 	},
 	props: ['goalToShow'],
@@ -144,6 +150,22 @@ export default {
 		console.log('data updated');
 	},
 	methods: {
+		showPopup: function( el ) {
+
+			if ( el.target.classList.contains('qm-popup') ) {
+				this.$data.qmPopup = true;
+			} else {
+				this.$data.infoPopup = true;
+			}
+		},
+		hidePopup: function( el ) {
+
+			// to check? ( or to hide all the popups right away )
+			// el.target.classList.contains('info-popup') ? this.$data.qmPopup = false : this.$data.infoPopup = false
+			this.$data.qmPopup = false;
+			this.$data.infoPopup = false;
+
+		},
 		showTaskDetails: function( index ) {
 			this.stopEditing();
 			console.log(index);
@@ -174,6 +196,7 @@ export default {
 			this.editableGoalIndex = index;
 		},
 		stopEditingGoal: function ( goalId, goalName ) {
+			console.log('here');
 			this.editableGoalIndex = '';
 
 			console.log(goalName);
@@ -437,10 +460,33 @@ makelongshadow(color, size)
 					border-right 1px solid rimiLightGrey
 					.hover-popup
 						position relative
+						cursor pointer
 						height 30px
 						width 30px
 						top 20px
 						left 7px
+						
+						.popup-wrapper
+							position absolute
+							background rimiPink
+							min-height 25px
+							width 250px
+							bottom 70px
+							left -5px
+							color #FFF
+							padding 10px 20px
+							border-radius 2px
+							
+							&:before
+								content ''
+								display block
+								border-top 15px solid rimiPink
+								border-left 15px solid transparent
+								border-bottom 15px solid transparent
+								border-right 15px solid transparent
+								position absolute
+								left 5px
+								bottom -30px
 						
 					.qm-popup
 						background transparent url('../../styles/img/qm-popup.png') 0 0 no-repeat

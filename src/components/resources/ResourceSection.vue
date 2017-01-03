@@ -131,7 +131,7 @@ export default {
 		border-left 16px solid transparent
 		border-right 16px solid transparent
 		left 5px
-		bottom 36px
+		bottom 34px
 	
 
 		

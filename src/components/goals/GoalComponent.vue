@@ -30,13 +30,17 @@
 			<!-- <span>285 B.C - 476 A.D</span> -->
 
 			<div class="goal-graph-wrapper">
+				<div class="tooltip-wrapper">
+					<div @click="createEmptyGoal" class="tooltip" :class="'tooltip-' + goalIndex"></div>
+					<div class="tooltip-text" :class="'tooltip-text-' + goalIndex">{{goalIndex === 1 ? tooltip : ''}}</div>
+				</div>
 
 				<div class="percentage"> 0% </div>
 
 				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-1 empty-goal"></div>
 				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-2 empty-goal"></div>
 				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-3 empty-goal"></div>
-				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-4 empty-goal"></div>	
+				<div @mouseover="mouseOver" @mouseleave="mouseLeave" v-bind:class="'goal-bg-' + goalIndex" class="graph-part graph-part-4 empty-goal"></div>
 
 			</div>
 
@@ -54,6 +58,9 @@ import GoalTaskPart from './GoalTaskPart.vue';
 function setGoalToDisplay( store, goalId ) {
 	return store.dispatch('SET_GOAL_TO_DISPLAY', { goalId });
 }
+function setEmptyGoal(store, userId) {
+	store.dispatch('CREATE_EMPTY_GOAL', { userId });
+}
 
 
 export default {
@@ -61,10 +68,11 @@ export default {
 	name: 'GoalComponent',
 	data: function() {
 		return {
-			counter: 0
+			counter: 0,
+			tooltip: 'Izvēlies kādu no trīs mērķiem un sāc plānot savu izaugsmi! Katrs mērķis satur četrus uzdevumus.'
 		}
 	},
-	props: ['goal', 'goalIndex'],
+	props: ['goal', 'goalIndex', 'goalTutorialPhase'],
 	components: {
 		GoalTaskPart
 	},
@@ -102,6 +110,13 @@ export default {
 			totalScore = totalScore / 400 * 100;
 
 			return Math.floor(totalScore);
+
+		},
+		createEmptyGoal: function() {
+
+			let userId = this.$store.state.users['currentUser'].id;
+
+			setEmptyGoal( this.$store, userId );
 
 		},
 
@@ -278,5 +293,70 @@ export default {
 		.bigger
 			height 100px
 			width 100px
+
+.tooltip-wrapper
+	transform rotate(45deg)
+	.tooltip-text
+		position relative
+		height 45px
+		width 340px
+		top 66px
+		left 457px
+		background rimiPink
+		color #FFF
+		padding 10px 20px
+		
+		&:before
+			content ''
+			display block
+			position absolute
+			height 25px
+			width 25px
+			left -13px
+			top 19px
+			background rimiPink
+			transform rotate(45deg)
+			
+		&:after
+			content ''
+			display block
+			position absolute
+			width 179px
+			height 2px
+			background rimiPink
+			left -195px
+			top 31px
+
+		&.tooltip-text-2
+			background transparent
+			&:before
+				background rimiOrange
+			&:after
+				background rimiOrange
+		&.tooltip-text-3
+			background transparent
+			&:before
+				background rimiOrange
+			&:after
+				background rimiOrange
+	.tooltip
+		position absolute
+		height 142px
+		width 142px
+		border-radius 50%
+		left 117px
+		top 25px
+		cursor pointer
+		
+		&.tooltip-1
+			border 2px solid rimiPink
+		&.tooltip-2
+			border 2px solid rimiOrange
+		&.tooltip-3
+			border 2px solid rimiOrange		
+
+	.goal-tutorial
+		display none
+
 
 </style>

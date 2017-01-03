@@ -7,13 +7,12 @@
 		<transition-group 
 			name="fade-resource" 
 			tag="div" 
-			@beforeLeave="changeSection">
-				<div class="resource-info" v-show="!isHidden" :key="resource.resource_title" 
-					@beforeEnter="beforeEnter" 
-					@afterEnter="afterEnter" 
-					@beforeLeave="beforeLeave" 
-					@afterLeave="afterLeave" 
-					>
+			@beforeLeave="changeSection"
+			@beforeEnter="beforeEnter" 
+			@afterEnter="afterEnter" 
+			@afterLeave="afterLeave" 
+			>
+				<div class="resource-info" v-if="!isHidden" :key="resource.resource_title">
 					<div class="completion-icon"></div>
 					<div class="resource-description">{{resource.resource_description}}</div>
 					
@@ -50,55 +49,49 @@ export default {
 			this.isHidden = !this.isHidden;
 		},
 		changeSection(el) {
-			console.log('here');
 			this.isHidden = true;
+
+			el.style.visibility = 'hidden';
+			el.style.transition = '';
+
+
+			let parentEl = el.parentNode.parentNode;
+	        setTimeout(() => parentEl.style.height = "20px", 25)
+
 		},
 		beforeEnter(el) {
-	        // Setup clone
 
-	        el.style.opacity = '0';
+	        console.log('before');
 
-	        var clone = el.cloneNode(true), 
-	        	h
+	        el.style.visibility = 'hidden';
 
-	        clone.style.visibility = 'hidden'
-	        clone.style.removeProperty('display')
-	        
-	        // var desc = clone.querySelectorAll("*");
-	        // [].forEach.call(desc, function (item) {
-	        //     item.style.removeProperty('display')
-	        // });
-	        
-	        el.parentNode.appendChild(clone)
-	        h = clone.clientHeight
-	        clone.remove()
-	        
-	        // // Force animation instead of simple "setting a height"
-	        el.style.height = "0px"
-	        setTimeout(() => el.style.height = h + "px", 1)
-	        el.parentNode.parentNode.style.height = '20px'
-	        setTimeout(() => el.parentNode.parentNode.style.height = el.parentNode.parentNode.clientHeight + h + "px", 25)
 		},
 		afterEnter(el) {
 
-	        el.style.opacity = '1';
-        	el.style.removeProperty('height')
+			console.log('after');
+
+			// console.log(el);
+			// console.log(el.parentNode.parentNode);
+			// console.log(el.clientHeight);
+
+			let elHeight 	 = el.clientHeight;
+			let parentHeight = el.parentNode.parentNode.clientHeight;
+
+			el.style.transition = 'opacity 0.1s 0.3s ease-out';
+
+			setTimeout(() => el.parentNode.parentNode.style.height = elHeight + parentHeight + "px", 25)
+			setTimeout(() => el.style.visibility = 'visible', 50)
+			setTimeout(() => el.style.opacity = 1, 100)
+
 		},
 		beforeLeave(el) {
-	        el.style.opacity = '0';
-	        el.parentNode.parentNode.style.height = el.parentNode.parentNode.clientHeight + "px";
-	        setTimeout(() => el.parentNode.parentNode.style.height = "20px", 25)
 
-    		el.style.height = el.clientHeight + "px"
-        	setTimeout(() => el.style.height = "0px", 1)
+			setTimeout(() => el.parentNode.parentNode.style.height = 15 + "px", 25)
+
 		},
 		afterLeave(el) {
-        	el.style.removeProperty('height')
+
 		}
-	},
-	beforeUpdate: function() {
-		// console.log('here');
-		// this.isHidden = true;
 	}
 }
 
@@ -115,13 +108,15 @@ export default {
 		transition height 0.3s ease-out
 		border-bottom 1px solid rimiLightGrey
 		position relative
-		padding 10px 60px 4px 25px
-		margin-left 10px
+		padding 12px 60px 12px 0px
+		margin 0px 25px
 		border-top 1px solid transparent
+		height 20px
 		
 		&.visible-resource-item
 			background #EAEAEA
-			padding 10px 60px 4px 65px
+			padding 9px 60px 8px 65px
+			margin-left 10px
 			.resource-title
 				font-size 24px
 				font-weight 600
@@ -176,6 +171,7 @@ export default {
 		margin-left -4px
 	
 	.resource-info
+		opacity 0
 		.completion-icon
 			background transparent url('../../styles/img/tick-green.png') 0 0 no-repeat
 			width 34px

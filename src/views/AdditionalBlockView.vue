@@ -46,8 +46,9 @@
 
 					<div class="goal-section" v-for="index in [1,2,3]">
 						<!-- <pre>{{goals['Goal' + index]}}</pre> -->
-						<GoalComponent v-bind:goalIndex="index" v-bind:goal="goals['Goal' + index]"></GoalComponent>
+						<GoalComponent v-bind:goalIndex="index" v-bind:goal="goals['Goal' + index]" v-bind:goalTutorialPhase="goalTutorialPhase"></GoalComponent>
 					</div>
+
 
 				</div>
 
@@ -132,6 +133,9 @@ export default {
   	},
   	notifications() {
   		return this.$store.state.lists.notifications;
+  	},
+  	goalTutorialPhase() {
+  		return this.$store.state.goalTutorialPhase[0];
   	},
   	mandatoryCourse() {
   		return this.$store.state.lists.courseSections.mandatory;
@@ -309,8 +313,10 @@ ul
 	.course-sections
 	.sections
 		position absolute
-		height 78%
+		height 730px
 		width 100%
+		top -2px
+		
 		ul
 			display flex
 			flex-direction column
@@ -320,6 +326,8 @@ ul
 			text-align center
 			li
 				transition all 0.3s ease-out
+	.course-sections
+		height 693px
 
 	.goals-list
 		position absolute

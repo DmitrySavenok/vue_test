@@ -125,8 +125,12 @@ const store = new Vuex.Store({
 		// 	 * User data
 		// 	 * Fetch news/notifications
 
-		// Next: goals/polish up news|resources|next week - start styling up?
-		// back
+
+		SET_LANG: ({ commit, state }, { lang }) => {
+
+			commit('SET_LANG', { lang });
+
+		},
 
 
 		FETCH_MAIN_BLOCKS_DATA: ({ commit, state }, { type }) => {
@@ -424,6 +428,16 @@ const store = new Vuex.Store({
 	},
 
 	mutations: {
+
+
+		SET_LANG: (state, { lang }) => {
+
+			if ( Vue.config.lang !== lang ) {
+				console.log('Setting new language: ' + lang);
+				Vue.config.lang = lang;
+			}
+
+		},
 
 		//TEMP
 		CLEAR_SOME_DATA: (state) => {

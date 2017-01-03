@@ -163,9 +163,10 @@ export function clearGoals( userId ) {
 			console.log('we here');
 			console.log(res);
 			let userGoalId = res[0].id;
-			for ( let i = 0; i < 12; i++ ) {
+			for ( let i = 1; i < 13; i++ ) {
 				patchData(`goal_tasks/${i}`, { "task_name": "", "task_description": "", "task_complete": "0" });
 			}
+			// Oh my
 			// patchData(`goal_tasks/1`, { "task_name": "","task_description":"","task_complete":"0" });
 			// patchData(`goal_tasks/2`, { "task_name": "","task_description":"","task_complete":"0" });
 			// patchData(`goal_tasks/3`, { "task_name": "","task_description":"","task_complete":"0" });
