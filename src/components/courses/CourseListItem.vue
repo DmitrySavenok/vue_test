@@ -14,6 +14,8 @@
 			@afterLeave="afterLeave"
 			>
 				<div class="course-info" v-if="!isHidden" :key="course">
+
+					<!-- check if course is completed here -->
 					<div class="completion-icon"></div>
 					<div class="course-description">{{course.course_description}}</div>
 					

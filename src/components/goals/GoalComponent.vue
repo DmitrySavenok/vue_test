@@ -5,7 +5,6 @@
 
 			<!-- Existing goal here -->
 			<h4>{{goal.goal_name}}</h4>
-			<!-- <span>285 B.C - 476 A.D</span> -->
 
 			<div class="goal-graph-wrapper">
 
@@ -27,10 +26,12 @@
 			<!-- Empty goal here -->
 
 			<h4>Goal {{goalIndex}}</h4>
+			<span>{{notSelectedDate}}</span>
 			<!-- <span>285 B.C - 476 A.D</span> -->
 
 			<div class="goal-graph-wrapper">
-				<div class="tooltip-wrapper">
+				<!-- Remade just for one tooltip (for now) -->
+				<div class="tooltip-wrapper" v-if="goalIndex === 1">
 					<div @click="createEmptyGoal" class="tooltip" :class="'tooltip-' + goalIndex"></div>
 					<div class="tooltip-text" :class="'tooltip-text-' + goalIndex">{{goalIndex === 1 ? tooltip : ''}}</div>
 				</div>
@@ -84,6 +85,11 @@ export default {
 	},
 
 	computed: {
+
+		notSelectedDate() {
+			let date = new Date();
+			return date.getDate() + '.' + (+date.getMonth() + 1) + '.' + date.getFullYear() + ' -  _______'
+		},
 
 		goalTasks() {
 			return this.$store.state.goalTasks;
@@ -179,11 +185,11 @@ export default {
 		font-size 21px
 		font-weight 400
 		margin 10px 0px 0px 0px
-		padding-left 60px
+		padding-left 75px
 		color rimiGrey
 	
 	span
-		padding-left 60px
+		padding-left 75px
 		color rimiGrey
 
 	.goal-graph-wrapper
@@ -296,12 +302,18 @@ export default {
 
 .tooltip-wrapper
 	transform rotate(45deg)
+	height 250px
+	position absolute
+	top 46px
+	left -18px
+	z-index 10
+	
 	.tooltip-text
 		position relative
 		height 45px
 		width 340px
-		top 66px
-		left 457px
+		top 93px
+		left 407px
 		background rimiPink
 		color #FFF
 		padding 10px 20px
@@ -341,11 +353,11 @@ export default {
 				background rimiOrange
 	.tooltip
 		position absolute
-		height 142px
-		width 142px
+		height 173px
+		width 173px
 		border-radius 50%
-		left 117px
-		top 25px
+		left 36px
+		top 37px
 		cursor pointer
 		
 		&.tooltip-1

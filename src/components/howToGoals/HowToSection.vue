@@ -1,40 +1,30 @@
 <template>
+
 	<li v-on:click="showSectionInfo" class="section-handle">
-		<div class="list-handle">Section {{section.id}}</div>
+		<div class="list-handle" v-show="!showSection">{{ $t("howToSections.Section"+sectionIndex+".sectionTitle") }}</div>
 		<!-- <transition appear name="section-fade"> -->
-			<div v-if="showSection" class="section-info" v-on:click.stop>
-				<h3>{{section.section_name}}</h3>
-				<p>{{section.section_description}}</p>
-				<hr>
-				<div class="section-expert">
-					Section expert
-					<div class="section-expert-photo"></div>
-					<h3 class="section-expert-name">{{section.section_expert_name}}</h3>
-					<p>
-						<span class="section-expert-phone">{{section.section_expert_phone}}</span>
-						<span class="section-expert-mail">{{section.section_expert_mail}}</span>
-					</p>
-				</div>
+			<div v-if="showSection" class="section-info">
+				<h3>{{ $t("howToSections.Section"+sectionIndex+".sectionTitle") }}</h3>
+				<p v-on:click.stop>{{ $t("howToSections.Section"+sectionIndex+".sectionDescription") }}</p>
 			</div>
 		<!-- </transition> -->
 	</li>
+
 </template>
 
 <script>
 
-// Rewrite that damn animation for opening lists
-// Transition left for later..
 
 export default {
 
-	name: 'ResourceSection',
+	name: 'HowToSection',
 	data () {
 		return {
 			showEl: 0
 		}
 	},
-	props: ['type', 'section'],
-	//Methods here
+	props: ['sectionIndex'],
+
 	computed: {
 		showSection() {
 			return this.$store.state.showSection === this.showEl;
@@ -42,28 +32,30 @@ export default {
 	},
 	methods: {
 		showSectionInfo: function(event) {
-			this.showSection ? this.showEl = '' : this.showEl = this.section.id;
+			this.showSection ? this.showEl = '' : this.showEl = this.sectionIndex;
 			// Not a good idea to change state w/o outside actions/mutations
-			this.$store.state.showSection = this.section.id;
+			this.$store.state.showSection = this.sectionIndex;
 		}
 	}
 }
+
 </script>
 
 <style lang="stylus" scoped>
 
 @import '../../styles/variables.styl';
 
+
 .section-info
 	transition all .5s cubic-bezier(.55,0,.1,1)
-	// min-height 602px
+	height 375px
 	text-align left
 	
 	h3
 		color rimiRed
-		padding 30px 50px 0px 50px
+		padding 15px 40px 0px 40px
 	p
-		padding 0px 50px 30px 50px
+		padding 0px 40px 30px 40px
 
 	
 .section-expert
@@ -132,5 +124,4 @@ export default {
 		bottom 34px
 	
 
-		
 </style>

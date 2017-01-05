@@ -110,6 +110,12 @@ const store = new Vuex.Store({
 				Goal1: 'Kappa',
 				Goal3: 'Keepo'
 			},
+			// howToSections: [
+			// 	{
+			// 		"SectionName": "Learn from colleagues",
+			// 		"SectionDescription": "'Learn from colleagues' section description here, interpolation could be needed for markup"
+			// 	}
+			// ]
 			// Will split currentUserCourses[] in 2 (Mandatory / Optional)
 			// Or merge with currentUserTests[] and split in 3
 			currentUserCourses: {
@@ -177,6 +183,10 @@ const store = new Vuex.Store({
 						console.log('no user id specified');
 					}
 					
+
+					break;
+				case 'goals-how-to':
+					console.log('goals how to');
 
 					break;
 				case 'courses':

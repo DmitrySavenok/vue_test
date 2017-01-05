@@ -162,7 +162,7 @@ export default {
   },
   computed: {
   	user () {
-  		return this.$store.state.users['currentUser']
+  		return this.$store.state.users['currentUser'];
   	},
   	goalToShow() {
   		return this.$store.state.goalToShow[0];

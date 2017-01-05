@@ -12,7 +12,10 @@
 					<p>{{section.category_description}}</p>
 					<hr>
 					<div class="section-completion">
+						<!-- check course completion status -->
 						Course passed
+
+						<!-- Check how many courses passed in that sections -->
 						<div class="courses-passed courses-passed-ph"></div>
 						<span class="passed-number-ph">3/14</span>
 					</div>

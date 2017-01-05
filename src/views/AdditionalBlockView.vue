@@ -56,6 +56,21 @@
 
 			</template>
 
+			<template v-if="additionalBlockState === 'how-to-goals'">
+				
+				<div class="how-to-goals-list">
+					
+					<ul>
+						<!-- <template v-for="(section, index) in howToSections"> -->
+						<template v-for="n in 4">
+							<HowToSection v-bind:sectionIndex="n"></HowToSection>
+						</template>
+					</ul>
+
+				</div>
+
+			</template>
+
 			<template v-if="additionalBlockState === 'courses'">
 
 				<div class="course-sections">
@@ -91,6 +106,7 @@
 import ResourceSection from '../components/resources/ResourceSection.vue';
 import CourseSection from '../components/courses/CourseSection.vue';
 import GoalComponent from '../components/goals/GoalComponent.vue';
+import HowToSection from '../components/howToGoals/HowToSection.vue';
 
 // Not needed for now
 // Used _.debounce on update to filter out function calls
@@ -123,7 +139,8 @@ export default {
   components: {
   	ResourceSection,
   	CourseSection,
-  	GoalComponent
+  	GoalComponent,
+  	HowToSection
   },
   props: ['type'],
 
@@ -137,6 +154,9 @@ export default {
   	goalTutorialPhase() {
   		return this.$store.state.goalTutorialPhase[0];
   	},
+  	// howToSections() {
+  	// 	return this.$store.state.lists.howToSections;
+  	// },
   	mandatoryCourse() {
   		return this.$store.state.lists.courseSections.mandatory;
   	},
@@ -310,6 +330,7 @@ ul
 	.data-2
 		top 150px
 
+	.how-to-goals-list
 	.course-sections
 	.sections
 		position absolute
@@ -328,7 +349,9 @@ ul
 				transition all 0.3s ease-out
 	.course-sections
 		height 693px
-
+	.how-to-goals-list
+		height 500px
+		
 	.goals-list
 		position absolute
 		height 100%

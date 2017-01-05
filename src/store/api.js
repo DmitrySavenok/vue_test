@@ -5,9 +5,7 @@
 import axios from 'axios';
 
 
-
-
-export function fetch ( child ) {
+export function fetch( child ) {
 
 	// tbf we need only to fetch user data
 	// or fetch course list too?
@@ -26,12 +24,13 @@ export function fetch ( child ) {
 
 }
 
-export function patchData ( child, data ) {
+export function patchData( child, data ) {
+
+	console.log('patch function called ( child / data )');
 
 	console.log(child);
 	console.log(data);
 
-	console.log('patch function called');
 
 	return new Promise((resolve, reject) => {
 		axios.patch(`http://localhost:3000/${child}`, data).then( (res) => {
@@ -45,7 +44,7 @@ export function patchData ( child, data ) {
 
 }
 
-export function postData ( child, data ) {
+export function postData( child, data ) {
 
 	return new Promise((resolve, reject) => {
 		axios.post(`http://localhost:3000/${child}`, data).then( (res) => {
@@ -151,9 +150,6 @@ export function createEmptyGoal( userId ) {
 		});
 	})
 
-
-	// return postData(`goals`, { "userId": userId, "user_goals": [ { goal_name: "", goal_description: "", "goal_quarter": "" } ] })
-	// return false;
 }
 export function clearGoals( userId ) {
 	// return patchData(`goals/${userId}`, { "user_goals": [] })
@@ -167,18 +163,6 @@ export function clearGoals( userId ) {
 				patchData(`goal_tasks/${i}`, { "task_name": "", "task_description": "", "task_complete": "0" });
 			}
 			// Oh my
-			// patchData(`goal_tasks/1`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/2`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/3`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/4`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/5`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/6`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/7`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/8`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/9`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/10`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/11`, { "task_name": "","task_description":"","task_complete":"0" });
-			// patchData(`goal_tasks/12`, { "task_name": "","task_description":"","task_complete":"0" });
 			resolve(patchData(`goals/${userGoalId}`, { "user_goals": [] })
 			)
 		}).catch( (err) => {

@@ -18,10 +18,11 @@
 
 		<div class="student-menu" v-if="user.role === 'student'">
 			<ul>
-				<li><router-link class="link-home" :to="'/home'" v-on:click="setPageHome">Home</router-link></li>
-				<li><router-link class="link-goals" :to="'/goals'" v-on:click="setPageGoals">Development Goals</router-link></li>
-				<li><router-link class="link-courses" :to="'/courses'" v-on:click="setPageCourses">Rimi e-learning</router-link></li>
-				<li><router-link class="link-resources" :to="'/resources'" v-on:click="setPageResources">Learning resources</router-link></li>
+				<li><router-link class="link-home" 			:to="'/home'" v-on:click="setPageHome">Home</router-link></li>
+				<li><router-link class="link-goals" 		:to="'/goals'" v-on:click="setPageGoals">Development Goals</router-link></li>
+				<li><router-link class="link-goals-how-to"	:to="'/how-to-goals'" v-on:click="setPageGoalsHowTo">How to learn?</router-link></li>
+				<li><router-link class="link-courses"		:to="'/courses'" v-on:click="setPageCourses">Rimi e-learning</router-link></li>
+				<li><router-link class="link-resources"		:to="'/resources'" v-on:click="setPageResources">Learning resources</router-link></li>
 			</ul>
 
 		</div>
@@ -105,6 +106,7 @@ export default {
 	},
 
 	setPageGoals: function(){ console.log('goals') },
+	setPageGoalsHowTo: function(){ console.log('goals-how-to') },
 	setPageCourses: function(){ console.log('courses') },
 	setPageResources: function(){ console.log('resources') },
 
@@ -193,6 +195,7 @@ export default {
 			
 		.link-home
 		.link-goals
+		.link-goals-how-to
 		.link-courses
 		.link-resources
 			&:hover
@@ -213,10 +216,17 @@ export default {
 				background rimiRed
 				
 		.link-goals
+		.link-goals-how-to
 			&:hover
 				background rimiPink
 			&:before
 				background rimiPink
+		.link-goals-how-to
+			padding-left 25px
+			margin-bottom 15px
+			&:before
+				margin-left -25px
+			
 		.link-courses
 			&:hover
 				background rimiOrange
@@ -233,6 +243,8 @@ export default {
 			&.link-home
 				background rimiRed
 			&.link-goals
+				background rimiPink
+			&.link-goals-how-to
 				background rimiPink
 			&.link-courses
 				background rimiOrange

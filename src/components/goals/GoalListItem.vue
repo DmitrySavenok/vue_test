@@ -25,6 +25,9 @@
 				<!-- <template v-if="task.task_goal_id === goalToShow.goal_id"> -->
 					<!-- <h4 class="task-header">{{task.task_name}}</h4> -->
 					<h4 class="task-header" @click="showTaskDetails(index)">{{taskNames[index-1]}}</h4>
+
+					<!-- Take that from locales "howToSections.Section(n).sectionTitle" -->
+					<!-- <h4 class="task-header" @click="showTaskDetails(index)"> -->
 					
 					<template>
 						<textarea 
@@ -131,7 +134,7 @@ export default {
 
 		phDate() {
 			let date = new Date();
-			return date.getDate() + '.' + date.getMonth() + '.' + date.getFullYear() + ' - ' + date.getDate() + '.' + date.getMonth(date.setMonth(date.getMonth() + 3 )) + '.' + date.getFullYear()
+			return date.getDate() + '.' + (+date.getMonth() + 1) + '.' + date.getFullYear() + ' - ' + date.getDate() + '.' + date.getMonth(date.setMonth(date.getMonth() + 4 )) + '.' + date.getFullYear()
 		}
 
 	},

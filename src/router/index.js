@@ -11,11 +11,12 @@ Vue.use(VueRouter);
 export default new VueRouter({
 	scrollBehavior: () => ({ y: 0 }),
 	routes: [
-		{ path: '/',          component: Login },
-		{ path: '/home',      component: createMainView('home') },
-		{ path: '/goals',     component: createMainView('goals') },
-		{ path: '/courses',   component: createMainView('courses') },
-		{ path: '/resources', component: createMainView('resources') },
-		{ path: '*',     redirect: '/' }
+		{ path: '/',				component: Login },
+		{ path: '/home',			component: createMainView('home') },
+		{ path: '/goals',			component: createMainView('goals') },
+		{ path: '/how-to-goals',	component: createMainView('how-to-goals') },
+		{ path: '/courses',			component: createMainView('courses') },
+		{ path: '/resources',		component: createMainView('resources') },
+		{ path: '*',				redirect: '/' }
 	]
 });
