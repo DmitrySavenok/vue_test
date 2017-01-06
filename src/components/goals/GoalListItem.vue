@@ -21,6 +21,7 @@
 
 		<template>
 
+
 			<div :class="index == visibleTaskIndex ? 'visible-slider' : 'hidden-slider'" class="task-wrapper" v-for="(task, index) in goalTasks" v-if="task.task_goal_id === goalToShow.goal_id">
 				<!-- <template v-if="task.task_goal_id === goalToShow.goal_id"> -->
 					<!-- <h4 class="task-header">{{task.task_name}}</h4> -->

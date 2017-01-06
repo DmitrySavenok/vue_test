@@ -10,7 +10,7 @@
 
 				<ul class="news">
 						
-					<li class="article" v-for="article in news">
+					<li class="article" :class="'article-' + index" v-for="(article, index) in news">
 						
 						<div class="article-first-row">
 							<div class="article-headline">{{article.headline}}</div>
@@ -19,7 +19,9 @@
 								{{article.description}}
 							</p>
 						</div>
-						<p class="article-notification">{{article.article_notification}}</p>
+						<router-link v-if="index == 1" class="article-notification" :to="'/goals'" >{{article.article_notification}}</router-link>
+						<router-link v-else-if="index == 2" class="article-notification" :to="'/courses'" >{{article.article_notification}}</router-link>
+						<p v-else class="article-notification">{{article.article_notification}}</p>
 
 					</li>
 
@@ -30,21 +32,35 @@
 					<!-- Probably will be remade to v-for type template -->
 					<!-- With proper descriptions etc. -->
 
-					<div class="main-video-block"></div>
+					<div class="main-video-block">
+						<div class="video-description">
+							<h3>Video 1</h3>
+							<p>Garāks apraksts par konkrētu video</p>
+							<div class="play-button"></div>
+						</div>
+					</div>
 
 					<div class="video-selection-panel">
 						
 						<div class="video-selector">
-							<p class="video-description"><span>Video 1</span>short description here.</p>
+							<div class="video-description">
+								<p><span>Video 1</span>short description here.</p>
+							</div>
 						</div>
 						<div class="video-selector">
-							<p class="video-description"><span>Video 2</span>short description here.</p>
+							<div class="video-description">
+								<p><span>Video 2</span>short description here.</p>
+							</div>
 						</div>
 						<div class="video-selector">
-							<p class="video-description"><span>Video 3</span>short description here.</p>
+							<div class="video-description">
+								<p><span>Video 3</span>short description here.</p>
+							</div>
 						</div>
 						<div class="video-selector">
-							<p class="video-description"><span>Video 4</span>short description here.</p>
+							<div class="video-description">
+								<p><span>Video 4</span>short description here.</p>
+							</div>
 						</div>
 
 					</div>
@@ -225,6 +241,39 @@ export default {
 		.article
 			
 			.article-notification
+				position relative
+				cursor pointer
+				display block
+				text-decoration none
+				&:before
+					content ''
+					display block
+					position absolute
+					border-left 10px solid rimiLightGrey
+					border-top 10px solid transparent
+					border-right 10px solid transparent
+					border-bottom 10px solid transparent
+					left 70px
+					bottom 0px
+
+			&.article-1
+				.article-notification
+					color rimiPink
+					&:before
+						border-left-color rimiPink
+			
+			&.article-2
+				.article-notification
+					color rimiOrange
+					&:before
+						border-left-color rimiOrange
+			
+			&.article-3
+				margin-bottom 50px
+				.article-notification
+					display none
+			
+			.article-notification
 				padding-left 90px
 				margin 30px 0px 0px 0px
 			
@@ -291,14 +340,42 @@ export default {
 		width 100%
 		
 		.main-video-block
+			position relative
 			width 100%
 			height 330px
 			background transparent url('../styles/img/video-ph.png') 0 0 no-repeat
 			background-size 100% 110%
-		
+			
+			.video-description
+				position absolute
+				right 0px
+				top 0px
+				height 100%
+				width 200px
+				background rimiLightGrey
+				color rimiGrey
+				
+				h3
+					font-weight 600
+					padding 0px 15px
+					margin-bottom 0px
+					font-size 24px
+				p
+					padding 10px 15px
+					margin 0px
+					font-size 20px
+				
+				.play-button
+					background transparent url('../styles/img/big-play.png') 0 0 no-repeat
+					height 100px
+					width 75px
+					position relative
+					left 15px
+					top 20px
+
 		.video-selection-panel
 			width 100%
-			height 130px
+			height 140px
 			display flex
 			justify-content space-around
 			align-items center
@@ -311,23 +388,27 @@ export default {
 				background-size 100% 100%
 				position relative
 				
-				p
+				.video-description
 					position absolute
 					height 100%
 					width 100%
 					left 0px
 					top 0px
-					background rgba(50, 50, 50, 0.8)
+					background rimiLightGrey
 					visibility hidden
-					margin 0px
-					color #FFF
+					color rimiGrey
+					
+					p
+						margin 0px
+						font-size 20px
+						padding 20px 20px 0px 20px
 					
 					span
-						font-size 21px
+						font-size 24px
 						display block
 				
 				&:hover
-					p
+					.video-description
 						visibility visible
 	
 	.course-list

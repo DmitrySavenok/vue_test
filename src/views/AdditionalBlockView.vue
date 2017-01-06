@@ -22,12 +22,12 @@
 								@afterEnter="afterEnter" 
 								@beforeLeave="beforeLeave" 
 								@afterLeave="afterLeave" 
-								v-show="notification.status == 'not_seen'">
+								v-if="notification.status == 'not_seen'">
 									<p @click="hideNotification(notification.id)" :key="notification.id">
 										<span>{{notification.name}}</span>
 										{{notification.description}}
 									</p>
-									<div class="tick"></div>
+									<div class="tick" :key="notification.id"></div>
 							</transition-group>
 						</li>
 					</ul>
