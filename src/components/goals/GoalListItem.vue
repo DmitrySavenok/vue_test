@@ -21,11 +21,16 @@
 
 		<template>
 
-
-			<div :class="index == visibleTaskIndex ? 'visible-slider' : 'hidden-slider'" class="task-wrapper" v-for="(task, index) in goalTasks" v-if="task.task_goal_id === goalToShow.goal_id">
-				<!-- <template v-if="task.task_goal_id === goalToShow.goal_id"> -->
-					<!-- <h4 class="task-header">{{task.task_name}}</h4> -->
+			<div :class="[ index == visibleTaskIndex ? 'visible-slider' : 'hidden-slider', task.task_description.length > 0 ? '' : 'empty-task-text' ]" 
+				  class="task-wrapper" 
+				  v-for="(task, index) in goalTasks" 
+				  v-if="task.task_goal_id === goalToShow.goal_id">
+					
 					<h4 class="task-header" @click="showTaskDetails(index)">{{taskNames[index-1]}}</h4>
+
+
+					<p class="empty-task-tooltip">{{$t("goals.addNewText")}}</p>
+					<button class="empty-task-button" @click="showTaskDetails(index)"></button>
 
 					<!-- Take that from locales "howToSections.Section(n).sectionTitle" -->
 					<!-- <h4 class="task-header" @click="showTaskDetails(index)"> -->
@@ -35,7 +40,9 @@
 							class="editable-description" 
 							@blur="stopEditing(task.id)" 
 							v-model="task.task_description"
-							v-if="editableTaskIndex == index"></textarea>
+							v-if="editableTaskIndex == index"
+							autofocus>
+						</textarea>
 						<p v-else class="task-description">{{task.task_description}}</p>
 					</template>
 
@@ -62,10 +69,8 @@
 						<button class="edit-button edit-task-description" @click="editTaskDescription(index)"></button>
 						<!-- <input type="submit" name="submit" @click="saveGoalProgress(task.id)"> -->
 					</div>
-					<!-- <span>%: {{goalTasks[index].task_complete}}</span> -->
 
-				<!-- </template> -->
-			</div>			
+			</div>
 
 		</template>
 
@@ -114,6 +119,7 @@ export default {
 				'Izzinu pats',
 				'4th option'
 			],
+			tasksArr: [],
 			visibleTaskIndex: '',
 			editableTaskIndex: '',
 			editableGoalIndex: '',
@@ -154,6 +160,13 @@ export default {
 		console.log('data updated');
 	},
 	methods: {
+		loadNextTask: function() {
+			// console.log('load next task ' + index);
+			// console.log(this.tasksArr);
+			// console.log('pushing ' + +this.tasksArr[this.tasksArr.length-1]++);
+			// console.log(this.tasksArr);
+			// this.tasksArr.push( +(this.tasksArr[this.tasksArr.length-1]+1) );
+		},
 		showPopup: function( el ) {
 
 			if ( el.target.classList.contains('qm-popup') ) {
@@ -174,7 +187,7 @@ export default {
 			this.stopEditing();
 			console.log(index);
 			// this.visibleTaskIndex == index ? this.visibleTaskIndex = '' : this.visibleTaskIndex = index;
-			this.visibleTaskIndex = index;
+			this.visibleTaskIndex === index ? this.visibleTaskIndex = 0 : this.visibleTaskIndex = index;
 		},
 		saveGoalProgress: function( taskId ) {
 
@@ -232,6 +245,10 @@ export default {
 .task-header
 	margin 0px
 	padding 0px
+	
+.empty-task-tooltip
+.empty-task-button
+	display none
 
 .goal-header
 	.goal-heading
@@ -244,8 +261,57 @@ export default {
 	&:before
 		content ''
 		background rimiPink
+		
 
-
+.empty-task-text
+	
+	.task-header
+	.empty-task-tooltip
+		text-align center
+	
+	.task-header
+		padding 0px
+		margin 0px
+		font-weight 600
+		color rimiPink
+		text-align center
+		
+	.empty-task-tooltip
+		color rimiGrey
+		display block
+		
+	.empty-task-button
+		display inline-block
+		position absolute
+		border 2px solid rimiPink
+		border-radius 50%
+		height 32px
+		width 32px
+		background #FFF
+		outline none
+		margin-top 10px
+		cursor pointer
+		left 0px
+		right 0px
+		margin auto
+		bottom -10px
+		
+		&:after
+			content '+'
+			font-family 'Neris'
+			font-weight 600
+			color rimiPink
+			font-size 24px
+			line-height 12px
+	
+	&.visible-slider
+		.empty-task-tooltip
+		.empty-task-button
+			display none
+		
+		.task-header
+			text-align left 
+			color rimiGrey
 
 
 
@@ -373,6 +439,7 @@ makelongshadow(color, size)
 
 .goals
 	.goal-item
+				
 		
 		.edit-button
 			position absolute
@@ -443,16 +510,7 @@ makelongshadow(color, size)
 		
 			
 				&:before
-					content ''
-					display block
-					position absolute
-					background rimiPink
-					height 70.5%
-					width 15px
-					left -12px
-					top 19%
-					transform rotateZ(-45deg) skew(-45deg)
-					transform-origin center
+					leftSideLine(rimiPink)
 					
 			.task-slider
 				.left-side

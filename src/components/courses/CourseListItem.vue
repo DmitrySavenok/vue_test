@@ -138,16 +138,7 @@ export default {
 			top 0px
 							
 		&:before
-			content ''
-			display block
-			position absolute
-			background rimiLightGreen
-			height 70.5%
-			width 15px
-			left -12px
-			top 18%
-			transform rotateZ(-45deg) skew(-45deg)
-			transform-origin center
+			leftSideLine(rimiLightGreen)
 		
 	
 .course-title

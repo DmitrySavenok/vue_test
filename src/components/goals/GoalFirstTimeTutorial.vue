@@ -111,16 +111,11 @@ export default {
 		cursor pointer
 		
 		&:before
-			content ''
-			display block
-			position absolute
-			background rimiLighterBlue
-			height 70.5%
-			width 50px
-			left -42px
-			top 50%
-			transform rotateZ(-45deg) skew(-45deg)
-			transform-origin center
+			leftSideLine(rimiLighterBlue)
+			width 46px
+			left -40px
+			top 19px
+			
 		&:after
 			content ''
 			display block

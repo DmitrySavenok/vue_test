@@ -10,12 +10,15 @@ import router from './router';
 import { sync } from 'vuex-router-sync';
 
 
-// Export to separate module?
+// Export to a hseparate module?
 
 const locales = {
 	eng: {
 		message: {
 			header: "RIMI LMS 3.0 (ENG)"
+		},
+		goals: {
+			addNewText: 'Add an information about the task (ENG)'
 		},
 		howToSections: {
 			Section1: {
@@ -55,6 +58,9 @@ const locales = {
 		message: {
 			header: "RIMI LMS 3.0 (EE)"
 		},
+		goals: {
+			addNewText: 'Add an information about the task (EE)'
+		},
 		howToSections: {
 			Section1: {
 				sectionTitle: 'Learn from colleagues ee',
@@ -92,6 +98,9 @@ const locales = {
 	lv: {
 		message: {
 			header: "RIMI LMS 3.0 (LV)"
+		},
+		goals: {
+			addNewText: 'Add an information about the task (LV)'
 		},
 		howToSections: {
 			Section1: {
@@ -131,6 +140,9 @@ const locales = {
 		message: {
 			header: "RIMI LMS 3.0 (LT)"
 		},
+		goals: {
+			addNewText: 'Add an information about the task (LT)'
+		},
 		howToSections: {
 			Section1: {
 				sectionTitle: 'Learn from colleagues lt',
@@ -168,6 +180,9 @@ const locales = {
 	es: {
 		message: {
 			header: "El Custom Header"
+		},
+		goals: {
+			addNewText: 'Add an information about the task Custom Header'
 		},
 		howToSections: {
 			Section1: {

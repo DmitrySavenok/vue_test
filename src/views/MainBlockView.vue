@@ -293,15 +293,20 @@ export default {
 					position relative
 					
 					&:before
-						content ''
-						display block
-						position absolute
-						height 70.5%
-						width 35px
-						left -29px
-						top 23px
-						transform rotateZ(-45deg) skew(-45deg)
-						transform-origin center
+						leftSideLine(rimiLighterGrey)
+						width 32px
+						left -28px
+						top 13px
+						
+						// content ''
+						// display block
+						// position absolute
+						// height 70.5%
+						// width 35px
+						// left -29px
+						// top 23px
+						// transform rotateZ(-45deg) skew(-45deg)
+						// transform-origin center
 					
 				.article-name
 					color rimiGrey
@@ -429,16 +434,18 @@ export default {
 		text-transform capitalize
 		
 		&:before
-			content ''
-			display block
-			position absolute
-			background rimiLightGreen
-			height 70.5%
-			width 15px
-			left -12px
-			top 19%
-			transform rotateZ(-45deg) skew(-45deg)
-			transform-origin center
+			leftSideLine(rimiLightGreen)
+			
+			// content ''
+			// display block
+			// position absolute
+			// background rimiLightGreen
+			// height 70.5%
+			// width 15px
+			// left -12px
+			// top 19%
+			// transform rotateZ(-45deg) skew(-45deg)
+			// transform-origin center
 	
 	&.resources
 		margin-top 120px

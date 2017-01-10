@@ -270,16 +270,20 @@ ul
 				z-index 1
 			
 			&:before
-				content ''
-				display block
-				position absolute
-				height 70.5%
-				width 40px
-				left -34px
-				top 32px
-				background #f0f0f0
-				transform rotateZ(-45deg) skew(-45deg)
-				transform-origin center
+				leftSideLine(rimiLighterGrey)
+				width 36px
+				left -32px
+				top 15px
+				// content ''
+				// display block
+				// position absolute
+				// height 70.5%
+				// width 40px
+				// left -34px
+				// top 32px
+				// background rimiLighterGrey
+				// transform rotateZ(-45deg) skew(-45deg)
+				// transform-origin center
 					
 			&:after
 				content ''
