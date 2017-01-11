@@ -15,7 +15,7 @@
 			
 			<form v-on:submit.prevent="onSubmit">
 				<div class="login-field"><input v-model="login" type="text" name="name" placeholder="Login"></label></div>
-				<div class="login-field"><input type="password" name="password" placeholder="Password"></label></div>
+				<div class="login-field"><input v-model="password" type="password" name="password" placeholder="Password"></label></div>
 				<input class="login-submit" type="submit" name="submit" value="Log in">
 			</form>
 		</div>
@@ -26,11 +26,33 @@
 
 <script>
 
+import axios from 'axios';
 
 function setLang( store, lang ) {
 	return store.dispatch('SET_LANG', { lang });
 }
 
+
+function devLogin( child, data ) {
+
+
+	console.log('dev login PHP function called');
+
+	console.log(data);
+
+	return new Promise((resolve, reject) => {
+		axios.post(`http://slprod.lv/tmp/rimi/api_v0.php`, {data}).then( (res) => {
+			console.log('DATA: ');
+			console.log(res);
+			resolve(res.data);
+		})
+		.catch( (err) => {
+			reject(err);
+		});
+	})
+
+
+}
 
 export default {
   name: 'LoginView',
@@ -40,16 +62,30 @@ export default {
   data () {
     return {
       msg: 'RIMI LMS 3.0',
-      login: ''
+      login: '',
+      password: ''
     }
   },
   methods: {
   	onSubmit: function() {
   		// Auth here. if ( true ) =>
   		// Set user pin here (and login in UserMenu.vue component?)
-  		console.log(this);
-  		this.$store.state.userId = +this.$data.login;
-  		this.$store.changePath('/home', { router: this.$router });
+  		let data = {
+  			login: this.$data.login,
+  			pass: this.$data.password
+  		}
+  		devLogin('que', data).then( (res) => {
+			console.log('LOGIN DATA: ');
+			console.log(res);
+	  		this.$store.state.userId = +this.$data.login;
+	  		this.$store.changePath('/home', { router: this.$router });
+		})
+		.catch( (err) => {
+			console.log('LOGIN ERROR: ');
+			console.log(err);
+			// reject(err);
+		});
+  		// console.log(this);
   	},
 
   	changeLang: function(e) {

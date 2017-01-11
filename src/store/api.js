@@ -5,6 +5,27 @@
 import axios from 'axios';
 
 
+
+export function fetchPHP( child ) {
+
+
+	console.log('fetch PHP function called');
+
+	return new Promise((resolve, reject) => {
+		axios.get(`http://localhost:8080/server/api_v0.php?r=${child}`).then( (res) => {
+			console.log('DATA: ');
+			console.log(res);
+			resolve(res.data);
+		})
+		.catch( (err) => {
+			reject(err);
+		});
+	})
+
+
+}
+
+
 export function fetch( child ) {
 
 	// tbf we need only to fetch user data
@@ -60,12 +81,14 @@ export function postData( child, data ) {
 
 
 export function fetchCourses( userId ) {
+
 	console.log('fetch courses + ')
 	console.log(userId);
 	// Separation for mandatory/optional courses
 
 	// Mandatory:
 	return fetch('courses/?course_mandatory=true')
+
 }
 
 /*
@@ -85,7 +108,7 @@ export function fetchGoalTasks( goalId ) {
 
 
 // Will change ID to pin (?)
-export function fetchUser (id) {
+export function fetchUser(id) {
 	console.log('fetchUser function called, id: ' + id);
 	// return fetch('manager')
 	return fetch(`users/${id}`)
@@ -94,8 +117,8 @@ export function fetchUser (id) {
 // Should add limit (?)
 // Called from HANDLE_ADDITIONAL_FIELD
 export function fetchNotifications() {
-	console.log('fetching notifications');
-	return fetch('notifications');
+	console.log('fetching notifications PHP');
+	return fetchPHP('notifications');
 }
 
 export function fetchNews() {
