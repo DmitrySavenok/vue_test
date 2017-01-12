@@ -20,6 +20,9 @@
 			</form>
 		</div>
 
+
+		<button @click="addDevUser">Add test user (user/password)</button>
+
 	</div>
 
 </template>
@@ -33,7 +36,7 @@ function setLang( store, lang ) {
 }
 
 
-function devLogin( child, data ) {
+function apiPostCall( child, data ) {
 
 
 	console.log('dev login PHP function called');
@@ -41,7 +44,11 @@ function devLogin( child, data ) {
 	console.log(data);
 
 	return new Promise((resolve, reject) => {
-		axios.post(`http://slprod.lv/tmp/rimi/api_v0.php`, {data}).then( (res) => {
+		axios({
+			method: 'post',
+			url: `http://localhost/server/test.php?r=${child}`,
+			data: data
+		}).then( (res) => {
 			console.log('DATA: ');
 			console.log(res);
 			resolve(res.data);
@@ -49,8 +56,55 @@ function devLogin( child, data ) {
 		.catch( (err) => {
 			reject(err);
 		});
-	})
+	});
 
+}
+
+function apiGetCall( child ) {
+
+	return new Promise((resolve, reject) => {
+		axios({
+			method: 'get',
+			url: `http://localhost/server/test.php?r=${child}`
+		}).then( (res) => {
+			// console.log('DATA: ');
+			// console.log(res);
+			resolve(res.data);
+		})
+		.catch( (err) => {
+			reject(err);
+		});
+	});
+
+}
+
+function createDevUser() {
+
+	return new Promise((resolve, reject) => {
+		axios({
+			method: 'post',
+			url: 'http://localhost/server/test.php?r=add_user',
+			data: {
+				role: 'learner',
+				name: 'Billy',
+				surname: 'Bob',
+				country: 'LV',
+				position: 'Tester',
+				department_alias: 'Testing department',
+				department_id: 1337,
+				login: 'user',
+				password: 'pass'
+
+			}
+		}).then( (res) => {
+			console.log('DATA: ');
+			console.log(res);
+			resolve(res.data);
+		})
+		.catch( (err) => {
+			reject(err);
+		});
+	});
 
 }
 
@@ -74,11 +128,34 @@ export default {
   			login: this.$data.login,
   			pass: this.$data.password
   		}
-  		devLogin('que', data).then( (res) => {
+
+
+  		apiPostCall('login', data).then( (res) => {
+
 			console.log('LOGIN DATA: ');
-			console.log(res);
-	  		this.$store.state.userId = +this.$data.login;
-	  		this.$store.changePath('/home', { router: this.$router });
+			console.log(res.result);
+			document.querySelector('#debug').innerHTML = JSON.stringify(res);
+
+			if ( res.result.indexOf('Logged in') == 0 ) {
+				
+				apiGetCall(`users&userId=${res.COOKIE.id}&userHash=${res.COOKIE.hash}`).then( (res) => {
+					console.log('User data: ');
+					console.log(res[0]);
+
+					if ( res[0].id ) {
+						// this.$store.state.userId = +res.id;
+						this.$store.state.users.currentUser = res[0];
+						this.$store.changePath('/home', { router: this.$router });	
+					} else {
+						console.log('error while getting user data');
+					}
+
+				}).catch( (err) => {
+					console.log(err);
+				});
+
+
+			}
 		})
 		.catch( (err) => {
 			console.log('LOGIN ERROR: ');
@@ -86,6 +163,21 @@ export default {
 			// reject(err);
 		});
   		// console.log(this);
+  	},
+
+  	addDevUser: function() {
+
+
+
+  		createDevUser().then( (res) => {
+			document.querySelector('#debug').innerHTML = JSON.stringify(res);
+  			console.log('Created new user: ');
+  			console.log(res);
+  		}).catch( (err) => {
+  			console.log('Error while creating a new user');
+  			console.log(err);
+  		})
+
   	},
 
   	changeLang: function(e) {

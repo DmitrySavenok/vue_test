@@ -150,7 +150,7 @@ const store = new Vuex.Store({
 			// Additinal Field
 			switch(type) {
 				case 'home':
-					fetchNotifications().then(notifications => {
+					fetchNotifications( state.users.currentUser.id, state.users.currentUser.hash ).then(notifications => {
 						// some filtering logic here
 
 						notifications = notifications.filter( notification => !state.lists.notifications[notification.id] );

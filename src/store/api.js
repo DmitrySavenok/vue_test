@@ -6,13 +6,56 @@ import axios from 'axios';
 
 
 
+function apiPostCall( child, data ) {
+
+
+	console.log('dev login PHP function called');
+
+	console.log(data);
+
+	return new Promise((resolve, reject) => {
+		axios({
+			method: 'post',
+			url: `http://localhost/server/test.php?r=${child}`,
+			data: data
+		}).then( (res) => {
+			console.log('DATA: ');
+			console.log(res);
+			resolve(res.data);
+		})
+		.catch( (err) => {
+			reject(err);
+		});
+	});
+
+}
+
+function apiGetCall( child ) {
+
+	return new Promise((resolve, reject) => {
+		axios({
+			method: 'get',
+			url: `http://localhost/server/test.php?r=${child}`
+		}).then( (res) => {
+			// console.log('DATA: ');
+			// console.log(res);
+			resolve(res.data);
+		})
+		.catch( (err) => {
+			reject(err);
+		});
+	});
+
+}
+
+
 export function fetchPHP( child ) {
 
 
 	console.log('fetch PHP function called');
 
 	return new Promise((resolve, reject) => {
-		axios.get(`http://localhost:8080/server/api_v0.php?r=${child}`).then( (res) => {
+		axios.get(`http://localhost/server/api_v0.php?r=${child}`).then( (res) => {
 			console.log('DATA: ');
 			console.log(res);
 			resolve(res.data);
@@ -116,9 +159,9 @@ export function fetchUser(id) {
 
 // Should add limit (?)
 // Called from HANDLE_ADDITIONAL_FIELD
-export function fetchNotifications() {
+export function fetchNotifications( userId, userHash ) {
 	console.log('fetching notifications PHP');
-	return fetchPHP('notifications');
+	return apiGetCall(`notifications&userId=${userId}&userHash=${userHash}`);
 }
 
 export function fetchNews() {

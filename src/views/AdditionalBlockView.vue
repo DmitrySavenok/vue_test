@@ -22,7 +22,8 @@
 								@afterEnter="afterEnter" 
 								@beforeLeave="beforeLeave" 
 								@afterLeave="afterLeave" 
-								v-if="notification.status == 'not_seen'">
+								>
+								<!-- v-if="notification.status == 'not_seen'" -->
 									<p @click="hideNotification(notification.id)" :key="notification.id">
 										<span>{{notification.name}}</span>
 										{{notification.description}}
