@@ -37,8 +37,8 @@ function apiGetCall( child ) {
 			method: 'get',
 			url: `http://localhost/server/test.php?r=${child}`
 		}).then( (res) => {
-			// console.log('DATA: ');
-			// console.log(res);
+			console.log('DATA: ');
+			console.log(res);
 			resolve(res.data);
 		})
 		.catch( (err) => {
@@ -123,14 +123,15 @@ export function postData( child, data ) {
 }
 
 
-export function fetchCourses( userId ) {
+export function fetchCourses( userId, userHash ) {
 
-	console.log('fetch courses + ')
-	console.log(userId);
+	console.log('fetch courses for userId: ' + userId + ' hash: ' + userHash);
+
 	// Separation for mandatory/optional courses
 
 	// Mandatory:
-	return fetch('courses/?course_mandatory=true')
+	return apiGetCall(`courses&userId=${userId}&userHash=${userHash}`)
+	// return fetch('courses/?course_mandatory=true')
 
 }
 
@@ -151,10 +152,10 @@ export function fetchGoalTasks( goalId ) {
 
 
 // Will change ID to pin (?)
-export function fetchUser(id) {
-	console.log('fetchUser function called, id: ' + id);
+export function fetchUser(id, hash) {
+	console.log('fetchUser function called, id: ' + id + ' hash: ' + hash);
 	// return fetch('manager')
-	return fetch(`users/${id}`)
+	return apiGetCall(`users&userId=${id}&userHash=${hash}`)
 }
 
 // Should add limit (?)

@@ -3,7 +3,7 @@
 	<div class="course-item" :class="isHidden ? 'hidden-item' : 'visible-course-item'">
 		<!-- {{course}} -->
 		
-		<h4 class="course-title" @click="showInfo">{{course.course_name}}</h4>
+		<h4 class="course-title" @click="showInfo">{{course.name}}</h4>
 
 		<transition-group 
 			name="fade-course" 
@@ -17,7 +17,7 @@
 
 					<!-- check if course is completed here -->
 					<div class="completion-icon"></div>
-					<div class="course-description">{{course.course_description}}</div>
+					<div class="course-description">{{course.description}}</div>
 					
 					<template v-for="link in course.links">
 						<a target="_blank" class="course-link" v-bind:href="link.url">{{link.lang}}</a>

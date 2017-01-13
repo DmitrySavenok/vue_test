@@ -150,23 +150,28 @@ const store = new Vuex.Store({
 			// Additinal Field
 			switch(type) {
 				case 'home':
-					fetchNotifications( state.users.currentUser.id, state.users.currentUser.hash ).then(notifications => {
-						// some filtering logic here
+					if ( state.users.currentUser ) {
 
-						notifications = notifications.filter( notification => !state.lists.notifications[notification.id] );
-						if ( notifications.length ) {
-							// console.log('setting notifications');
-							commit('SET_NOTIFICATIONS', { notifications });
-							// console.log(notifications);
-						}
-					});
-					fetchNews().then(news => {
-						news = news.filter( article => !state.lists.news[article.id] )
-						if ( news.length ) {
-							// console.log('setting news');
-							commit('SET_NEWS', { news });
-						}
-					});
+						fetchNotifications( state.users.currentUser.id, state.users.currentUser.hash ).then(notifications => {
+							// some filtering logic here
+
+							notifications = notifications.filter( notification => !state.lists.notifications[notification.id] );
+							if ( notifications.length ) {
+								// console.log('setting notifications');
+								commit('SET_NOTIFICATIONS', { notifications });
+								// console.log(notifications);
+							}
+						});
+						fetchNews().then(news => {
+							news = news.filter( article => !state.lists.news[article.id] )
+							if ( news.length ) {
+								// console.log('setting news');
+								commit('SET_NEWS', { news });
+							}
+						});
+
+					}
+
 					break;
 				case 'goals':
 					console.log('fetch goals data');
@@ -190,7 +195,8 @@ const store = new Vuex.Store({
 
 					break;
 				case 'courses':
-					// console.log('fetch courses data');
+
+					console.log('fetch courses data');
 
 					fetchCourseSectionDescription( 'mandatory' ).then( mandatoryCourses => {
 						commit('SET_COURSE_SECTION_DESC', { courseDesc: mandatoryCourses });
@@ -200,29 +206,32 @@ const store = new Vuex.Store({
 					}
 					);
 
-					let userPosition = 'first_row';
+					// let userPosition = 'first_row';
 
-					if ( state.users.currentUser ) {
-						userPosition = state.users.currentUser.position;
-					}
+					// if ( state.users.currentUser ) {
+					// 	userPosition = state.users.currentUser.position;
+					// }
 
-					let positionCourses = state.positionCourses[userPosition];
+					// let positionCourses = state.positionCourses[userPosition];
 
-					positionCourses = positionCourses.filter( course => !state.lists.currentUserCourses[course.id]);
+					// positionCourses = positionCourses.filter( course => !state.lists.currentUserCourses[course.id]);
 					// Maybe will be possible to fetch only those courses we need (not all and then sort out here)
-					if ( positionCourses.length ) {
-						return fetchCourses(positionCourses).then(courses => { 
+					if ( state.users.currentUser ) {
+						return fetchCourses( state.users.currentUser.id, state.users.currentUser.hash ).then(courses => { 
 
 
 							let posCoursesNames = [],
 								showCourses = [];
-							positionCourses.forEach(posCourse => posCoursesNames.push(posCourse.courseName));
+
+							console.log('Courses: ');
+							console.log(courses);
+							// positionCourses.forEach(posCourse => posCoursesNames.push(posCourse.courseName));
 							// Filter out courses that we alredy have in our list
 							// courses = courses.filter( course => !state.lists.currentUserCourses[course.courseId] );
 							if ( courses.length ) {
 								courses.forEach(course => {
-									console.log(posCoursesNames);
-									posCoursesNames.includes(course.course_name) ? showCourses.push(course) : '';
+									// posCoursesNames.includes(course.course_name) ? showCourses.push(course) : '';
+									showCourses.push(course);
 								});
 								commit('SET_COURSES', { courses: showCourses }) 
 							}
@@ -337,7 +346,7 @@ const store = new Vuex.Store({
 
 		// The can't be a user in our state alredy
 		// TODO: remake with that in mind (state.users[id] check is irrelevant)
-		FETCH_USER: ({ commit, state }, { id }) => {
+		FETCH_USER: ({ commit, state }, { id, hash }) => {
 
 			if ( id ) {
 
@@ -351,11 +360,13 @@ const store = new Vuex.Store({
 				// debugger;
 				return ( state.users['currentUser'] && state.users['currentUser'].id === id )
 					? Promise.resolve(state.users['currentUser'])
-					: fetchUser(id).then(user => { console.log(user); commit('SET_USER', { user })})
-					.catch( (err) => {
-						fetchUser(123).then(user => { console.log(user); commit('SET_USER', { user })})
+					: fetchUser(id, hash).then(user => { 
+						console.log(user); 
+						commit('SET_USER', { user })
+					}).catch( (err) => {
+						// fetchUser(123).then(user => { console.log(user); commit('SET_USER', { user })})
 						console.log('fetch failed, changing path to / ');
-						// commit('CHANGE_PATH', { path: '/' });
+						commit('CHANGE_PATH', { path: '/' });
 					});
 			}
 		},

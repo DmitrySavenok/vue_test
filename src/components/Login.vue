@@ -21,7 +21,7 @@
 		</div>
 
 
-		<button @click="addDevUser">Add test user (user/password)</button>
+		<!-- <button @click="addDevUser">Add test user (user/password)</button> -->
 
 	</div>
 
@@ -30,6 +30,9 @@
 <script>
 
 import axios from 'axios';
+import docCookies from '../scripts/cookies.js';
+
+console.log(docCookies);
 
 function setLang( store, lang ) {
 	return store.dispatch('SET_LANG', { lang });
@@ -78,35 +81,35 @@ function apiGetCall( child ) {
 
 }
 
-function createDevUser() {
+// function createDevUser() {
 
-	return new Promise((resolve, reject) => {
-		axios({
-			method: 'post',
-			url: 'http://localhost/server/test.php?r=add_user',
-			data: {
-				role: 'learner',
-				name: 'Billy',
-				surname: 'Bob',
-				country: 'LV',
-				position: 'Tester',
-				department_alias: 'Testing department',
-				department_id: 1337,
-				login: 'user',
-				password: 'pass'
+// 	return new Promise((resolve, reject) => {
+// 		axios({
+// 			method: 'post',
+// 			url: 'http://localhost/server/test.php?r=add_user',
+// 			data: {
+// 				role: 'learner',
+// 				name: 'Billy',
+// 				surname: 'Bob',
+// 				country: 'LV',
+// 				position: 'Tester',
+// 				department_alias: 'Testing department',
+// 				department_id: 1337,
+// 				login: 'user',
+// 				password: 'pass'
 
-			}
-		}).then( (res) => {
-			console.log('DATA: ');
-			console.log(res);
-			resolve(res.data);
-		})
-		.catch( (err) => {
-			reject(err);
-		});
-	});
+// 			}
+// 		}).then( (res) => {
+// 			console.log('DATA: ');
+// 			console.log(res);
+// 			resolve(res.data);
+// 		})
+// 		.catch( (err) => {
+// 			reject(err);
+// 		});
+// 	});
 
-}
+// }
 
 export default {
   name: 'LoginView',
@@ -137,14 +140,19 @@ export default {
 			document.querySelector('#debug').innerHTML = JSON.stringify(res);
 
 			if ( res.result.indexOf('Logged in') == 0 ) {
+
+				console.log('ayy we here');
+
+				docCookies.setItem('userId', res.COOKIE.id);
+				docCookies.setItem('userHash', res.COOKIE.hash);
 				
 				apiGetCall(`users&userId=${res.COOKIE.id}&userHash=${res.COOKIE.hash}`).then( (res) => {
 					console.log('User data: ');
-					console.log(res[0]);
+					console.log(res);
 
-					if ( res[0].id ) {
+					if ( res.id ) {
 						// this.$store.state.userId = +res.id;
-						this.$store.state.users.currentUser = res[0];
+						this.$store.state.users.currentUser = res;
 						this.$store.changePath('/home', { router: this.$router });	
 					} else {
 						console.log('error while getting user data');
@@ -165,20 +173,20 @@ export default {
   		// console.log(this);
   	},
 
-  	addDevUser: function() {
+  	// addDevUser: function() {
 
 
 
-  		createDevUser().then( (res) => {
-			document.querySelector('#debug').innerHTML = JSON.stringify(res);
-  			console.log('Created new user: ');
-  			console.log(res);
-  		}).catch( (err) => {
-  			console.log('Error while creating a new user');
-  			console.log(err);
-  		})
+  	// 	createDevUser().then( (res) => {
+			// document.querySelector('#debug').innerHTML = JSON.stringify(res);
+  	// 		console.log('Created new user: ');
+  	// 		console.log(res);
+  	// 	}).catch( (err) => {
+  	// 		console.log('Error while creating a new user');
+  	// 		console.log(err);
+  	// 	})
 
-  	},
+  	// },
 
   	changeLang: function(e) {
 
