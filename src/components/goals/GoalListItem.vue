@@ -21,11 +21,11 @@
 
 		<template>
 
-			New tasks: {{rightTasks}}
+			{{ rightTasks }}
 
 			<div :class="[ index == visibleTaskIndex ? 'visible-slider' : 'hidden-slider', task.task_description.length > 0 ? '' : 'empty-task-text' ]" 
 				  class="task-wrapper" 
-				  v-for="(task, index) in goalTasks" 
+				  v-for="(task, index) in rightTasks" 
 				  v-if="task.task_goal_id === goalToShow.goal_id">
 
 					<h4 class="task-header" @click="showTaskDetails(index)">{{taskNames[index-1]}}</h4>
@@ -58,8 +58,8 @@
 							</div>
 						</div>
 						<div class="range-wrapper">
-							<input v-if="isIe" @mouseup="saveGoalProgress(task.id)" type="range" v-model.lazy="goalTasks[index].task_complete" min="0" max="100">
-							<input v-else type="range" v-model="goalTasks[index].task_complete" min="0" max="100">
+							<input v-if="isIe" @mouseup="saveGoalProgress(task.id)" type="range" v-model.lazy="rightTasks[index].task_complete" min="0" max="100">
+							<input v-else type="range" v-model="rightTasks[index].task_complete" min="0" max="100">
 							<div class="percentage-labels">
 								<span>0%</span>
 								<span>25%</span>
@@ -137,8 +137,23 @@ export default {
 		isIe() {
 			return this.$store.state.isIe;
 		},
+		// CHANGE TO METHOD
 		rightTasks() {
-			return this.$store.getters.properTasks;
+			console.log('something');
+			let keys = Object.keys(this.$store.state.goalTasks);
+			let properTasks = [];
+			keys.forEach( key => {
+				if ( +this.$store.state.goalTasks[key].task_goal_id === +this.$options.propsData['goalToShow'].goal_id ) {
+					properTasks.push( this.$store.state.goalTasks[key])
+				}
+			})
+			keys = keys.filter( key => {
+				console.log(key);
+				console.log(+this.$store.state.goalTasks[key].task_goal_id === +this.$options.propsData['goalToShow'].goal_id);
+				+this.$store.state.goalTasks[key].task_goal_id === +this.$options.propsData['goalToShow'].goal_id
+			})
+
+			return keys;
 		},
 		goalTasks() {
 			return this.$store.state.goalTasks;
