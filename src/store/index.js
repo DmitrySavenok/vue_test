@@ -146,6 +146,17 @@ const store = new Vuex.Store({
 			commit('SET_MAIN_BLOCK_STATE', { type });
 			commit('SET_DEFAULT_SECTION', { type });
 
+			let userId = 0,
+				userHash = 0;
+
+			if ( state.users.currentUser ) {
+				userId = state.users.currentUser.id;
+				userHash = state.users.currentUser.hash;
+			} else {
+				console.log('UserID: ' + userId);
+				console.log('UserHash: ' + userHash);
+			}
+
 
 			// Additinal Field
 			switch(type) {
@@ -157,15 +168,12 @@ const store = new Vuex.Store({
 
 							notifications = notifications.filter( notification => !state.lists.notifications[notification.id] );
 							if ( notifications.length ) {
-								// console.log('setting notifications');
 								commit('SET_NOTIFICATIONS', { notifications });
-								// console.log(notifications);
 							}
 						});
 						fetchNews().then(news => {
 							news = news.filter( article => !state.lists.news[article.id] )
 							if ( news.length ) {
-								// console.log('setting news');
 								commit('SET_NEWS', { news });
 							}
 						});
@@ -176,14 +184,17 @@ const store = new Vuex.Store({
 				case 'goals':
 					console.log('fetch goals data');
 
-					let userId = 123
+					// let userId = 123
 
-					if ( state.users.currentUser ) {
-						let userId = state.users.currentUser.id 
-					}
+					// if ( state.users.currentUser ) {
+					// 	let userId = state.users.currentUser.id 
+					// }
 					
 					if ( userId ) {
-						fetchGoals(userId).then(goals => { goals[0] != undefined ? commit('SET_GOALS', { goals: goals[0].user_goals }) : console.log('no goals ;('); } )
+						fetchGoals(userId, userHash).then(goals => {
+							// console.log(goals);
+							goals[0] != undefined ? commit('SET_GOALS', { goals: goals[0].user_goals }) : console.log('no goals ;('); 
+						})
 					} else {
 						console.log('no user id specified');
 					}
@@ -217,7 +228,7 @@ const store = new Vuex.Store({
 					// positionCourses = positionCourses.filter( course => !state.lists.currentUserCourses[course.id]);
 					// Maybe will be possible to fetch only those courses we need (not all and then sort out here)
 					if ( state.users.currentUser ) {
-						return fetchCourses( state.users.currentUser.id, state.users.currentUser.hash ).then(courses => { 
+						return fetchCourses( userId, userHash ).then(courses => { 
 
 
 							let posCoursesNames = [],
@@ -239,10 +250,8 @@ const store = new Vuex.Store({
 					}
 					break;
 				case 'resources':
-					// console.log('fetch resources data');
 
 					fetchResources().then(resources => {
-						// console.log(resources);
 
 						resources = resources.filter( resoucre => !state.lists.resources[resoucre.id] );
 
@@ -355,13 +364,10 @@ const store = new Vuex.Store({
 				commit('CLEAR_SOME_DATA');
 
 
-				// console.log('FETCH_USER dispatched, id: ' + id);
-				// console.log(state.users[id]);
 				// debugger;
 				return ( state.users['currentUser'] && state.users['currentUser'].id === id )
 					? Promise.resolve(state.users['currentUser'])
 					: fetchUser(id, hash).then(user => { 
-						console.log(user); 
 						commit('SET_USER', { user })
 					}).catch( (err) => {
 						// fetchUser(123).then(user => { console.log(user); commit('SET_USER', { user })})
@@ -377,10 +383,15 @@ const store = new Vuex.Store({
 
 				// Could check if tasks are alredy in the state obj. and return resolved promise
 
-				return fetchGoalTasks(goalId).then( tasks => {
+				// return fetchGoalTasks(goalId, state.users.currentUser.id, state.users.currentUser.hash).then( tasks => {
+					// console.log('tasks: ');
+					// console.log(tasks);
 					// tasks = tasks.filter( task => task.task_goal_id === goalId );
-					commit('SET_GOAL_TO_DISPLAY', { goalId, goalTasks: tasks });
-				});
+				// let tasks = state.goalTasks;
+				// console.log('tasks: ');
+				// console.log(tasks);
+					commit('SET_GOAL_TO_DISPLAY', { goalId });
+				// });
 			}
 		},
 		SET_GOAL_PHASE: ({ commit, state }, { phaseNum }) => {
@@ -466,15 +477,19 @@ const store = new Vuex.Store({
 			// store.state.lists.currentUserCourses = {};
 		},
 
-		SET_GOAL_TO_DISPLAY: (state, { goalId, goalTasks }) => {
+		SET_GOAL_TO_DISPLAY: (state, { goalId }) => {
+			console.log(goalId);
+			Vue.set(state.goalToShow, 0, 'Goal' + goalId);
 			// console.log('Goal id: ' + goalId);
 			// console.log('Tasks: ');
 			// console.log(goalTasks);
-			Vue.set(state.goalToShow, 0, 'Goal' + goalId);
-			state.goalTasks = {};
-			goalTasks.forEach( goalTask => {
-				Vue.set(state.goalTasks, goalTask.id, goalTask );
-			});
+			// Vue.set(state.goalToShow, 0, 'Goal' + goalId);
+			// // state.goalTasks = {};
+			// goalTasks.forEach( goalTask => {
+			// 	if ( +goalTask.task_goal_id === goalId ) {
+			// 		Vue.set(state.goalTasks, goalTask.id, goalTask );
+			// 	}
+			// });
 		},
 		UPDATE_TASK_COMPLETION_STATUS: (state, { updatedTask }) => {
 			//Updating task completion percentage right away ( bind it to task compeiton graph )
@@ -511,7 +526,10 @@ const store = new Vuex.Store({
 			});
 		},
 		HIDE_NOTIFICATION: (state, { notificationId }) => {
-			Vue.set(state.lists.notifications, notificationId, "seen");
+			console.log('hiding: ' + notificationId);
+			let notification = state.lists.notifications[notificationId];
+			notification.status = 'seen';
+			Vue.set(state.lists.notifications, notificationId, notification);
 		},
 		SET_NEWS: (state, { news }) => {
 			news.forEach( article => {
@@ -540,6 +558,9 @@ const store = new Vuex.Store({
 			goals.forEach( goal => {
 				if ( goal ) {
 					Vue.set(state.goals, 'Goal' + goal.goal_id, goal)
+					goal.tasks.forEach( task => {
+						Vue.set(state.goalTasks, task.id, task)
+					});
 				}
 			})
 		},
@@ -571,6 +592,10 @@ const store = new Vuex.Store({
 			} else {
 				return []
 			}
+		},
+
+		properTasks( state, goalId ) {
+			return state.goalTasks.map( task => { +task.task_goal_id === goalId});
 		},
 
 		// items (course name/descriptions/status etc.)

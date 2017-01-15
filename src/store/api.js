@@ -142,12 +142,19 @@ export function fetchCourses( userId, userHash ) {
  * @param {Object} user
  * @return {Promise}
  */
-export function fetchGoals( userId ) {
-	return fetch(`goals?userId=${userId}`)
+export function fetchGoals( id, hash ) {
+	// return fetch(`goals?userId=${userId}`)
+
+
+	return apiGetCall(`goals&userId=${id}&userHash=${hash}`)
 }
 
-export function fetchGoalTasks( goalId ) {
-	return fetch(`goal_tasks?goal_task_id=${goalId}`)
+export function fetchGoalTasks( goalId, id, hash ) {
+	// return fetch(`goal_tasks?goal_task_id=${goalId}`)
+
+	// console.log('ayy');
+	// return false;
+	return apiGetCall(`goal_tasks&goalId=${goalId}&userId=${id}&userHash=${hash}`)
 }
 
 

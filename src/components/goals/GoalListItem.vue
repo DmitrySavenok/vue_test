@@ -21,11 +21,13 @@
 
 		<template>
 
+			New tasks: {{rightTasks}}
+
 			<div :class="[ index == visibleTaskIndex ? 'visible-slider' : 'hidden-slider', task.task_description.length > 0 ? '' : 'empty-task-text' ]" 
 				  class="task-wrapper" 
 				  v-for="(task, index) in goalTasks" 
 				  v-if="task.task_goal_id === goalToShow.goal_id">
-					
+
 					<h4 class="task-header" @click="showTaskDetails(index)">{{taskNames[index-1]}}</h4>
 
 
@@ -134,6 +136,9 @@ export default {
 
 		isIe() {
 			return this.$store.state.isIe;
+		},
+		rightTasks() {
+			return this.$store.getters.properTasks;
 		},
 		goalTasks() {
 			return this.$store.state.goalTasks;

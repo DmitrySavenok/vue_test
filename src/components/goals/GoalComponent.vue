@@ -11,7 +11,7 @@
 				<div class="percentage">{{overallPercentage(goalIndex)}}%</div>
 
 				<template v-for="(task, index) in goalTasks">
-					<GoalTaskPart v-if="task.task_goal_id === goalIndex"
+					<GoalTaskPart v-if="+task.task_goal_id === goalIndex"
 						:index="index"
 						:goalIndex="goalIndex"
 						:task="task">
@@ -79,6 +79,7 @@ export default {
 	},
 
 	mounted () {
+		// Make it once
 		console.log('here');
 		console.log(this.$options.propsData);
 		setGoalToDisplay(this.$store, 1);
