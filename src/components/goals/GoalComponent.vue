@@ -107,7 +107,7 @@ export default {
 
 			for ( let task in allTasks ) {
 				if ( allTasks.hasOwnProperty(task)) {
-					if ( allTasks[task].task_goal_id === goalId ) {
+					if ( +allTasks[task].task_goal_id === +goalId ) {
 						totalScore+= Math.floor(+allTasks[task].task_complete);
 					}
 				}
@@ -228,70 +228,61 @@ export default {
 			background green
 
 
-		.graph-part-1
-		.graph-part-5
-		.graph-part-9
-			height 40px
-			width 40px
-			
-			border-radius 0px 100px 0px 0px
-			left 125px
-			bottom 125px
-			
-			&.goal-bg-1
-				background rgb(204, 51, 102)
-			&.goal-bg-2
-				background rgb(255, 204, 0)
-			&.goal-bg-3
-				background rgb(255, 102, 0)
+			&:nth-last-of-type(4)
+				height 40px
+				width 40px
 				
-		.graph-part-2
-		.graph-part-6
-		.graph-part-10
-			border-radius 0px 0px 100px 0px
-			left 125px
-			top 125px
-			
-			height 45px
-			width 45px
-			
-			&.goal-bg-1
-				background rgb(255, 102, 153)
-			&.goal-bg-2
-				background rgb(255, 204, 102)
-			&.goal-bg-3
-				background rgb(255, 153, 51)
+				border-radius 0px 100px 0px 0px
+				left 125px
+				bottom 125px
+				&.goal-bg-1
+					background rgb(227, 36, 112)
+				&.goal-bg-2
+					background rgb(199, 159, 0)
+				&.goal-bg-3
+					background rgb(230, 109, 3)
+					
+			&:nth-last-of-type(3)
+				border-radius 0px 0px 100px 0px
+				left 125px
+				top 125px
 				
-		.graph-part-3
-		.graph-part-7
-		.graph-part-11
-			border-radius 0px 0px 0px 100px
-			right 125px
-			top 125px
-			
-			height 60px
-			width 60px
-			
-			&.goal-bg-1
-				background rgb(204, 51, 102)
-			&.goal-bg-2
-				background rgb(255, 204, 0)
-			&.goal-bg-3
-				background rgb(255, 102, 0)
+				height 45px
+				width 45px
 				
-		.graph-part-4
-		.graph-part-8
-		.graph-part-12
-			border-radius 100px 0px 0px 0px
-			right 125px
-			bottom 125px
-			
-			&.goal-bg-1
-				background rgb(153, 51, 102)
-			&.goal-bg-2
-				background rgb(204, 153, 0)
-			&.goal-bg-3
-				background rgb(204, 102, 0)
+				&.goal-bg-1
+					background rgb(255, 102, 154)
+				&.goal-bg-2
+					background rgb(255, 204, 0)
+				&.goal-bg-3
+					background rgb(190, 93, 7)
+					
+			&:nth-last-of-type(2)
+				border-radius 0px 0px 0px 100px
+				right 125px
+				top 125px
+				
+				height 60px
+				width 60px
+				
+				&.goal-bg-1
+					background rgb(226, 73, 125)
+				&.goal-bg-2
+					background rgb(254, 228, 126)
+				&.goal-bg-3
+					background rgb(250, 120, 5)
+					
+			&:nth-last-of-type(1)
+				border-radius 100px 0px 0px 0px
+				right 125px
+				bottom 125px
+				
+				&.goal-bg-1
+					background rgb(161, 41, 113)
+				&.goal-bg-2
+					background rgb(233, 190, 20)
+				&.goal-bg-3
+					background rgb(255, 159, 74)
 					
 		.empty-goal
 			height 40px

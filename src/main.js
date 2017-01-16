@@ -49,6 +49,20 @@ const locales = {
 				sectionTexts: {}
 			}
 		},
+		courseSections: {
+			mandatory: {
+				category_name: "Mandatory courses",
+				category_heading: "Information",
+				category_handle: "mandatory",
+				category_description: "Respective category description etc. ENG"
+			},
+			optional: {
+				category_name: "Optional courses",
+				category_heading: "Some kind of heading",
+				category_handle: "optional",
+				category_description: "Respective category description etc. ENG"	
+			}
+		},
 		popups: {
 			goalQm: 'Goal QM popup text here ENG',
 			goalInfo: 'Goal Info popup text here ENG'
@@ -88,6 +102,20 @@ const locales = {
 				sectionTitle: 'Apmeklē kursus',
 				sectionDescription: 'Apmeklē kursus description here ee',
 				sectionTexts: {}
+			}
+		},
+		courseSections: {
+			mandatory: {
+				category_name: "Mandatory courses",
+				category_heading: "Information",
+				category_handle: "mandatory",
+				category_description: "Respective category description etc. EE"
+			},
+			optional: {
+				category_name: "Optional courses",
+				category_heading: "Some kind of heading",
+				category_handle: "optional",
+				category_description: "Respective category description etc. EE"	
 			}
 		},
 		popups: {
@@ -131,6 +159,20 @@ const locales = {
 				sectionTexts: {}
 			}
 		},
+		courseSections: {
+			mandatory: {
+				category_name: "Mandatory courses",
+				category_heading: "Information",
+				category_handle: "mandatory",
+				category_description: "Respective category description etc. LV"
+			},
+			optional: {
+				category_name: "Optional courses",
+				category_heading: "Some kind of heading",
+				category_handle: "optional",
+				category_description: "Respective category description etc. LV"	
+			}
+		},
 		popups: {
 			goalQm: 'Goal QM popup text here LV',
 			goalInfo: 'Goal Info popup text here LV'
@@ -172,6 +214,20 @@ const locales = {
 				sectionTexts: {}
 			}
 		},
+		courseSections: {
+			mandatory: {
+				category_name: "Mandatory courses",
+				category_heading: "Information",
+				category_handle: "mandatory",
+				category_description: "Respective category description etc. LT"
+			},
+			optional: {
+				category_name: "Optional courses",
+				category_heading: "Some kind of heading",
+				category_handle: "optional",
+				category_description: "Respective category description etc. LT"	
+			}
+		},
 		popups: {
 			goalQm: 'Goal QM popup text here LT',
 			goalInfo: 'Goal Info popup text here LT'
@@ -211,6 +267,20 @@ const locales = {
 				sectionTitle: 'Apmeklē kursus',
 				sectionDescription: 'Apmeklē kursus description here es',
 				sectionTexts: {}
+			}
+		},
+		courseSections: {
+			mandatory: {
+				category_name: "Mandatory courses",
+				category_heading: "Information",
+				category_handle: "mandatory",
+				category_description: "Respective category description etc. ESPANOL"
+			},
+			optional: {
+				category_name: "Optional courses",
+				category_heading: "Some kind of heading",
+				category_handle: "optional",
+				category_description: "Respective category description etc. ENG"
 			}
 		},
 		popups: {

@@ -9,7 +9,7 @@ import axios from 'axios';
 function apiPostCall( child, data ) {
 
 
-	console.log('dev login PHP function called');
+	console.log('API POST call called');
 
 	console.log(data);
 
@@ -189,18 +189,21 @@ export function fetchCourseSectionDescription( type ) {
 
 // PATCH functions
 
-export function patchTaskPercentage( taskId, percentage ) {
+export function patchTaskPercentage( taskId, percentage, userId, userHash ) {
 	console.log('patchTaskPercentage');
-	return patchData(`goal_tasks/${taskId}`, { "task_complete": percentage } )
+	// return patchData(`goal_tasks/${taskId}`, { "task_complete": percentage } )
+	return apiPostCall(`set_task_percentage`, { "task_id": taskId, "task_percentage": percentage, "userId": userId, "userHash": userHash });
 }
-export function patchTaskDescription( taskId, taskDescription ) {
+export function patchTaskDescription( taskId, taskDescription, userId, userHash ) {
 	console.log('patchTaskDescription');
-	return patchData(`goal_tasks/${taskId}`, { "task_description": taskDescription } )
+	// return patchData(`goal_tasks/${taskId}`, { "task_description": taskDescription } )
+	return apiPostCall(`set_task_description`, { "task_id": taskId, "task_description": taskDescription, "userId": userId, "userHash": userHash });
 }
-export function patchGoalName( goalId, goalName ) {
+export function patchGoalName( goalId, goalName, userId, userHash ) {
 	console.log('patchGoalName');
 	// TODO: NEED TO CHECK USER ID TOO
 	// return patchData(`goals/1`)
+	return apiPostCall(`set_goal_name`, { "goal_id": goalId, "goal_name": goalName, "userId": userId, "userHash": userHash });
 }
 
 

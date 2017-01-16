@@ -9,7 +9,7 @@
 				<textarea 
 					class="editable-goal" 
 					@blur="stopEditingGoal(goalToShow.goal_id, goalToShow.goal_name)" 
-					@keyup.enter.prevent.stop="stopEditingGoal(goalToShow.goal_id, goalToShow.goal_name)"
+					@keyup.enter.prevent="stopEditingGoal(goalToShow.goal_id, goalToShow.goal_name)"
 					v-model="goalToShow.goal_name"
 					v-if="editableGoalIndex == goalToShow.goal_id"></textarea>
 				<h2 v-else class="goal-heading" @click="editGoalName(goalToShow.goal_id)">{{goalToShow.goal_name}}</h2>
@@ -17,18 +17,18 @@
 			<p class="goal-date">{{phDate}}</p>
 			<button class="edit-button edit-task-description" @click="editGoalName(goalToShow.goal_id)"></button>
 		</div>
-		<!-- <pre>{{goalTasks}}</pre> -->
 
 		<template>
 
-			{{ rightTasks }}
-
-			<div :class="[ index == visibleTaskIndex ? 'visible-slider' : 'hidden-slider', task.task_description.length > 0 ? '' : 'empty-task-text' ]" 
+			<div :class="[ index == visibleTaskIndex ? 'visible-slider' : 'hidden-slider', properTasks[Object.keys(properTasks)[index-1]].task_description.length > 0 ? '' : 'empty-task-text' ]" 
 				  class="task-wrapper" 
-				  v-for="(task, index) in rightTasks" 
-				  v-if="task.task_goal_id === goalToShow.goal_id">
+				  v-for="index in [1,2,3,4]" 
+				  v-if="properTasks[Object.keys(properTasks)[index-1]]"
+				  >
+				  	
 
-					<h4 class="task-header" @click="showTaskDetails(index)">{{taskNames[index-1]}}</h4>
+					<!-- <h4 class="task-header" @click="showTaskDetails(index)">{{taskNames[index-1]}}</h4> -->
+					<h4 class="task-header" @click="showTaskDetails(index)">{{$t("howToSections.Section" + [index] + '.sectionTitle')}}</h4>
 
 
 					<p class="empty-task-tooltip">{{$t("goals.addNewText")}}</p>
@@ -40,12 +40,12 @@
 					<template>
 						<textarea 
 							class="editable-description" 
-							@blur="stopEditing(task.id)" 
-							v-model="task.task_description"
+							@blur="stopEditing(properTasks[Object.keys(properTasks)[index-1]].id)" 
+							v-model="properTasks[Object.keys(properTasks)[index-1]].task_description"
 							v-if="editableTaskIndex == index"
 							autofocus>
 						</textarea>
-						<p v-else class="task-description">{{task.task_description}}</p>
+						<p v-else class="task-description">{{properTasks[Object.keys(properTasks)[index-1]].task_description}}</p>
 					</template>
 
 					<div class="task-slider" v-show="index == visibleTaskIndex">
@@ -58,8 +58,8 @@
 							</div>
 						</div>
 						<div class="range-wrapper">
-							<input v-if="isIe" @mouseup="saveGoalProgress(task.id)" type="range" v-model.lazy="rightTasks[index].task_complete" min="0" max="100">
-							<input v-else type="range" v-model="rightTasks[index].task_complete" min="0" max="100">
+							<input v-if="isIe" @mouseup="saveGoalProgress(properTasks[Object.keys(properTasks)[index-1]].id)" type="range" v-model.lazy="properTasks[Object.keys(properTasks)[index-1]].task_complete" min="0" max="100">
+							<input v-else @mouseup="saveGoalProgress(properTasks[Object.keys(properTasks)[index-1]].id)" type="range" v-model="properTasks[Object.keys(properTasks)[index-1]].task_complete" min="0" max="100">
 							<div class="percentage-labels">
 								<span>0%</span>
 								<span>25%</span>
@@ -72,6 +72,10 @@
 						<!-- <input type="submit" name="submit" @click="saveGoalProgress(task.id)"> -->
 					</div>
 
+			</div>
+
+			<div v-else>
+				{{index}}
 			</div>
 
 		</template>
@@ -107,21 +111,8 @@ export default {
 				3: 0
 			},
 			bindTask: '',
-			taskNames: [
-				'Mācos no kolēģiem',
-				'Mācos darba vietā',
-				'Izzinu pats',
-				'4th option',
-				'Mācos no kolēģiem',
-				'Mācos darba vietā',
-				'Izzinu pats',
-				'4th option',
-				'Mācos no kolēģiem',
-				'Mācos darba vietā',
-				'Izzinu pats',
-				'4th option'
-			],
 			tasksArr: [],
+			properTasks: [],
 			visibleTaskIndex: '',
 			editableTaskIndex: '',
 			editableGoalIndex: '',
@@ -138,22 +129,11 @@ export default {
 			return this.$store.state.isIe;
 		},
 		// CHANGE TO METHOD
-		rightTasks() {
+		properTasks() {
 			console.log('something');
-			let keys = Object.keys(this.$store.state.goalTasks);
-			let properTasks = [];
-			keys.forEach( key => {
-				if ( +this.$store.state.goalTasks[key].task_goal_id === +this.$options.propsData['goalToShow'].goal_id ) {
-					properTasks.push( this.$store.state.goalTasks[key])
-				}
-			})
-			keys = keys.filter( key => {
-				console.log(key);
-				console.log(+this.$store.state.goalTasks[key].task_goal_id === +this.$options.propsData['goalToShow'].goal_id);
-				+this.$store.state.goalTasks[key].task_goal_id === +this.$options.propsData['goalToShow'].goal_id
-			})
 
-			return keys;
+			return this.$store.state.properTasks;
+
 		},
 		goalTasks() {
 			return this.$store.state.goalTasks;

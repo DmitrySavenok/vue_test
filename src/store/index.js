@@ -13,6 +13,7 @@ import {
 import {
 	patchTaskPercentage,
 	patchTaskDescription,
+	patchGoalName,
 	createEmptyGoal,
 	clearGoals
 } from './api';
@@ -90,6 +91,9 @@ const store = new Vuex.Store({
 			0: 'Goal1'
 		},
 		goalTasks: {},
+		properTasks: {},
+
+		goalTasksPreProcessed: [],
 
 		// Position matrix (?)
 		// Instead of providing list on positions for every course we can specify which courses will be shown to each position
@@ -101,7 +105,29 @@ const store = new Vuex.Store({
 
 		},
 		lists: {
-			news: {},
+			news: {
+				1: {
+					id:1,
+					headline:"Development Goals",
+					name:"Create and manage your goals etc.",
+					description:"Short description of a category etc.",
+					article_notification:"3 unfinished goals"
+				},
+				2: {
+					id:2,
+					headline:"Rimi e-learning",
+					name:"Course database access",
+					description:"Shot description of a category etc.",
+					article_notification:"2 unfinished courses"
+				},
+				3: {
+					id:3,
+					headline:"Training courses",
+					name:"Course document access",
+					description:"Short description of a category etc.",
+					article_notification:""
+				}
+			},
 			notifications: {},
 			courseSections: {},
 			resources: {},
@@ -183,17 +209,11 @@ const store = new Vuex.Store({
 					break;
 				case 'goals':
 					console.log('fetch goals data');
-
-					// let userId = 123
-
-					// if ( state.users.currentUser ) {
-					// 	let userId = state.users.currentUser.id 
-					// }
 					
 					if ( userId ) {
 						fetchGoals(userId, userHash).then(goals => {
 							// console.log(goals);
-							goals[0] != undefined ? commit('SET_GOALS', { goals: goals[0].user_goals }) : console.log('no goals ;('); 
+							goals[0] != undefined ? ( commit('SET_GOALS', { goals: goals[0].user_goals }), commit('SET_PROPER_TASKS', { tasks: state.goalTasksPreProcessed }) ) : console.log('no goals ;('); 
 						})
 					} else {
 						console.log('no user id specified');
@@ -209,13 +229,15 @@ const store = new Vuex.Store({
 
 					console.log('fetch courses data');
 
-					fetchCourseSectionDescription( 'mandatory' ).then( mandatoryCourses => {
-						commit('SET_COURSE_SECTION_DESC', { courseDesc: mandatoryCourses });
-						fetchCourseSectionDescription( 'optional' ).then( optionalCourses => {
-							commit('SET_COURSE_SECTION_DESC', { courseDesc: optionalCourses });
-						});
-					}
-					);
+
+					// Taken from locales (not DB) => redundant
+					// fetchCourseSectionDescription( 'mandatory' ).then( mandatoryCourses => {
+					// 	commit('SET_COURSE_SECTION_DESC', { courseDesc: mandatoryCourses });
+					// 	fetchCourseSectionDescription( 'optional' ).then( optionalCourses => {
+					// 		commit('SET_COURSE_SECTION_DESC', { courseDesc: optionalCourses });
+					// 	});
+					// }
+					// );
 
 					// let userPosition = 'first_row';
 
@@ -391,6 +413,7 @@ const store = new Vuex.Store({
 				// console.log('tasks: ');
 				// console.log(tasks);
 					commit('SET_GOAL_TO_DISPLAY', { goalId });
+					commit('SET_PROPER_TASKS', { tasks: state.goalTasksPreProcessed })
 				// });
 			}
 		},
@@ -424,7 +447,9 @@ const store = new Vuex.Store({
 		UPDATE_TASK_COMPLETION_STATUS: ({ commit, state }, { taskId, percentage }) => {
 
 			if ( taskId && percentage ) {
-				return patchTaskPercentage(taskId, percentage).then( updatedTask => {
+				let userId = state.users.currentUser.id;
+				let userHash = state.users.currentUser.hash;
+				return patchTaskPercentage(taskId, percentage, userId, userHash).then( updatedTask => {
 					// console.log(answer);
 					commit('UPDATE_TASK_COMPLETION_STATUS', { updatedTask });
 				});
@@ -435,7 +460,9 @@ const store = new Vuex.Store({
 		UPDATE_TASK_DESCRIPTION: ({ commit, state }, { taskId, taskDescription }) => {
 
 			if ( taskId && taskDescription ) {
-				return patchTaskDescription(taskId, taskDescription).then( updatedTask => {
+				let userId = state.users.currentUser.id;
+				let userHash = state.users.currentUser.hash;
+				return patchTaskDescription(taskId, taskDescription, userId, userHash).then( updatedTask => {
 					// console.log(answer);
 					commit('UPDATE_TASK_DESCRIPTION', { updatedTask });
 				});
@@ -447,13 +474,14 @@ const store = new Vuex.Store({
 
 			//TODO: NOT READY
 
-			// if ( goalId && goalName ) {
+			if ( goalId && goalName ) {
+				let userId = state.users.currentUser.id;
+				let userHash = state.users.currentUser.hash;
+				return patchGoalName(goalId, goalName, userId, userHash).then( updatedGoal => {
+					commit('UPDATE_GOAL_NAME', { updatedGoal });
+				});
 
-			// 	return patchGoalName(goalId, goalName).then( updatedGoal => {
-			// 		commit('UPDATE_GOAL_NAME', { updatedGoal });
-			// 	});
-
-			// }
+			}
 
 		}
 
@@ -500,7 +528,9 @@ const store = new Vuex.Store({
 		UPDATE_TASK_DESCRIPTION: (state, { updatedTask }) => {
 			Vue.set(state.goalTasks, updatedTask.id, updatedTask);
 		},
-
+		UPDATE_GOAL_NAME: (state, { updatedGoal }) => {
+			console.log(updatedGoal);
+		},
 		CHANGE_PATH: (state, { path } ) => {
 			store.state.route = path;
 		},
@@ -555,14 +585,62 @@ const store = new Vuex.Store({
 
 		},
 		SET_GOALS: (state, { goals }) => {
+
 			goals.forEach( goal => {
 				if ( goal ) {
 					Vue.set(state.goals, 'Goal' + goal.goal_id, goal)
 					goal.tasks.forEach( task => {
-						Vue.set(state.goalTasks, task.id, task)
+
+						state.goalTasksPreProcessed.push(task);
+
+						Vue.set(state.goalTasks, task.id, task);
+
+						// console.log(+task.task_goal_id);
+						// console.log(state.goals[state.goalToShow[0]].goal_id);
+
+						// if ( +task.task_goal_id === +state.goals[state.goalToShow[0]].goal_id ) {
+						// 	Vue.set(state.properTasks, task.id, task);
+						// }
 					});
 				}
 			})
+		},
+		SET_PROPER_TASKS: ( state, { tasks }) => {
+
+			let goalId = 1;
+
+			if ( state.goals[state.goalToShow[0]] ) {
+				goalId = +state.goals[state.goalToShow[0]].goal_id;
+			}
+
+			let count = 0;
+			let countId = 9999;
+
+			console.log('GOAL ID: ' + goalId);
+
+
+			state.properTasks = {};
+			let taskTemplate = {
+				"id": 1,
+				"task_complete": "0",
+				"task_description": "",
+				"task_goal_id": goalId,
+				"task_name": ""
+			}
+
+			tasks.forEach( task => {
+				if ( +task.task_goal_id === +state.goals[state.goalToShow[0]].goal_id ) {
+					count++;
+					Vue.set(state.properTasks, task.id, task);
+				}
+			})
+			console.log(count);
+			while( count < 4) {
+				Vue.set(state.properTasks, countId, taskTemplate);
+				count++;
+				countId++;
+			}
+
 		},
 		SET_GOAL_PHASE: (state, { phaseNum }) => {
 			Vue.set(state.goalTutorialPhase, 0, 'phase-' + phaseNum);
@@ -592,10 +670,6 @@ const store = new Vuex.Store({
 			} else {
 				return []
 			}
-		},
-
-		properTasks( state, goalId ) {
-			return state.goalTasks.map( task => { +task.task_goal_id === goalId});
 		},
 
 		// items (course name/descriptions/status etc.)

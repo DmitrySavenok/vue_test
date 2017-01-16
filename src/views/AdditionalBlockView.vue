@@ -77,8 +77,8 @@
 				<div class="course-sections">
 					
 					<ul>
-						<CourseSection v-bind:section="mandatoryCourse"></CourseSection>
-						<CourseSection v-bind:section="optionalCourse"></CourseSection>
+						<CourseSection v-bind:section="'mandatory'"></CourseSection>
+						<CourseSection v-bind:section="'optional'"></CourseSection>
 					</ul>
 
 				</div>
@@ -158,12 +158,6 @@ export default {
   	// howToSections() {
   	// 	return this.$store.state.lists.howToSections;
   	// },
-  	mandatoryCourse() {
-  		return this.$store.state.lists.courseSections.mandatory;
-  	},
-  	optionalCourse() {
-  		return this.$store.state.lists.courseSections.optional;
-  	},
   	courseSections() {
   		return this.$store.state.lists.courseSections;
   	},

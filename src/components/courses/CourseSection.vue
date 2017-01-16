@@ -4,12 +4,12 @@
 
 		<div v-if="section">
 
-			<div class="list-handle">{{section.category_name}}</div>
+			<div class="list-handle">{{$t('courseSections.' + section + '.category_name')}}</div>
 
 			<!-- <transition appear name="section-fade"> -->
 				<div v-if="showSection" class="section-info" v-on:click.stop>
-					<h3>{{section.category_heading}}</h3>
-					<p>{{section.category_description}}</p>
+					<h3>{{$t('courseSections.' + section + '.category_heading')}}</h3>
+					<p>{{$t('courseSections.' + section + '.category_description')}}</p>
 					<hr>
 					<div class="section-completion">
 						<!-- check course completion status -->
@@ -51,9 +51,9 @@ export default {
 	},
 	methods: {
 		showSectionInfo: function(event) {
-			this.showSection ? this.showEl = '' : this.showEl = this.section.category_handle;
+			this.showSection ? this.showEl = '' : this.showEl = this.$t('courseSections.' + this.$options.propsData.section + '.category_handle');
 			// Not a good idea to change state w/o outside actions/mutations
-			this.$store.state.showSection = this.section.category_handle;
+			this.$store.state.showSection = this.$t('courseSections.' + this.$options.propsData.section + '.category_handle');
 		}
 	}
 }

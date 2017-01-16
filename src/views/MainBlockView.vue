@@ -195,6 +195,9 @@ export default {
   		return this.$store.state.lists.currentUserCourses;
   	},
   	news() {
+  		// Hardcoded for now
+  		// TODO:
+  		// Implement for admin panel (w/ server side?)
   		return this.$store.state.lists.news;
   	},
   	sectionNum() {

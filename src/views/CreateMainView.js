@@ -20,8 +20,13 @@ export function createMainView (type) {
 
 			if ( !activeUser['currentUser'] ) {
 				if ( userId ) {
-					this.$store.dispatch('FETCH_USER', { id: +userId, hash: userHash });
-					return this.$store.dispatch('FETCH_MAIN_BLOCKS_DATA', { type })
+					this.$store.dispatch('FETCH_USER', { id: +userId, hash: userHash }).then( ans => {
+						console.log('FETCH USER ANSWER: ');
+						console.log(ans);
+						return this.$store.dispatch('FETCH_MAIN_BLOCKS_DATA', { type })
+					}).catch( err => {
+						console.log('error while trying to fetch user data');
+					});
 				} else {
 					this.$store.changePath('/', { router: this.$router });
 					return;
